@@ -1,0 +1,9 @@
+{
+  "dropdown": {"value": 100},
+  "overlay": {"value": 200},
+  "modal": {"value": 300},
+  "tooltip": {"value": 400},
+  "toast": {"value": 500},
+  "dialog": {"value": 600},
+  "topmost": {"value": 9999}
+}

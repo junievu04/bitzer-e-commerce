@@ -6,19 +6,30 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "prepare": "panda codegen",
+    "panda": "panda"
   },
   "dependencies": {
+    "cloudinary": "^2.9.0",
+    "mongodb": "^7.1.0",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },
   "devDependencies": {
+    "@csstools/postcss-cascade-layers": "^6.0.0",
+    "@pandacss/dev": "^1.8.2",
+    "@types/mongoose": "^5.11.96",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "concurrently": "^9.2.1",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "postcss": "^8.5.8",
+    "postcss-preset-env": "^11.2.0",
+    "postcss-prune-var": "^1.1.2",
     "typescript": "^5"
   }
 }
