@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Lato } from "next/font/google";
+import { IntlProvider } from "@/utils/intl";
 import "./globals.css";
 
 const lato = Lato({
@@ -91,21 +92,9 @@ export default function RootLayout({
   return (
     <html lang="vi" suppressHydrationWarning className={`${lato.variable}`}>
       <body>
-        {/*
-         * Providers go here as the project grows:
-         *
-         * <CartProvider>
-         *   <LanguageProvider>
-         *     <ToastProvider>
-         *       {children}
-         *     </ToastProvider>
-         *   </LanguageProvider>
-         * </CartProvider>
-         *
-         * For now, render children directly so the file compiles
-         * before context files are created.
-         */}
-        {children}
+        <IntlProvider>
+          {children}
+        </IntlProvider>
       </body>
     </html>
   );
