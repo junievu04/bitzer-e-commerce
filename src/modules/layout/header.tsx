@@ -1,25 +1,35 @@
 "use client";
-import { Cart } from "@/components/icons";
+import Button from "@/components/button";
+import { Cart, Icon3Lines } from "@/components/icons";
+import Link from "@/components/link";
+import Text from "@/components/text";
 import { useIntl } from "@/utils/intl";
-import { css } from "@/vendors/styled-system/css";
 import { Box, Flex, HStack, Stack } from "@/vendors/styled-system/jsx";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 
-const NAV_LINKS = [
-  { href: "/", labelKey: "nav.home" },
-  { href: "/products", labelKey: "nav.products" },
-  { href: "/about", labelKey: "nav.about" },
-  { href: "/news", labelKey: "nav.news" },
-  { href: "/contact", labelKey: "nav.contact" },
-] as const;
+const NAV_LINKS = {
+  vi: [
+    { href: "/", label: "Trang chủ" },
+    { href: "/products", label: "Sản phẩm" },
+    { href: "/about", label: "Giới thiệu" },
+    { href: "/news", label: "Tin tức" },
+    { href: "/contact", label: "Liên hệ" },
+  ],
+  en: [
+    { href: "/", label: "Home" },
+    { href: "/products", label: "Products" },
+    { href: "/about", label: "About" },
+    { href: "/news", label: "News" },
+    { href: "/contact", label: "Contact" },
+  ],
+};
 
 export function Header() {
-  const { t } = useIntl();
+  const { lang } = useIntl();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const links = NAV_LINKS.map((l) => ({ ...l, label: t(l.labelKey) }));
+  const links = NAV_LINKS[lang];
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 10);
@@ -29,10 +39,9 @@ export function Header() {
 
   return (
     <Box
-      as="header"
       position="sticky"
       top="0"
-      zIndex="sticky"
+      zIndex={1}
       bg="white"
       borderBottom="1px solid"
       borderColor={scrolled ? "border.default" : "transparent"}
@@ -40,7 +49,7 @@ export function Header() {
       transition="all 0.3s ease"
     >
       <Flex
-        maxW="1280px"
+        w="100%"
         mx="auto"
         px={{ base: "4", md: "8" }}
         h="16"
@@ -48,35 +57,26 @@ export function Header() {
         justifyContent="space-between"
       >
         {/* Logo */}
-        <Link href="/">
-          <Box
-            fontFamily="heading"
-            fontSize="2xl"
-            fontWeight="900"
-            color="brand.600"
-          >
+        <Link href="/" display="flex">
+          <Text variant="metric-2" tone="success">
             BITZER
-            <Box as="span" color="gray.400">
-              shop
-            </Box>
-          </Box>
+          </Text>
+          <Text tone="neutral-light" variant="page-heading-2">
+            shop
+          </Text>
         </Link>
 
         {/* Nav desktop */}
         <HStack gap="6" display={{ base: "none", md: "flex" }}>
           {links.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              className={css({
-                fontSize: "sm",
-                fontWeight: "500",
-                color: "text.secondary",
-                _hover: { color: "brand.600" },
-                transition: "color 0.2s",
-              })}
-            >
-              {l.label}
+            <Link key={l.href} href={l.href} transition="color 0.2s">
+              <Text
+                weight="medium"
+                tone="secondary"
+                _hover={{ color: "brand.600" }}
+              >
+                {l.label}
+              </Text>
             </Link>
           ))}
         </HStack>
@@ -84,15 +84,21 @@ export function Header() {
         {/* Right actions */}
         <HStack gap="3">
           <LanguageSwitcher />
-          <Cart />
+          <Link href="/cart">
+            <Cart />
+          </Link>
           {/* Mobile menu toggle */}
-          <Box
+          <Button
             display={{ base: "flex", md: "none" }}
-            cursor="pointer"
+            size="sm"
+            bgColor="transparent"
+            _active={{ bgColor: "transparent" }}
+            alignItems="center"
+            p={0}
             onClick={() => setMenuOpen(!menuOpen)}
           >
-            ☰
-          </Box>
+            <Icon3Lines />
+          </Button>
         </HStack>
       </Flex>
 
@@ -112,12 +118,10 @@ export function Header() {
               key={l.href}
               href={l.href}
               onClick={() => setMenuOpen(false)}
-              className={css({
-                py: "2",
-                fontSize: "sm",
-                color: "text.secondary",
-                _hover: { color: "brand.600" },
-              })}
+              py="2"
+              fontSize="sm"
+              color="text.secondary"
+              _hover={{ color: "brand.600" }}
             >
               {l.label}
             </Link>

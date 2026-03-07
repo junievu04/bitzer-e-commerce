@@ -1,3 +1,6 @@
+import { Footer } from "@/modules/layout/footer";
+import { Header } from "@/modules/layout/header";
+
 export default function RootLayout({
   children,
 }: {
@@ -6,7 +9,7 @@ export default function RootLayout({
   return (
     <>
       {/* ── Top bar ─────────────────────────────────────────────────── */}
-      {/* <Header /> */}
+      <Header />
 
       {/* ── Page content ─────────────────────────────────────────────
           min-h calculation subtracts header (64px) so short pages
@@ -23,7 +26,7 @@ export default function RootLayout({
       </main>
 
       {/* ── Bottom ───────────────────────────────────────────────────── */}
-      {/* <Footer /> */}
+      <Footer />
 
       {/* ── Floating widgets (fixed position, above everything) ──────── */}
       {/* <StickyContact />

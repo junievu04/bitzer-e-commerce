@@ -1,13 +1,19 @@
-import type { Metadata, Viewport } from "next";
-import { Lato } from "next/font/google";
 import { IntlProvider } from "@/utils/intl";
+import type { Metadata, Viewport } from "next";
+import { Be_Vietnam_Pro, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const lato = Lato({
+const beVietnamPro = Be_Vietnam_Pro({
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-heading",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  weight: ["100", "300", "400", "700", "900"],
-  style: ["normal", "italic"],
-  variable: "--font-body",
+  weight: ["400", "500"],
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -90,11 +96,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="vi" suppressHydrationWarning className={`${lato.variable}`}>
+    <html
+      lang="vi"
+      suppressHydrationWarning
+      className={`${beVietnamPro.variable} ${jetbrainsMono.variable}`}
+    >
       <body>
-        <IntlProvider>
-          {children}
-        </IntlProvider>
+        <IntlProvider>{children}</IntlProvider>
       </body>
     </html>
   );

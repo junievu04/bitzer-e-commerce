@@ -116,9 +116,9 @@ export const buttonRecipe = cva({
       none: {},
     },
     size: {
-      sm: { minH: "8" },
-      md: { minH: "10" },
-      lg: { minH: "12" },
+      sm: { minH: "7" }, //1.75rem
+      md: { minH: "9" }, //2.25rem
+      lg: { minH: "12" }, //3rem
     },
     iconOnly: {
       true: {},

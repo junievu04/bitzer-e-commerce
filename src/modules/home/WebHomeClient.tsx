@@ -1,14 +1,12 @@
-"use client";
+import { HeroBanner } from "@/modules/home/hero-banner";
 
-import { Box } from "@/vendors/styled-system/jsx";
-
-const page = () => {
+export default function HomePage() {
   return (
-    <Box fontSize="2xl" fontWeight={900} bg="brand.600">
-      BITZER
-      <Box color="gray.400">shop</Box>
-    </Box>
+    <>
+      <HeroBanner />
+      {/* // <FeaturedCategories />
+      // <BestSellers />
+      // <CompanyIntro /> */}
+    </>
   );
-};
-
-export default page;
+}

@@ -7,7 +7,6 @@ export function LanguageSwitcher() {
   const { lang, toggle } = useIntl();
   return (
     <HStack
-      gap="0"
       borderRadius="full"
       border="1px solid"
       borderColor="border.default"
