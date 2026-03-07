@@ -1,10 +1,14 @@
 "use client";
 import {
   Envelope,
+  Facebook,
   Location,
+  Mail,
+  Messenger,
   Phone,
   ShieldTick,
   StarTickFilled,
+  Zalo,
 } from "@/components/icons";
 import Link from "@/components/link";
 import Text from "@/components/text/text";
@@ -38,28 +42,24 @@ const INFO_LINKS = [
 
 const SOCIAL_LINKS = [
   {
-    label: "f",
+    label: Facebook,
     href: "https://facebook.com/YOUR_PAGE",
-    bg: "#1877f2",
     title: "Facebook",
   },
   {
-    label: "ig",
-    href: "https://instagram.com/YOUR_PAGE",
-    bg: "#e1306c",
-    title: "Instagram",
+    label: Zalo,
+    href: "https://",
+    title: "Zalo",
   },
   {
-    label: "yt",
-    href: "https://youtube.com/YOUR_PAGE",
-    bg: "#ff0000",
-    title: "YouTube",
+    label: Mail,
+    href: "https://",
+    title: "Mail",
   },
   {
-    label: "in",
-    href: "https://linkedin.com/YOUR_PAGE",
-    bg: "#0077b5",
-    title: "LinkedIn",
+    label: Messenger,
+    href: "https://",
+    title: "Messenger",
   },
 ];
 
@@ -404,7 +404,7 @@ export function Footer() {
               <HStack gap="2.5">
                 {SOCIAL_LINKS.map((s) => (
                   <Link
-                    key={s.label}
+                    key={s.title}
                     href={s.href}
                     tone="inverse"
                     hover="none"
@@ -417,15 +417,12 @@ export function Footer() {
                     borderRadius="full"
                     fontWeight="800"
                     fontSize="sm"
-                    color="white"
                     transition="transform 0.2s ease"
                     _hover={{
                       transform: "translateY(-3px)",
-                      textDecoration: "none",
                     }}
-                    style={{ backgroundColor: s.bg }}
                   >
-                    {s.label}
+                    {s.label && <s.label />}
                   </Link>
                 ))}
               </HStack>
