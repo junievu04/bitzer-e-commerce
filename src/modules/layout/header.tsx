@@ -5,8 +5,9 @@ import Link from "@/components/link";
 import Text from "@/components/text";
 import { useIntl } from "@/utils/intl";
 import { Box, Flex, HStack, Stack } from "@/vendors/styled-system/jsx";
-import { useEffect, useState } from "react";
-import { LanguageSwitcher } from "./LanguageSwitcher";
+import { usePathname } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { LanguageSwitcher } from "./language-switcher";
 
 const NAV_LINKS = {
   vi: [
@@ -30,6 +31,14 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const links = NAV_LINKS[lang];
+  const pathname = usePathname();
+
+  const isActive = useCallback(
+    (href: string) => {
+      return pathname.startsWith(href);
+    },
+    [pathname],
+  );
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 10);
@@ -51,7 +60,8 @@ export function Header() {
       <Flex
         w="100%"
         mx="auto"
-        px={{ base: "4", md: "8" }}
+        maxW={1280}
+        px="3"
         h="16"
         alignItems="center"
         justifyContent="space-between"
@@ -72,7 +82,7 @@ export function Header() {
             <Link key={l.href} href={l.href} transition="color 0.2s">
               <Text
                 weight="medium"
-                tone="secondary"
+                tone={isActive(l.href) ? "success" : "secondary"}
                 _hover={{ color: "brand.600" }}
               >
                 {l.label}

@@ -1,4 +1,4 @@
-import WebHomeClient from "@/modules/home/WebHomeClient";
+import WebHomeClient from "@/modules/home/web-home-client";
 
 const page = () => {
   return <WebHomeClient />;
