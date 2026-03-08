@@ -114,8 +114,11 @@ type BaseTextProps = {
 
 // ✅ Props are grounded to HTMLStyledProps<'span'> — a single concrete type,
 // no more generic E causing the "too complex union" error.
+// Include htmlFor for label support.
 type TextProps = BaseTextProps &
-  Omit<HTMLStyledProps<"span">, keyof BaseTextProps>;
+  Omit<HTMLStyledProps<"span">, keyof BaseTextProps> & {
+    htmlFor?: string;
+  };
 
 const Text = ({
   htmlTag,

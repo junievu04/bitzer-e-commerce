@@ -1,11 +1,13 @@
 "use client";
 import Button from "@/components/button";
-import { Cart, Icon3Lines } from "@/components/icons";
+import { Cart, Icon3Lines, MagnifyingGlass } from "@/components/icons";
 import Link from "@/components/link";
 import Text from "@/components/text";
+import TextField from "@/components/text-field/text-field";
 import { useIntl } from "@/utils/intl";
+import { css } from "@/vendors/styled-system/css";
 import { Box, Flex, HStack, Stack } from "@/vendors/styled-system/jsx";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { LanguageSwitcher } from "./language-switcher";
 
@@ -13,6 +15,7 @@ const NAV_LINKS = {
   vi: [
     { href: "/", label: "Trang chủ" },
     { href: "/products", label: "Sản phẩm" },
+    { href: "/services", label: "Dịch vụ" },
     { href: "/about", label: "Giới thiệu" },
     { href: "/news", label: "Tin tức" },
     { href: "/contact", label: "Liên hệ" },
@@ -20,6 +23,7 @@ const NAV_LINKS = {
   en: [
     { href: "/", label: "Home" },
     { href: "/products", label: "Products" },
+    { href: "/services", label: "Services" },
     { href: "/about", label: "About" },
     { href: "/news", label: "News" },
     { href: "/contact", label: "Contact" },
@@ -27,16 +31,17 @@ const NAV_LINKS = {
 };
 
 export function Header() {
-  const { lang } = useIntl();
+  const { lang, t } = useIntl();
+  const router = useRouter();
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [query, setQuery] = useState("");
   const links = NAV_LINKS[lang];
-  const pathname = usePathname();
 
   const isActive = useCallback(
-    (href: string) => {
-      return pathname.startsWith(href);
-    },
+    (href: string) =>
+      href === "/" ? pathname === "/" : pathname.startsWith(href),
     [pathname],
   );
 
@@ -45,6 +50,13 @@ export function Header() {
     window.addEventListener("scroll", handler);
     return () => window.removeEventListener("scroll", handler);
   }, []);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = query.trim();
+    if (!q) return;
+    router.push(`/products?q=${encodeURIComponent(q)}`);
+  };
 
   return (
     <Box
@@ -57,6 +69,7 @@ export function Header() {
       shadow={scrolled ? "md" : "none"}
       transition="all 0.3s ease"
     >
+      {/* ── Main row ──────────────────────────────────────────────────────── */}
       <Flex
         w="100%"
         mx="auto"
@@ -64,10 +77,11 @@ export function Header() {
         px="3"
         h="16"
         alignItems="center"
+        gap="5"
         justifyContent="space-between"
       >
         {/* Logo */}
-        <Link href="/" display="flex">
+        <Link href="/" display="flex" flexShrink={0}>
           <Text variant="metric-2" tone="success">
             BITZER
           </Text>
@@ -76,14 +90,17 @@ export function Header() {
           </Text>
         </Link>
 
-        {/* Nav desktop */}
-        <HStack gap="6" display={{ base: "none", md: "flex" }}>
+        {/* Desktop nav */}
+        <HStack gap="5" display={{ base: "none", lg: "flex" }} flexShrink={0}>
           {links.map((l) => (
             <Link key={l.href} href={l.href} transition="color 0.2s">
               <Text
                 weight="medium"
                 tone={isActive(l.href) ? "success" : "secondary"}
-                _hover={{ color: "brand.600" }}
+                className={css({
+                  whiteSpace: "nowrap",
+                  _hover: { color: "brand.600" },
+                })}
               >
                 {l.label}
               </Text>
@@ -91,19 +108,56 @@ export function Header() {
           ))}
         </HStack>
 
+        {/* ── Search bar ─────────────────────────────────────────────────── */}
+        <Box
+          as="form"
+          flex="1"
+          display={{ base: "none", md: "block" }}
+          onSubmit={handleSearch}
+        >
+          <TextField
+            value={query}
+            placeholder={
+              lang === "vi" ? "Tìm kiếm sản phẩm..." : "Search products..."
+            }
+            onChange={(e) => setQuery(e.target.value)}
+            leftAdornment={MagnifyingGlass}
+            action={
+              <Button
+                type="submit"
+                h="full"
+                px="4"
+                bg="brand.500"
+                color="white"
+                fontSize="sm"
+                fontWeight="600"
+                border="none"
+                cursor="pointer"
+                flexShrink={0}
+                transition="background 0.2s"
+                className={css({
+                  _hover: { bg: "brand.600" },
+                  borderRadius: "0",
+                })}
+              >
+                {t("Tìm")}
+              </Button>
+            }
+          />
+        </Box>
+
         {/* Right actions */}
-        <HStack gap="3">
+        <HStack gap="3" flexShrink={0}>
           <LanguageSwitcher />
           <Link href="/cart">
             <Cart />
           </Link>
-          {/* Mobile menu toggle */}
           <Button
-            display={{ base: "flex", md: "none" }}
+            display={{ base: "flex", lg: "none" }}
             size="sm"
             bgColor="transparent"
             _active={{ bgColor: "transparent" }}
-            alignItems="center"
+            _hover={{ bgColor: "transparent" }}
             p={0}
             onClick={() => setMenuOpen(!menuOpen)}
           >
@@ -112,16 +166,50 @@ export function Header() {
         </HStack>
       </Flex>
 
-      {/* Mobile menu */}
+      {/* ── Mobile search — below the header row ──────────────────────────── */}
+      <Box
+        as="form"
+        display={{ base: "block", md: "none" }}
+        mx="3"
+        mb="3"
+        onSubmit={handleSearch}
+      >
+        <TextField
+          value={query}
+          placeholder={t("Tìm kiếm sản phẩm...")}
+          onChange={(e) => setQuery(e.target.value)}
+          leftAdornment={MagnifyingGlass}
+          action={
+            <Button
+              type="submit"
+              h="full"
+              px="4"
+              bg="brand.500"
+              color="white"
+              fontSize="sm"
+              fontWeight="600"
+              border="none"
+              cursor="pointer"
+              className={css({
+                _hover: { bg: "brand.600" },
+                borderRadius: "0",
+              })}
+            >
+              {t("Tìm")}
+            </Button>
+          }
+        />
+      </Box>
+
+      {/* ── Mobile nav menu ───────────────────────────────────────────────── */}
       {menuOpen && (
         <Stack
           px="4"
           pb="4"
           gap="2"
-          display={{ base: "flex", md: "none" }}
+          display={{ base: "flex", lg: "none" }}
           bg="white"
-          borderTop="1px solid"
-          borderColor="border.default"
+          borderTop="1px solid {colors.border.default}"
         >
           {links.map((l) => (
             <Link
@@ -129,9 +217,9 @@ export function Header() {
               href={l.href}
               onClick={() => setMenuOpen(false)}
               py="2"
-              fontSize="sm"
-              color="text.secondary"
-              _hover={{ color: "brand.600" }}
+              fontWeight="medium"
+              color={isActive(l.href) ? "brand.600" : "text.secondary"}
+              className={css({ _hover: { color: "brand.600" } })}
             >
               {l.label}
             </Link>

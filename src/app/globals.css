@@ -188,6 +188,15 @@
   border-radius: var(--radius-sm);
 }
 
+/* Inputs handle their own focus via parent _focusWithin — no browser outline */
+input:focus,
+input:focus-visible,
+textarea:focus,
+textarea:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 /* ════════════════════════════════════════════════════════════════════════════
    ANIMATIONS
    ════════════════════════════════════════════════════════════════════════════ */

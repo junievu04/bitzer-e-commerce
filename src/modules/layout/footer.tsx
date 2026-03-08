@@ -337,7 +337,7 @@ export function Footer() {
 
           {/* ── Col 4: Liên Hệ + Social ──────────────────────────────────── */}
           <Stack gap="0">
-            <ColHeading>{t("Liên Hệ")}</ColHeading>
+            <ColHeading>{t("Liên hệ")}</ColHeading>
             <Stack gap="4" mb="7">
               {/* Ms Vân */}
               <HStack gap="3" alignItems="flex-start">
