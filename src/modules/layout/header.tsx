@@ -62,7 +62,7 @@ export function Header() {
     <Box
       position="sticky"
       top="0"
-      zIndex={1}
+      zIndex="topmost"
       bg="white"
       borderBottom="1px solid"
       borderColor={scrolled ? "border.default" : "transparent"}
