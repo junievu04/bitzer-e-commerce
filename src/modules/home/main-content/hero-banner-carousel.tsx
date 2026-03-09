@@ -121,8 +121,7 @@ export function HeroBannerCarousel() {
                   px="3"
                   py="1"
                   borderRadius="full"
-                  border="1px solid"
-                  borderColor="brand.600"
+                  border="1px solid {colors.brand.600}"
                   w="fit-content"
                   bgColor="brand.900/40"
                 >

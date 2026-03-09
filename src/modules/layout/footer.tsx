@@ -97,8 +97,7 @@ function ColHeading({ children }: { children: React.ReactNode }) {
     <Box
       pb="2"
       mb="6"
-      borderBottom="1px solid"
-      borderColor="gray.700"
+      borderBottom="1px solid {colors.gray.700}"
       h="12"
       display="flex"
       alignItems="flex-end"

@@ -150,8 +150,7 @@ export const ContactForm = () => {
       bg="white"
       p="6"
       borderRadius="lg"
-      border="1px solid"
-      borderColor="gray.200"
+      border="1px solid {colors.gray.200}"
       onSubmit={handleSubmit}
     >
       <Stack gap="4">

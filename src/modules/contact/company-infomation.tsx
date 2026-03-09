@@ -20,8 +20,7 @@ export const CompanyInfomation = () => {
       bg="white"
       p="6"
       borderRadius="lg"
-      border="1px solid"
-      borderColor="gray.200"
+      border="1px solid {colors.gray.200}"
     >
       <Text variant="section-heading-2" weight="bold" tone="primary" mb="4">
         {COMPANY_INFO.name}

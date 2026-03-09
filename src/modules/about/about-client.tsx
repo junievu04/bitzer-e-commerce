@@ -211,8 +211,7 @@ export default function AboutClient() {
         <Box
           bg="white"
           borderRadius="2xl"
-          border="1px solid"
-          borderColor="gray.100"
+          border="1px solid {colors.gray.200}"
           py={{ base: "8", md: "12" }}
           mb={{ base: "12", md: "20" }}
         >
@@ -347,8 +346,7 @@ export default function AboutClient() {
                   key={v.title}
                   bg="white"
                   borderRadius="xl"
-                  border="1px solid"
-                  borderColor="gray.100"
+                  border="1px solid {colors.gray.200}"
                   p="6"
                   className={css({
                     transition: "all 0.25s ease",
@@ -405,8 +403,7 @@ export default function AboutClient() {
                   key={cert.label}
                   bg="white"
                   borderRadius="xl"
-                  border="1px solid"
-                  borderColor="gray.200"
+                  border="1px solid {colors.gray.200}"
                   p="6"
                   display="flex"
                   flexDirection="column"
@@ -446,8 +443,7 @@ export default function AboutClient() {
                   key={item.name}
                   bg="white"
                   borderRadius="xl"
-                  border="1px solid"
-                  borderColor="gray.100"
+                  border="1px solid {colors.gray.200}"
                   overflow="hidden"
                   className={css({
                     transition: "all 0.25s ease",
@@ -504,8 +500,7 @@ export default function AboutClient() {
                 <Box
                   key={name}
                   bg="white"
-                  border="1px solid"
-                  borderColor="gray.200"
+                  border="1px solid {colors.gray.200}"
                   borderRadius="xl"
                   px="6"
                   py="4"
@@ -532,6 +527,8 @@ export default function AboutClient() {
       <Box
         style={{ background: "linear-gradient(90deg, #15803d, #22c55e)" }}
         py={{ base: "10", md: "16" }}
+        borderRadius="xl"
+        mb="10"
       >
         <Stack alignItems="center" gap="4" px="4" textAlign="center">
           <Text

@@ -16,9 +16,8 @@ export function StatsStrip() {
     <MainContentWrapper>
       <Box
         bg="white"
-        borderTop="1px solid"
-        borderBottom="1px solid"
-        borderColor="gray.100"
+        borderTop="1px solid {colors.gray.100}"
+        borderBottom="1px solid {colors.gray.100}"
         py={{ base: "8", md: "12" }}
         borderRadius="xl"
       >

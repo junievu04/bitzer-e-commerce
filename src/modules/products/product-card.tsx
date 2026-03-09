@@ -45,8 +45,7 @@ export function ProductCard({ product }: ProductCardProps) {
         bg="white"
         borderRadius="lg"
         overflow="hidden"
-        border="1px solid"
-        borderColor="gray.200"
+        border="1px solid {colors.gray.200}"
         transition="all 0.25s ease"
         h="full"
         _hover={{
@@ -96,8 +95,14 @@ export function ProductCard({ product }: ProductCardProps) {
             disabled={product.quantity <= 0}
           >
             <Center gap="1">
-              <Cart size="sm" tone={product.quantity > 0 ? "success" : "disabled"} />
-              <Text weight="bold" tone={product.quantity > 0 ? "success" : "disabled"}>
+              <Cart
+                size="sm"
+                tone={product.quantity > 0 ? "success" : "disabled"}
+              />
+              <Text
+                weight="bold"
+                tone={product.quantity > 0 ? "success" : "disabled"}
+              >
                 {t("Thêm vào giỏ")}
               </Text>
             </Center>

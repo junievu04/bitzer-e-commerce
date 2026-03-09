@@ -31,8 +31,7 @@ export function ServiceCard({ service }: ServiceCardProps) {
         borderRadius="2xl"
         overflow="hidden"
         bg="white"
-        border="1px solid"
-        borderColor="gray.100"
+        border="1px solid {colors.gray.100}"
         className={css({
           transition: "all 0.3s ease",
           _hover: {

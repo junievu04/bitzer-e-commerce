@@ -209,8 +209,7 @@ export function ProductDetailClient({ slug }: ProductDetailClientProps) {
           bg="white"
           borderRadius="lg"
           p="6"
-          border="1px solid"
-          borderColor="gray.200"
+          border="1px solid {colors.gray.200}"
         >
           <Box position="relative" h={{ base: "300px", md: "400px" }}>
             <Image
@@ -246,8 +245,7 @@ export function ProductDetailClient({ slug }: ProductDetailClientProps) {
             p="4"
             bg="gray.50"
             borderRadius="md"
-            border="1px solid"
-            borderColor="gray.200"
+            border="1px solid {colors.gray.200}"
           >
             <Flex align="center" gap="2" mb="2">
               <Text variant="paragraph-2" weight="medium" tone="primary">
@@ -279,7 +277,7 @@ export function ProductDetailClient({ slug }: ProductDetailClientProps) {
               {t("Liên hệ tư vấn")}
             </Button>
             <Button
-              variant="highlight"
+              variant="secondary"
               size="lg"
               leftIcon={Cart}
               onClick={() => addToCart(product)}
@@ -298,8 +296,7 @@ export function ProductDetailClient({ slug }: ProductDetailClientProps) {
           p="6"
           bg="white"
           borderRadius="lg"
-          border="1px solid"
-          borderColor="gray.200"
+          border="1px solid {colors.gray.200}"
         >
           <Stack gap="4" maxH="100%" overflow="hidden">
             <Box>
@@ -349,8 +346,7 @@ export function ProductDetailClient({ slug }: ProductDetailClientProps) {
           p="6"
           bg="white"
           borderRadius="lg"
-          border="1px solid"
-          borderColor="gray.200"
+          border="1px solid {colors.gray.200}"
         >
           <Stack gap="4">
             <Box>
@@ -371,10 +367,9 @@ export function ProductDetailClient({ slug }: ProductDetailClientProps) {
                   py="3"
                   borderBottom={
                     index < product.specifications!.length - 1
-                      ? "1px solid"
+                      ? "1px solid {colors.gray.200}"
                       : "none"
                   }
-                  borderColor="gray.100"
                 >
                   <Text
                     variant="paragraph-2"

@@ -105,8 +105,7 @@ export function CartClient() {
           <Box
             bg="white"
             borderRadius="lg"
-            border="1px solid"
-            borderColor="gray.200"
+            border="1px solid {colors.gray.200}"
             overflow="hidden"
           >
             {/* Header */}
@@ -115,8 +114,7 @@ export function CartClient() {
               px="4"
               py="3"
               bg="gray.50"
-              borderBottom="1px solid"
-              borderColor="gray.200"
+              borderBottom="1px solid {colors.gray.200}"
             >
               <Box flex="1">
                 <Text variant="caption-1" weight="bold" tone="secondary">
@@ -147,8 +145,11 @@ export function CartClient() {
                 key={item.product.id}
                 px="4"
                 py="4"
-                borderBottom={index < items.length - 1 ? "1px solid" : "none"}
-                borderColor="gray.200"
+                borderBottom={
+                  index < items.length - 1
+                    ? "1px solid {colors.gray.200}"
+                    : "none"
+                }
               >
                 <Flex
                   direction={{ base: "column", md: "row" }}
@@ -238,8 +239,7 @@ export function CartClient() {
                     </Text>
                     <HStack
                       gap="0"
-                      border="1px solid"
-                      borderColor="gray.300"
+                      border="1px solid {colors.gray.300}"
                       borderRadius="md"
                     >
                       <Button
@@ -259,8 +259,7 @@ export function CartClient() {
                       <Center
                         w="10"
                         h="8"
-                        borderX="1px solid"
-                        borderColor="gray.300"
+                        borderX="1px solid {colors.gray.300}"
                       >
                         <Text variant="paragraph-2" weight="medium">
                           {item.quantity}
@@ -352,8 +351,7 @@ export function CartClient() {
           <Box
             bg="white"
             borderRadius="lg"
-            border="1px solid"
-            borderColor="gray.200"
+            border="1px solid {colors.gray.200}"
             p="5"
             position={{ base: "relative", lg: "sticky" }}
             top={{ lg: "100px" }}

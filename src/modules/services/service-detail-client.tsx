@@ -128,8 +128,7 @@ export function ServiceDetailClient({ slug }: ServiceDetailClientProps) {
               p="6"
               bg="gray.50"
               borderRadius="lg"
-              border="1px solid"
-              borderColor="gray.200"
+              border="1px solid {colors.gray.200}"
             >
               <Text
                 variant="section-heading-2"
@@ -160,8 +159,7 @@ export function ServiceDetailClient({ slug }: ServiceDetailClientProps) {
             p="6"
             bg="brand.50"
             borderRadius="lg"
-            border="1px solid"
-            borderColor="brand.200"
+            border="1px solid {colors.gray.200}"
           >
             <Flex
               direction={{ base: "column", md: "row" }}
