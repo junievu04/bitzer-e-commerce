@@ -64,8 +64,6 @@ export function Header() {
       top="0"
       zIndex="topmost"
       bg="white"
-      borderBottom="1px solid"
-      borderColor={scrolled ? "gray.200" : "transparent"}
       shadow={scrolled ? "md" : "none"}
       transition="all 0.3s ease"
     >
@@ -97,10 +95,8 @@ export function Header() {
               <Text
                 weight="medium"
                 tone={isActive(l.href) ? "success" : "secondary"}
-                className={css({
-                  whiteSpace: "nowrap",
-                  _hover: { color: "brand.600" },
-                })}
+                whiteSpace="nowrap"
+                _hover={{ color: "brand.600" }}
               >
                 {l.label}
               </Text>

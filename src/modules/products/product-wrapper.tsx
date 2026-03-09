@@ -1,8 +1,8 @@
 "use client";
 
 import { useIntl } from "@/utils/intl";
-import { Box, Flex, Stack } from "@/vendors/styled-system/jsx";
-import Breadcrumbs from "../../components/breadcrumbs";
+import { Flex, Stack } from "@/vendors/styled-system/jsx";
+import { HeaderTitleWrapper } from "../layout/header-title-wrapper";
 import { ProductFilter } from "./product-filter";
 import { ProductList } from "./product-list";
 import { ProductPagination } from "./product-pagination";
@@ -51,11 +51,7 @@ export function ProductWrapper({
   }
 
   return (
-    <Box py="6" px="3">
-      <Box mb="4">
-        <Breadcrumbs items={breadcrumbItems} />
-      </Box>
-
+    <HeaderTitleWrapper breadcrumbItems={breadcrumbItems}>
       <Stack gap="4">
         <Flex
           direction={{ base: "column", md: "row" }}
@@ -85,6 +81,6 @@ export function ProductWrapper({
           onPageChange={onPageChange}
         />
       </Stack>
-    </Box>
+    </HeaderTitleWrapper>
   );
 }

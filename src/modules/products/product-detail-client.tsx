@@ -10,7 +10,7 @@ import { css } from "@/vendors/styled-system/css";
 import { Box, Flex, Grid, Stack } from "@/vendors/styled-system/jsx";
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
-import Breadcrumbs from "../../components/breadcrumbs";
+import { HeaderTitleWrapper } from "../layout/header-title-wrapper";
 import { PRODUCT_CATEGORIES } from "./product-filter";
 import { SuggestedProductsSection } from "./suggested-products-section";
 import { Product } from "./types";
@@ -203,11 +203,7 @@ export function ProductDetailClient({ slug }: ProductDetailClientProps) {
   breadcrumbItems.push({ label: product.name });
 
   return (
-    <Box py="6" px="3">
-      <Box mb="4">
-        <Breadcrumbs items={breadcrumbItems} />
-      </Box>
-
+    <HeaderTitleWrapper breadcrumbItems={breadcrumbItems}>
       <Grid columns={{ base: 1, lg: 2 }} gap="8">
         <Box
           bg="white"
@@ -403,6 +399,6 @@ export function ProductDetailClient({ slug }: ProductDetailClientProps) {
         products={suggestedProducts}
         categorySlug={product.category.slug}
       />
-    </Box>
+    </HeaderTitleWrapper>
   );
 }
