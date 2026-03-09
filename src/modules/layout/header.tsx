@@ -18,7 +18,6 @@ const NAV_LINKS = {
     { href: "/products", label: "Sản phẩm" },
     { href: "/services", label: "Dịch vụ" },
     { href: "/about", label: "Giới thiệu" },
-    { href: "/news", label: "Tin tức" },
     { href: "/contact", label: "Liên hệ" },
   ],
   en: [
@@ -26,7 +25,6 @@ const NAV_LINKS = {
     { href: "/products", label: "Products" },
     { href: "/services", label: "Services" },
     { href: "/about", label: "About" },
-    { href: "/news", label: "News" },
     { href: "/contact", label: "Contact" },
   ],
 };
