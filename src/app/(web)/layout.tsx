@@ -1,5 +1,14 @@
 import { Footer } from "@/modules/layout/footer";
 import { Header } from "@/modules/layout/header";
+import { styled } from "@/vendors/styled-system/jsx";
+
+const Wrapper = styled("div", {
+  base: {
+    display: "flex",
+    flexDirection: "column",
+    minHeight: "100dvh",
+  },
+});
 
 export default function RootLayout({
   children,
@@ -7,20 +16,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <Wrapper>
       <Header />
-      <main
-        style={{
-          minHeight: "calc(100vh - var(--header-height, 64px))",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        {children}
-      </main>
+      <main style={{ flex: 1 }}>{children}</main>
       <Footer />
       {/* <StickyContact />
       <ChatbotWidget /> */}
-    </>
+    </Wrapper>
   );
 }

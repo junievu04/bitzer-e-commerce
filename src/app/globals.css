@@ -94,6 +94,7 @@
 
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: var(--header-height);
     text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
   }

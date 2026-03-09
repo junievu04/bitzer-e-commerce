@@ -88,15 +88,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           display="flex"
           alignItems="center"
           justifyContent="center"
-          gap="sbds-dimension-space-size-xs"
+          gap="2"
         >
           {isLoading ? (
             <>
-              <Spinner
-                w="sbds-dimension-size-7"
-                h="sbds-dimension-size-7"
-                tone="inherit"
-              />
+              <Spinner w="4" h="4" tone="inherit" />
               {loadingText}
             </>
           ) : (

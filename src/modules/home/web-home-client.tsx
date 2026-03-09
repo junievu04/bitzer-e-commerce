@@ -7,11 +7,11 @@ import {
   ServiceCards,
   StatsStrip,
 } from "@/modules/home/main-content";
-import { PageWrapper } from "@/modules/home/web-home-wrapper";
+import { LayoutContentWrapper } from "@/modules/layout/layout-content-wrapper";
 
 export default function HomePage() {
   return (
-    <PageWrapper>
+    <LayoutContentWrapper>
       <HeroBannerCarousel />
       <ServiceCards />
       <AboutSection />
@@ -19,6 +19,6 @@ export default function HomePage() {
       <GlobalSupplierSection />
       <CtaBanner />
       <NewsSection />
-    </PageWrapper>
+    </LayoutContentWrapper>
   );
 }

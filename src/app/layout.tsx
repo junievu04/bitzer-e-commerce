@@ -1,3 +1,4 @@
+import { CartProvider } from "@/hooks";
 import { IntlProvider } from "@/utils/intl";
 import type { Metadata, Viewport } from "next";
 import { Be_Vietnam_Pro, JetBrains_Mono } from "next/font/google";
@@ -102,7 +103,9 @@ export default function RootLayout({
       className={`${beVietnamPro.variable} ${jetbrainsMono.variable}`}
     >
       <body>
-        <IntlProvider>{children}</IntlProvider>
+        <IntlProvider>
+          <CartProvider>{children}</CartProvider>
+        </IntlProvider>
       </body>
     </html>
   );

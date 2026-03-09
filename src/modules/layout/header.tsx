@@ -4,9 +4,10 @@ import { Cart, Icon3Lines, MagnifyingGlass } from "@/components/icons";
 import Link from "@/components/link";
 import Text from "@/components/text";
 import TextField from "@/components/text-field/text-field";
+import { useCart } from "@/hooks";
 import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
-import { Box, Flex, HStack, Stack } from "@/vendors/styled-system/jsx";
+import { Box, Center, Flex, HStack, Stack } from "@/vendors/styled-system/jsx";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { LanguageSwitcher } from "./language-switcher";
@@ -32,6 +33,7 @@ const NAV_LINKS = {
 
 export function Header() {
   const { lang, t } = useIntl();
+  const { totalItems } = useCart();
   const router = useRouter();
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
@@ -65,7 +67,7 @@ export function Header() {
       zIndex="topmost"
       bg="white"
       borderBottom="1px solid"
-      borderColor={scrolled ? "border.default" : "transparent"}
+      borderColor={scrolled ? "gray.200" : "transparent"}
       shadow={scrolled ? "md" : "none"}
       transition="all 0.3s ease"
     >
@@ -149,8 +151,23 @@ export function Header() {
         {/* Right actions */}
         <HStack gap="3" flexShrink={0}>
           <LanguageSwitcher />
-          <Link href="/cart">
+          <Link href="/cart" position="relative">
             <Cart />
+            {totalItems > 0 && (
+              <Center
+                position="absolute"
+                top="-2"
+                right="-2"
+                w="4"
+                h="4"
+                bg="red.500"
+                borderRadius="full"
+              >
+                <Text variant="caption-2" tone="inverse" weight="bold">
+                  {totalItems > 99 ? "99+" : totalItems}
+                </Text>
+              </Center>
+            )}
           </Link>
           <Button
             display={{ base: "flex", lg: "none" }}
