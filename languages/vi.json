@@ -127,6 +127,8 @@
   "uses id for input id and name when name is not provided": "uses id for input id and name when name is not provided",
   "uses name for input id and name when provided": "uses name for input id and name when provided",
   "vi-VN": "vi-VN",
+  "x-event": "x-event",
+  "x-secret": "x-secret",
   "Đang gửi...": "Đang gửi...",
   "Điểm nổi bật": "Điểm nổi bật",
   "Điện Lạnh Đại Tín": "Điện Lạnh Đại Tín",
