@@ -28,15 +28,9 @@ jobs:
           project_id: ${{ vars.LOKALISE_PROJECT_ID }}
           file_format: json
           translations_path: languages
-          base_lang: vi
+          base_lang: vi_VN
           flat_naming: true
           skip_include_tags: true
-          additional_params: >
-            {
-              "language_mapping": [
-                {"original_language_iso": "en", "custom_language_iso": "en"},
-                {"original_language_iso": "en_EN "custom_language_iso": "en"},
-                {"original_language_iso": "vi", "custom_language_iso": "vi"},
-                {"original_language_iso": "vi_VN", "custom_language_iso": "vi"}
-              ]
-            }
+          # Luôn pull base language để phát hiện thay đổi
+          always_pull_base: true
+          additional_params: '{"filter_langs": ["vi_VN", "en"], "language_mapping": [{"original_language_iso": "en", "custom_language_iso": "en"}, {"original_language_iso": "en_US", "custom_language_iso": "en"}, {"original_language_iso": "vi_VN", "custom_language_iso": "vi"}]}'
