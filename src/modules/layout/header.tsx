@@ -72,7 +72,7 @@ export function Header() {
         w="100%"
         mx="auto"
         maxW={1280}
-        px="3"
+        p="3"
         h="16"
         alignItems="center"
         gap="5"
@@ -119,23 +119,7 @@ export function Header() {
             onChange={(e) => setQuery(e.target.value)}
             leftAdornment={MagnifyingGlass}
             action={
-              <Button
-                type="submit"
-                h="full"
-                px="4"
-                bg="brand.500"
-                color="white"
-                fontSize="sm"
-                fontWeight="600"
-                border="none"
-                cursor="pointer"
-                flexShrink={0}
-                transition="background 0.2s"
-                className={css({
-                  _hover: { bg: "brand.600" },
-                  borderRadius: "0",
-                })}
-              >
+              <Button type="submit" size="sm" flexShrink={0}>
                 {t("Tìm")}
               </Button>
             }

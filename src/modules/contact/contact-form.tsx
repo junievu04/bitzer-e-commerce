@@ -1,6 +1,6 @@
 "use client";
 import Button from "@/components/button";
-import { Paperplane } from "@/components/icons";
+import { TravelNavigation } from "@/components/icons";
 import Text from "@/components/text";
 import TextArea from "@/components/text-area/text-area";
 import TextField from "@/components/text-field";
@@ -214,7 +214,7 @@ export const ContactForm = () => {
           type="submit"
           variant="default"
           size="lg"
-          leftIcon={Paperplane}
+          rightIcon={TravelNavigation}
           disabled={isSubmitting}
         >
           {isSubmitting ? t("Đang gửi...") : t("Gửi liên hệ")}

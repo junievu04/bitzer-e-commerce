@@ -43,8 +43,8 @@ const SelectInput = styled("select", {
       opacity: 1,
     },
     p: {
-      base: "calc({spacing.2} - 2px)",
-      md: "calc({spacing.3} - 2px)",
+      base: "calc({spacing.1})",
+      md: "calc({spacing.2})",
     },
   },
 });
@@ -267,14 +267,14 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
             align="center"
             flex="1 0 0"
             p={{
-              base: "calc({spacing.2} - 2px)",
-              md: "calc({spacing.3} - 2px)",
+              base: "calc({spacing.1})",
+              md: "calc({spacing.2})",
             }}
             pl={
               prefixDropdown
                 ? {
-                    base: "calc({spacing.2} - 1px)",
-                    md: "calc({spacing.3} - 1px)",
+                    base: "calc({spacing.1})",
+                    md: "calc({spacing.2})",
                   }
                 : undefined
             }
