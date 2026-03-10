@@ -9,18 +9,20 @@ const LANG_DIR = join(ROOT, "languages");
 const EN_PATH = join(LANG_DIR, "en.json");
 const VI_PATH = join(LANG_DIR, "vi.json");
 
-// t("key") or t('key') - new regex per file to avoid lastIndex bug across files
+// t("key") or t('key') - chỉ match useIntl().t hoặc t(, không match get(, request(, etc.
 function collectKeysFromSource(): Set<string> {
   const files = globSync("src/**/*.{ts,tsx,js,jsx}", {
     cwd: ROOT,
     absolute: true,
+    ignore: ["**/*.spec.{ts,tsx}", "**/*.test.{ts,tsx}", "**/vendors/**"],
   });
 
   const keys = new Set<string>();
 
   for (const file of files) {
     const content = readFileSync(file, "utf-8");
-    const regex = /t\(\s*["']([^"']+)["']/g;
+    // (?<![a-zA-Z0-9_]) = t không đứng sau chữ/số (tránh match get("x-secret"))
+    const regex = /(?<![a-zA-Z0-9_])t\(\s*["']([^"']+)["']/g;
     for (const match of content.matchAll(regex)) {
       keys.add(match[1]);
     }
@@ -60,7 +62,12 @@ function findUnusedKeys(
   return unused;
 }
 
-function syncLanguage(lang: string, path: string, sourceKeys: Set<string>) {
+function syncLanguage(
+  lang: string,
+  path: string,
+  sourceKeys: Set<string>,
+  removeUnused: boolean,
+) {
   const json = readJson(path);
 
   let added = 0;
@@ -74,24 +81,34 @@ function syncLanguage(lang: string, path: string, sourceKeys: Set<string>) {
 
   const unused = findUnusedKeys(json, sourceKeys);
 
+  if (removeUnused) {
+    for (const key of unused) {
+      delete json[key];
+    }
+  }
+
   writeJson(path, json);
 
   return {
     added,
+    removed: removeUnused ? unused.length : 0,
     unused,
     total: Object.keys(json).length,
   };
 }
 
 function main() {
+  const removeUnused = process.argv.includes("--cleanup");
   const sourceKeys = collectKeysFromSource();
 
   console.log("🔍 Scanning source files...");
-  console.log(`Found ${sourceKeys.size} translation keys in code\n`);
+  console.log(`Found ${sourceKeys.size} translation keys in code`);
+  if (removeUnused) console.log("🧹 --cleanup: removing unused keys\n");
+  else console.log("");
 
   const report: Record<
     string,
-    { added: number; total: number; unused: string[] }
+    { added: number; removed: number; total: number; unused: string[] }
   > = {};
 
   for (const lang of ["en", "vi"]) {
@@ -99,6 +116,7 @@ function main() {
       lang,
       lang === "en" ? EN_PATH : VI_PATH,
       sourceKeys,
+      removeUnused,
     );
   }
 
@@ -109,9 +127,12 @@ function main() {
 
     console.log(`Language: ${lang}`);
     console.log(`  Added keys: ${r.added}`);
+    if (removeUnused && r.removed > 0) {
+      console.log(`  Removed keys: ${r.removed}`);
+    }
     console.log(`  Total keys: ${r.total}`);
 
-    if (r.unused.length > 0) {
+    if (r.unused.length > 0 && !removeUnused) {
       console.log(
         `  🏷️  [unused] Detected ${r.unused.length} keys not in code:`,
       );
@@ -123,6 +144,7 @@ function main() {
       if (r.unused.length > 10) {
         console.log(`     ...and ${r.unused.length - 10} more`);
       }
+      console.log(`     Run with --cleanup to remove them.`);
     }
 
     console.log("");
