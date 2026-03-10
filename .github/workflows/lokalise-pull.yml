@@ -1,9 +1,13 @@
 # Pull translations from Lokalise → tạo PR cập nhật languages/*.json
-# Chạy thủ công: Actions → Pull from Lokalise → Run workflow
+# Trigger: webhook (Lokalise) | schedule (thứ 2) | thủ công
 name: Pull from Lokalise
 
 on:
   workflow_dispatch:
+  repository_dispatch:
+    types: [lokalise-translation-updated]
+  schedule:
+    - cron: "0 8 * * 1"
 
 jobs:
   pull:
@@ -24,5 +28,15 @@ jobs:
           project_id: ${{ vars.LOKALISE_PROJECT_ID }}
           file_format: json
           translations_path: languages
-          base_lang: en
+          base_lang: vi
           flat_naming: true
+          skip_include_tags: true
+          additional_params: >
+            {
+              "language_mapping": [
+                {"original_language_iso": "en", "custom_language_iso": "en"},
+                {"original_language_iso": "en_US", "custom_language_iso": "en"},
+                {"original_language_iso": "vi", "custom_language_iso": "vi"},
+                {"original_language_iso": "vi_VN", "custom_language_iso": "vi"}
+              ]
+            }

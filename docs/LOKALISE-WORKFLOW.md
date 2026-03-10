@@ -11,8 +11,9 @@
 ### 1. Tạo project trên Lokalise
 
 1. Tạo project "Web and mobile" trên [Lokalise](https://lokalise.com)
-2. Thêm ngôn ngữ: `en` (base), `vi`
-3. Lấy **Project ID** trong Settings → General
+2. **Base language**: Vietnamese (`vi`) – ngôn ngữ gốc
+3. Thêm ngôn ngữ: English (`en`) – ngôn ngữ dịch
+4. Lấy **Project ID** trong Settings → General
 
 ### 2. API Token
 
@@ -54,9 +55,28 @@
 ### Cập nhật bản dịch (Lokalise → Code)
 
 1. Dịch/cập nhật trên Lokalise
-2. GitHub → Actions → **Pull from Lokalise** → Run workflow
-3. Workflow tạo PR với `languages/*.json` đã cập nhật
+2. **Tự động (webhook)**: Workflow Pull chạy ngay → tạo PR
+3. **Thủ công**: Actions → **Pull from Lokalise** → Run workflow
 4. Merge PR → code dùng bản dịch mới
+
+### Webhook – Pull tự động khi Lokalise cập nhật
+
+1. **GitHub PAT** (Personal Access Token):
+   - GitHub → Settings → Developer settings → Personal access tokens
+   - Tạo token với scope `repo`
+   - Lưu token
+
+2. **Env vars** (Vercel / hosting):
+   - `GITHUB_REPOSITORY`: `owner/repo` (vd: `yourname/bitzer-e-commerce`)
+   - `GITHUB_WEBHOOK_PAT`: PAT vừa tạo
+   - `LOKALISE_WEBHOOK_SECRET`: chuỗi bí mật bất kỳ (dùng để verify webhook)
+
+3. **Lokalise webhook**:
+   - Lokalise → Apps → Webhooks → Enable
+   - **URL**: `https://your-domain.com/api/webhooks/lokalise`
+   - **Events**: chọn `project.translation.updated`
+   - **X-Secret**: cùng giá trị với `LOKALISE_WEBHOOK_SECRET`
+   - Save
 
 ## Cấu trúc file
 
@@ -70,3 +90,10 @@
 - **`t("key")`**: Key mới được thêm tự động khi chạy `npm run sync-keys` (hoặc khi push lên main).
 - **`t("key", { defaultMessage: "Fallback" })**: Nếu thiếu key, dùng `defaultMessage`.
 - Không chỉnh sửa trực tiếp `languages/*.json` nếu đã dùng Lokalise – có thể bị ghi đè khi Pull.
+
+## Xử lý lỗi: vi có English, en có Vietnamese (lộn bản dịch)
+
+1. **Kiểm tra Lokalise**: Settings → Languages → Base language phải là **Vietnamese (vi)**.
+2. **Khi dịch**: Chọn đúng cột (vi = nguồn, en = bản dịch).
+3. **Pull workflow** đã có `language_mapping` để map `vi_VN` → `vi`, `en_US` → `en`.
+4. Nếu vẫn lộn: Xóa key trên Lokalise, push lại từ GitHub, rồi dịch lại.
