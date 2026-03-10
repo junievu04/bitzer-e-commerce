@@ -1,0 +1,45 @@
+# Push translation files (languages/*.json) to Lokalise when pushing to main
+# Chạy thủ công: Actions → Push to Lokalise → Run workflow
+# Hoặc tự động khi push lên main (đã bật bên dưới)
+name: Push to Lokalise
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "languages/**"
+      - "src/**"
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Sync i18n keys from code
+        run: npm run sync-keys
+
+      - name: Push to Lokalise
+        uses: lokalise/lokalise-push-action@v5.0.0
+        with:
+          api_token: ${{ secrets.LOKALISE_API_TOKEN }}
+          project_id: ${{ vars.LOKALISE_PROJECT_ID }}
+          base_lang: en
+          translations_path: languages
+          file_ext: json
+          flat_naming: true

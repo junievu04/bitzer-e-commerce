@@ -1,0 +1,28 @@
+# Pull translations from Lokalise → tạo PR cập nhật languages/*.json
+# Chạy thủ công: Actions → Pull from Lokalise → Run workflow
+name: Pull from Lokalise
+
+on:
+  workflow_dispatch:
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Pull from Lokalise
+        uses: lokalise/lokalise-pull-action@v5.0.0
+        with:
+          api_token: ${{ secrets.LOKALISE_API_TOKEN }}
+          project_id: ${{ vars.LOKALISE_PROJECT_ID }}
+          file_format: json
+          translations_path: languages
+          base_lang: en
+          flat_naming: true
