@@ -35,7 +35,7 @@ jobs:
             {
               "language_mapping": [
                 {"original_language_iso": "en", "custom_language_iso": "en"},
-                {"original_language_iso": "en_US", "custom_language_iso": "en"},
+                {"original_language_iso": "en_EN "custom_language_iso": "en"},
                 {"original_language_iso": "vi", "custom_language_iso": "vi"},
                 {"original_language_iso": "vi_VN", "custom_language_iso": "vi"}
               ]
