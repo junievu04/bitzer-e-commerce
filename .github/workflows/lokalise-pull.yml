@@ -31,6 +31,18 @@ jobs:
           base_lang: vi_VN
           flat_naming: true
           skip_include_tags: true
-          # Luôn pull base language để phát hiện thay đổi
-          always_pull_base: true
           additional_params: '{"filter_langs": ["vi_VN", "en"], "language_mapping": [{"original_language_iso": "en", "custom_language_iso": "en"}, {"original_language_iso": "en_US", "custom_language_iso": "en"}, {"original_language_iso": "vi_VN", "custom_language_iso": "vi"}]}'
+
+      - name: Debug - List files after Pull
+        run: |
+          echo "=== Cấu trúc thư mục ==="
+          find . -type f -name "*.json" | head -30
+          echo ""
+          echo "=== Nội dung languages/ ==="
+          ls -la languages/ 2>/dev/null || echo "Không có thư mục languages"
+          echo ""
+          echo "=== Mẫu en.json (10 dòng đầu) ==="
+          head -10 languages/en.json 2>/dev/null || echo "Không có en.json"
+          echo ""
+          echo "=== Mẫu vi.json (10 dòng đầu) ==="
+          head -10 languages/vi.json 2>/dev/null || echo "Không có vi.json"
