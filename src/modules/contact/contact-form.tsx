@@ -2,11 +2,12 @@
 import Button from "@/components/button";
 import { Paperplane } from "@/components/icons";
 import Text from "@/components/text";
-import TextField from "@/components/text-field/text-field";
+import TextArea from "@/components/text-area/text-area";
+import TextField from "@/components/text-field";
 import { useCart } from "@/hooks";
 import { SERVICES } from "@/modules/services/types";
 import { useIntl } from "@/utils/intl";
-import { Box, Stack, styled } from "@/vendors/styled-system/jsx";
+import { Box, Stack } from "@/vendors/styled-system/jsx";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -17,25 +18,6 @@ interface ContactFormData {
   address: string;
   message: string;
 }
-
-const TextArea = styled("textarea", {
-  base: {
-    w: "full",
-    minH: "150px",
-    p: "3",
-    borderRadius: "md",
-    border: "1px solid",
-    borderColor: "gray.300",
-    fontSize: "sm",
-    fontFamily: "body",
-    resize: "vertical",
-    outline: "none",
-    transition: "border-color 0.2s",
-    _placeholder: { color: "text.muted" },
-    _focus: { borderColor: "brand.500" },
-    _disabled: { bg: "gray.100", cursor: "not-allowed" },
-  },
-});
 
 export const ContactForm = () => {
   const { t } = useIntl();

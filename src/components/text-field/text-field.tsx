@@ -1,9 +1,7 @@
 "use client";
 
-import { ArrowDown, CircleCrossFilled } from "@/components/icons";
-import { BaseIconProps } from "@/components/icons/base";
-import Text from "@/components/text/text";
-import { css } from "@/vendors/styled-system/css";
+import Text from "@/components/text";
+import useCharacterCounter from "@/hooks/use-character-counter";
 import {
   Box,
   Divider,
@@ -12,43 +10,46 @@ import {
   styled,
 } from "@/vendors/styled-system/jsx";
 import { forwardRef, useCallback, useRef, useState } from "react";
+import { ArrowDown, CircleCrossFilled } from "../icons";
+import { BaseIconProps } from "../icons/base";
+import { textRecipe } from "../text/text.recipe";
 import { textFieldContainerRecipe } from "./text-field.recipe";
-
-// ─── Styled primitives ────────────────────────────────────────────────────────
 
 const Input = styled("input", {
   base: {
     flex: "1 0 0",
     outline: "none",
     bg: "transparent",
-    border: "none",
-    fontSize: "sm",
-    fontFamily: "body",
+    _placeholder: {
+      color: "text.accent.hover",
+    },
+    ...textRecipe.raw({ variant: "paragraph-2" }),
     color: "inherit",
-    _placeholder: { color: "text.muted" },
-    _focus: { outline: "none", boxShadow: "none" },
-    _disabled: { cursor: "not-allowed" },
   },
 });
 
 const SelectInput = styled("select", {
   base: {
+    width: "100%",
     bg: "transparent",
-    outline: "none",
-    border: "none",
+    outlineOffset: 1,
+    borderLeftRadius: "lg",
     appearance: "none",
+    overflow: "hidden",
     cursor: "default",
-    fontSize: "sm",
-    fontFamily: "body",
+    ...textRecipe.raw({ variant: "paragraph-2" }),
     color: "inherit",
-    px: "3",
-    pr: "8",
-    py: "2",
-    _disabled: { opacity: 1 },
+    _disabled: {
+      opacity: 1,
+    },
+    p: {
+      base: "calc({spacing.2} - 2px)",
+      md: "calc({spacing.3} - 2px)",
+    },
   },
 });
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+const Container = styled(Flex, textFieldContainerRecipe);
 
 export interface PrefixDropdownOption {
   value: string;
@@ -58,8 +59,7 @@ export interface PrefixDropdownOption {
 export interface PrefixDropdownProps extends HTMLStyledProps<"select"> {
   options: PrefixDropdownOption[];
 }
-
-export interface TextFieldProps extends Omit<HTMLStyledProps<"input">, "size"> {
+export interface TextFieldProps extends HTMLStyledProps<"input"> {
   label?: string;
   message?: string;
   error?: boolean;
@@ -70,8 +70,6 @@ export interface TextFieldProps extends Omit<HTMLStyledProps<"input">, "size"> {
   action?: React.ReactNode;
   prefixDropdown?: PrefixDropdownProps;
 }
-
-// ─── Component ────────────────────────────────────────────────────────────────
 
 const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
   (
@@ -100,19 +98,21 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
     ref,
   ) => {
     const [focused, setFocused] = useState(false);
-    const [length, setLength] = useState(
-      () => String(value ?? defaultValue ?? "").length,
-    );
     const inputRef = useRef<HTMLInputElement | null>(null);
 
     const setInputRef = useCallback(
       (element: HTMLInputElement | null) => {
         inputRef.current = element;
-        if (typeof ref === "function") ref(element);
-        else if (ref) ref.current = element;
+        if (typeof ref === "function") {
+          ref(element);
+        } else if (ref) {
+          ref.current = element;
+        }
       },
       [ref],
     );
+
+    const [length, setLength] = useCharacterCounter(value, defaultValue);
 
     const inputId = name || id || "";
     const messageId = `${inputId}-message`;
@@ -129,19 +129,25 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
       ...selectRest
     } = prefixDropdown || {};
 
+    const [prefixValue, setPrefixValue] = useState(selectDefaultValue);
+
     const prefixDropdownId =
       selectName || selectId || `${inputId}-prefix-dropdown`;
 
-    const getState = (): "default" | "focused" | "error" | "disabled" => {
-      if (disabled) return "disabled";
-      if (error) return "error";
-      if (focused) return "focused";
-      return "default";
+    const handleContainerClick = () => {
+      if (disabled) return;
+      setFocused(true);
+      inputRef.current?.focus();
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setLength(e.target.value.length);
       onChange?.(e);
+    };
+
+    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setPrefixValue(e.target.value);
+      selectOnChange?.(e);
     };
 
     const handleFocus = (
@@ -166,9 +172,25 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
       }
     };
 
+    const getContainerState = ():
+      | "default"
+      | "focused"
+      | "error"
+      | "disabled" => {
+      if (disabled) return "disabled";
+      if (error) return "error";
+      if (focused) return "focused";
+      return "default";
+    };
+
     return (
-      <Flex direction="column" gap="1">
-        {/* ── Label row ──────────────────────────────────────────────────── */}
+      <Flex
+        direction="column"
+        gap={{
+          base: "1",
+          md: "2",
+        }}
+      >
         {(label || maxLength) && (
           <Flex align="center" justify="end" gap="2">
             {label && (
@@ -176,9 +198,8 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
                 htmlTag="label"
                 htmlFor={inputId}
                 variant="paragraph-2"
-                weight="medium"
-                tone="primary"
-                style={{ flexGrow: 1 }}
+                truncate={1}
+                flexGrow={1}
               >
                 {label}
               </Text>
@@ -196,28 +217,21 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
             )}
           </Flex>
         )}
-
-        {/* ── Input container ────────────────────────────────────────────── */}
-        <Box
-          className={textFieldContainerRecipe({ state: getState() })}
-          onClick={() => !disabled && inputRef.current?.focus()}
-        >
-          {/* Prefix dropdown */}
+        <Container state={getContainerState()}>
           {prefixDropdown && (
             <>
-              <Box position="relative" flexShrink={0}>
+              <Box position="relative">
                 <SelectInput
                   id={prefixDropdownId}
                   name={prefixDropdownId}
                   value={selectValue}
                   defaultValue={selectDefaultValue}
                   disabled={disabled}
-                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                    selectOnChange?.(e);
-                  }}
+                  onChange={handleSelectChange}
                   onFocus={handleFocus}
                   onBlur={handleBlur}
                   aria-invalid={error}
+                  aria-describedby={message ? messageId : undefined}
                   {...selectRest}
                 >
                   {options.map((option) => (
@@ -231,7 +245,10 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
                   aria-hidden="true"
                   tone="primary"
                   position="absolute"
-                  right="2"
+                  right={{
+                    base: "2",
+                    md: "3",
+                  }}
                   top="50%"
                   transform="translateY(-50%)"
                   pointerEvents="none"
@@ -239,84 +256,86 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
               </Box>
               <Divider
                 orientation="vertical"
-                color="border.default"
-                thickness="1.5px"
+                color="inherit"
+                thickness="2px"
                 height="auto"
                 alignSelf="stretch"
               />
             </>
           )}
-
-          {/* Left adornment */}
-          {LeftAdornment && (
-            <Box display="flex" alignItems="center" pl="3" flexShrink={0}>
+          <Flex
+            align="center"
+            flex="1 0 0"
+            p={{
+              base: "calc({spacing.2} - 2px)",
+              md: "calc({spacing.3} - 2px)",
+            }}
+            pl={
+              prefixDropdown
+                ? {
+                    base: "calc({spacing.2} - 1px)",
+                    md: "calc({spacing.3} - 1px)",
+                  }
+                : undefined
+            }
+            gap="2"
+            onClick={handleContainerClick}
+          >
+            {LeftAdornment && (
               <LeftAdornment
                 aria-hidden="true"
-                tone={focused ? "link" : "secondary"}
-                className={css({ transition: "color 0.2s" })}
+                tone={focused ? "primary" : "placeholder"}
+                transition="all 0.3s ease-in-out"
               />
-            </Box>
-          )}
-
-          {/* Inner: prefix · input · suffix */}
-          <Flex align="center" flex="1 0 0" px="3" py="2" gap="2">
-            {prefix && (
-              <Text variant="paragraph-1" htmlTag="span" tone="secondary">
-                {prefix}
-              </Text>
             )}
-            <Input
-              id={inputId}
-              name={inputId}
-              maxLength={maxLength}
-              value={value}
-              defaultValue={defaultValue}
-              size={1}
-              placeholder={placeholder}
-              disabled={disabled}
-              onChange={handleChange}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              ref={setInputRef}
-              aria-invalid={error}
-              aria-describedby={message ? messageId : undefined}
-              {...rest}
-            />
-            {suffix && (
-              <Text variant="paragraph-1" htmlTag="span" tone="secondary">
-                {suffix}
-              </Text>
-            )}
-          </Flex>
-
-          {/* Right adornment */}
-          {RightAdornment && (
-            <Box display="flex" alignItems="center" pr="3" flexShrink={0}>
+            <Flex align="center" pt="0.5" pb="1" gap="2" flex="1 0 0">
+              {prefix && (
+                <Text variant="paragraph-2" htmlTag="span" tone="disabled">
+                  {prefix}
+                </Text>
+              )}
+              {disabled && prefixValue && (
+                <Text variant="paragraph-2" htmlTag="span" tone="disabled">
+                  {prefixValue}
+                </Text>
+              )}
+              <Input
+                id={inputId}
+                name={inputId}
+                maxLength={maxLength}
+                value={value}
+                defaultValue={defaultValue}
+                size={1}
+                placeholder={placeholder}
+                disabled={disabled}
+                onChange={handleChange}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                ref={setInputRef}
+                aria-invalid={error}
+                aria-describedby={message ? messageId : undefined}
+                {...rest}
+              />
+              {suffix && (
+                <Text variant="paragraph-2" htmlTag="span" tone="disabled">
+                  {suffix}
+                </Text>
+              )}
+            </Flex>
+            {RightAdornment && (
               <RightAdornment
                 aria-hidden="true"
-                tone={focused ? "link" : "secondary"}
-                className={css({ transition: "color 0.2s" })}
+                tone={focused ? "primary" : "placeholder"}
+                transition="all 0.3s ease-in-out"
               />
-            </Box>
-          )}
-
-          {/* Action slot (e.g. submit button) */}
-          {action && (
-            <Box display="flex" alignItems="stretch" flexShrink={0}>
-              {action}
-            </Box>
-          )}
-        </Box>
-
-        {/* ── Message / error ────────────────────────────────────────────── */}
+            )}
+            {action}
+          </Flex>
+        </Container>
         {message && (
           <Flex gap="1" id={messageId}>
             {error && (
-              <CircleCrossFilled
-                tone="error"
-                size="sm"
-                style={{ flexShrink: 0 }}
-              />
+              <CircleCrossFilled tone="error" size="sm" flexShrink={0} />
             )}
             <Text
               variant="caption-1"
@@ -333,4 +352,5 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
 );
 
 TextField.displayName = "TextField";
+
 export default TextField;

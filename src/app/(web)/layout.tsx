@@ -1,5 +1,7 @@
+import { Chatbot } from "@/modules/layout/chatbot";
 import { Footer } from "@/modules/layout/footer";
 import { Header } from "@/modules/layout/header";
+// import { StickyContact } from "@/modules/layout/sticky-contact";
 import { styled } from "@/vendors/styled-system/jsx";
 
 const Wrapper = styled("div", {
@@ -20,8 +22,8 @@ export default function RootLayout({
       <Header />
       <main style={{ flex: 1 }}>{children}</main>
       <Footer />
-      {/* <StickyContact />
-      <ChatbotWidget /> */}
+      {/* <StickyContact /> */}
+      <Chatbot />
     </Wrapper>
   );
 }

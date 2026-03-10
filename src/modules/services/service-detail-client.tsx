@@ -85,11 +85,7 @@ export function ServiceDetailClient({ slug }: ServiceDetailClientProps) {
       <Box maxW="900px" mx="auto">
         <Stack gap="8">
           {/* Intro */}
-          <Text
-            variant="paragraph-2"
-            tone="secondary"
-            className={css({ lineHeight: "1.8" })}
-          >
+          <Text variant="paragraph-1" tone="secondary">
             {service.description}
           </Text>
 
@@ -112,9 +108,9 @@ export function ServiceDetailClient({ slug }: ServiceDetailClientProps) {
               </Box>
               <Box>
                 <Text
-                  variant="paragraph-2"
+                  variant="paragraph-1"
                   tone="secondary"
-                  className={css({ lineHeight: "1.8", whiteSpace: "pre-wrap" })}
+                  whiteSpace="pre-wrap"
                 >
                   {service.detailedDescription}
                 </Text>
