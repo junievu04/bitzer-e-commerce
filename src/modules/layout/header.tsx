@@ -12,32 +12,23 @@ import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { LanguageSwitcher } from "./language-switcher";
 
-const NAV_LINKS = {
-  vi: [
-    { href: "/", label: "Trang chủ" },
-    { href: "/products", label: "Sản phẩm" },
-    { href: "/services", label: "Dịch vụ" },
-    { href: "/about", label: "Giới thiệu" },
-    { href: "/contact", label: "Liên hệ" },
-  ],
-  en: [
-    { href: "/", label: "Home" },
-    { href: "/products", label: "Products" },
-    { href: "/services", label: "Services" },
-    { href: "/about", label: "About" },
-    { href: "/contact", label: "Contact" },
-  ],
-};
+const NAV_LINKS: { href: string; label: string }[] = [
+  { href: "/", label: "Trang chủ" },
+  { href: "/products", label: "Sản phẩm" },
+  { href: "/services", label: "Dịch vụ" },
+  { href: "/about", label: "Giới thiệu" },
+  { href: "/contact", label: "Liên hệ" },
+];
 
 export function Header() {
-  const { lang, t } = useIntl();
+  const { t } = useIntl();
   const { totalItems } = useCart();
   const router = useRouter();
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const links = NAV_LINKS[lang];
+  const links = NAV_LINKS;
 
   const isActive = useCallback(
     (href: string) =>
@@ -98,7 +89,7 @@ export function Header() {
                 whiteSpace="nowrap"
                 _hover={{ color: "brand.600" }}
               >
-                {l.label}
+                {t(l.label)}
               </Text>
             </Link>
           ))}
@@ -113,9 +104,7 @@ export function Header() {
         >
           <TextField
             value={query}
-            placeholder={
-              lang === "vi" ? "Tìm kiếm sản phẩm..." : "Search products..."
-            }
+            placeholder={t("Tìm kiếm sản phẩm...")}
             onChange={(e) => setQuery(e.target.value)}
             leftAdornment={MagnifyingGlass}
             action={
