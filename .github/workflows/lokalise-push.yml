@@ -34,12 +34,15 @@ jobs:
       - name: Sync i18n keys from code
         run: npm run sync-keys
 
+      - name: Copy vi.json to vi_VN.json (Lokalise base = Vietnamese Vietnam)
+        run: cp languages/vi.json languages/vi_VN.json
+
       - name: Push to Lokalise
         uses: lokalise/lokalise-push-action@v5.0.0
         with:
           api_token: ${{ secrets.LOKALISE_API_TOKEN }}
           project_id: ${{ vars.LOKALISE_PROJECT_ID }}
-          base_lang: vi
+          base_lang: vi_VN
           translations_path: languages
           file_ext: json
           flat_naming: true

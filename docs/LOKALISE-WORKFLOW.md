@@ -11,7 +11,7 @@
 ### 1. Tạo project trên Lokalise
 
 1. Tạo project "Web and mobile" trên [Lokalise](https://lokalise.com)
-2. **Base language**: Vietnamese (`vi`) – ngôn ngữ gốc
+2. **Base language**: Vietnamese (Vietnam) (`vi_VN`) – ngôn ngữ gốc (cột in đậm)
 3. Thêm ngôn ngữ: English (`en`) – ngôn ngữ dịch
 4. Lấy **Project ID** trong Settings → General
 
