@@ -300,6 +300,33 @@ textarea:focus-visible {
 }
 
 /* ════════════════════════════════════════════════════════════════════════════
+   RIPPLE BLINK — contact button pulse rings
+   ════════════════════════════════════════════════════════════════════════════ */
+@keyframes ripple-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.ripple-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 2px solid var(--colors-brand-400, #4ade80);
+  animation: ripple-ring 2s ease-out infinite;
+  pointer-events: none;
+}
+
+.ripple-ring-2 {
+  animation-delay: 0.75s;
+}
+
+/* ════════════════════════════════════════════════════════════════════════════
    UTILITY CLASSES  (lightweight helpers not worth putting in Panda recipes)
    ════════════════════════════════════════════════════════════════════════════ */
 

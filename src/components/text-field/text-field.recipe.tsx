@@ -28,7 +28,7 @@ export const textFieldContainerRecipe = cva({
         boxShadow: "0 0 0 3px token(colors.brand.500/0.15)",
       },
       error: {
-        borderColor: "danger.DEFAULT",
+        borderColor: "danger.base",
         bg: "white",
       },
       disabled: {

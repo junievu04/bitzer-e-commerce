@@ -34,7 +34,7 @@ export function GlobalSupplierSection() {
             </Text>
 
             {/* Yellow accent rule (as in reference) */}
-            <Box w="16" h="1" bg="warning.DEFAULT" borderRadius="full" />
+            <Box w="16" h="1" bg="warning.base" borderRadius="full" />
 
             {/* Bullet list */}
             <Stack gap="4" pt="2">

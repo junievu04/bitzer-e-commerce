@@ -75,6 +75,7 @@ export { default as Card } from "./card";
 export { default as CardCoupon } from "./card-coupon";
 export { default as CardVoucher } from "./card-voucher";
 export { default as Cart } from "./cart";
+export { default as Chatbot } from "./chatbot";
 export { default as Circle } from "./circle";
 export { default as CircleCross } from "./circle-cross";
 export { default as CircleCrossFilled } from "./circle-cross-filled";

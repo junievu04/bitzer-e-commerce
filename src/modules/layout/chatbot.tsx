@@ -2,8 +2,9 @@
 
 import Button from "@/components/button/button";
 import {
+  ArrowRight,
+  Chatbot as ChatbotIcon,
   CrossDiagonal,
-  RoundSpeechBubble,
   TravelNavigation,
 } from "@/components/icons";
 import Link from "@/components/link";
@@ -170,23 +171,25 @@ export const Chatbot = () => {
   return (
     <Box position="fixed" bottom="6" right="6" zIndex="topmost">
       {!open ? (
-        <Button
-          size="lg"
+        <Box
           minH="0"
           p="4"
           onClick={handleOpen}
+          bg="warning.base"
+          borderRadius="full"
+          cursor="pointer"
           className={css({
-            borderRadius: "full",
-            boxShadow: "0 8px 24px {colors.brand.500/0.4}",
+            shadow: "0 8px 24px token(colors.warning.light/0.4)",
             transition: "all 0.2s ease",
             _hover: {
+              opacity: "0.88",
               transform: "scale(1.08)",
-              boxShadow: "0 12px 32px {colors.brand.500/0.5}",
+              boxShadow: "0 12px 32px token(colors.warning.light/0.5)",
             },
           })}
         >
-          <RoundSpeechBubble tone="inverse" />
-        </Button>
+          <ChatbotIcon tone="inverse" />
+        </Box>
       ) : (
         <Stack
           bg="white"
@@ -201,7 +204,7 @@ export const Chatbot = () => {
           })}
         >
           <Flex
-            bg="brand.500"
+            bg="warning.base"
             alignItems="center"
             justifyContent="space-between"
             px="4"
@@ -218,7 +221,7 @@ export const Chatbot = () => {
                 alignItems="center"
                 justifyContent="center"
               >
-                <RoundSpeechBubble tone="inverse" size="sm" />
+                <ChatbotIcon tone="inverse" size="sm" />
               </Box>
               <Stack gap="0">
                 <Text weight="bold" tone="inverse" variant="paragraph-2">
@@ -238,14 +241,11 @@ export const Chatbot = () => {
             </Flex>
 
             <Button
+              variant="none"
               onClick={handleClose}
               p="1.5"
               minH="0"
-              className={css({
-                bg: "white/15",
-                borderRadius: "full",
-                _hover: { bg: "white/30" },
-              })}
+              _hover={{ bg: "warning.base" }}
             >
               <CrossDiagonal tone="inverse" size="sm" />
             </Button>
@@ -273,7 +273,7 @@ export const Chatbot = () => {
                   py="2"
                   borderRadius="xl"
                   maxW="60"
-                  bg={msg.type === "user" ? "brand.500" : "gray.100"}
+                  bg={msg.type === "user" ? "warning.base" : "gray.100"}
                   className={css({
                     borderBottomRightRadius: msg.type === "user" ? "sm" : "xl",
                     borderBottomLeftRadius: msg.type === "bot" ? "sm" : "xl",
@@ -307,9 +307,9 @@ export const Chatbot = () => {
                             bg: "white",
                             transition: "all 0.2s ease",
                             _hover: {
-                              borderColor: "brand.400",
+                              borderColor: "warning.base",
                               boxShadow:
-                                "0 4px 16px token(colors.brand.500/0.15)",
+                                "0 4px 16px token(colors.warning.base/0.15)",
                               transform: "translateY(-1px)",
                             },
                           })}
@@ -354,44 +354,26 @@ export const Chatbot = () => {
                               <Text
                                 variant="caption-1"
                                 weight="bold"
-                                tone="primary"
-                                className={css({
-                                  overflow: "hidden",
-                                  whiteSpace: "nowrap",
-                                  textOverflow: "ellipsis",
-                                })}
+                                truncate={1}
                               >
                                 {product.name}
                               </Text>
                               <Text
                                 variant="caption-2"
                                 tone="secondary"
-                                className={css({
-                                  overflow: "hidden",
-                                  whiteSpace: "nowrap",
-                                  textOverflow: "ellipsis",
-                                })}
+                                truncate={1}
                               >
                                 {product.description}
                               </Text>
                             </Stack>
 
                             {/* Arrow */}
-                            <Box pr="3" flexShrink={0} color="brand.500">
-                              <svg
-                                width="14"
-                                height="14"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth="2.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              >
-                                <line x1="5" y1="12" x2="19" y2="12" />
-                                <polyline points="12 5 19 12 12 19" />
-                              </svg>
-                            </Box>
+                            <ArrowRight
+                              pr="3"
+                              flexShrink={0}
+                              tone="warning"
+                              size="sm"
+                            />
                           </Flex>
                         </Link>
                       );
@@ -435,7 +417,8 @@ export const Chatbot = () => {
               <Flex flexWrap="wrap" gap="1.5" mt="1">
                 {SUGGESTION_TOPICS.map((topic) => (
                   <Button
-                    variant="secondary"
+                    variant="none"
+                    border="1px solid {colors.warning.base}"
                     key={topic.key}
                     onClick={() => handleSelectTopic(topic.label, topic.key)}
                     size="sm"
@@ -465,14 +448,15 @@ export const Chatbot = () => {
                 placeholder={t("Nhập tin nhắn...")}
                 action={
                   <Button
+                    variant="none"
                     onClick={() => handleSendMessage(input)}
                     p="2"
                     minH="0"
                     h="full"
                     className={css({
-                      bg: "brand.500",
+                      bgColor: "warning.base",
                       borderRadius: "full",
-                      _hover: { bg: "brand.600" },
+                      _hover: { bg: "warning.base" },
                     })}
                   >
                     <TravelNavigation tone="inverse" size="sm" />
@@ -488,7 +472,7 @@ export const Chatbot = () => {
                 size="sm"
                 className={css({
                   fontWeight: "normal",
-                  color: "brand.500",
+                  color: "warning.base",
                   textDecoration: "underline",
                   fontSize: "xs",
                 })}

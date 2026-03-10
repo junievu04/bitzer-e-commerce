@@ -1435,17 +1435,17 @@ const tokens = {
     "value": "#030712",
     "variable": "var(--colors-gray-950)"
   },
-  "colors.danger": {
+  "colors.danger.base": {
     "value": "#ef4444",
-    "variable": "var(--colors-danger)"
+    "variable": "var(--colors-danger-base)"
   },
   "colors.danger.light": {
     "value": "#fee2e2",
     "variable": "var(--colors-danger-light)"
   },
-  "colors.warning": {
+  "colors.warning.base": {
     "value": "#f59e0b",
-    "variable": "var(--colors-warning)"
+    "variable": "var(--colors-warning-base)"
   },
   "colors.warning.light": {
     "value": "#fef3c7",
@@ -2150,6 +2150,10 @@ const tokens = {
   "colors.colorPalette.950": {
     "value": "var(--colors-color-palette-950)",
     "variable": "var(--colors-color-palette-950)"
+  },
+  "colors.colorPalette.base": {
+    "value": "var(--colors-color-palette-base)",
+    "variable": "var(--colors-color-palette-base)"
   },
   "colors.colorPalette.light": {
     "value": "var(--colors-color-palette-light)",

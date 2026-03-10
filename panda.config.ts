@@ -43,12 +43,12 @@ export default defineConfig({
             900: { value: "#111827" },
           },
           danger: {
-            DEFAULT: { value: "#ef4444" },
-            light: { value: "#fee2e2" },
+            base: { value: "#ef4444" }, // → bg="danger.base"
+            light: { value: "#fee2e2" }, // → bg="danger.light"
           },
           warning: {
-            DEFAULT: { value: "#f59e0b" },
-            light: { value: "#fef3c7" },
+            base: { value: "#f59e0b" }, // → bg="warning.base"
+            light: { value: "#fef3c7" }, // → bg="warning.light"
           },
         },
         fonts: {

@@ -42,11 +42,11 @@ const iconStyle = cva({
       // brand.500 — same as link (success icons are brand green)
       success: { color: "accent.default" },
 
-      // warning.DEFAULT → #f59e0b
-      warning: { color: "warning.DEFAULT" },
+      // warning.base → #f59e0b
+      warning: { color: "warning.base" },
 
-      // danger.DEFAULT → #ef4444
-      error: { color: "danger.DEFAULT" },
+      // danger.base → #ef4444
+      error: { color: "danger.base" },
 
       // white — for icons on dark/colored backgrounds
       inverse: { color: "white" },

@@ -51,7 +51,7 @@ const Container = styled(Flex, {
         bg: "white",
       },
       error: {
-        borderColor: "danger.DEFAULT",
+        borderColor: "danger.base",
         bg: "white",
       },
       disabled: {
