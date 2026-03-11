@@ -1,5 +1,6 @@
 "use client";
 import { Carousel } from "@/components/carousel";
+import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text/text";
 import { useIntl } from "@/utils/intl";
@@ -64,11 +65,31 @@ const CERTS = [
 ];
 
 const COMPRESSOR_LINES = [
-  { name: "Máy nén Scroll", emoji: "🔩" },
-  { name: "Máy nén Piston", emoji: "⚙️" },
-  { name: "Máy nén Trục vít", emoji: "🔧" },
-  { name: "Máy nén Semi-hermetic", emoji: "🏭" },
-  { name: "Máy nén Inverter", emoji: "💡" },
+  {
+    name: "Máy nén Scroll",
+    image:
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/breakfast.jpg",
+  },
+  {
+    name: "Máy nén Piston",
+    image:
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/breakfast.jpg",
+  },
+  {
+    name: "Máy nén Trục vít",
+    image:
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/breakfast.jpg",
+  },
+  {
+    name: "Máy nén Semi-hermetic",
+    image:
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/breakfast.jpg",
+  },
+  {
+    name: "Máy nén Inverter",
+    image:
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/breakfast.jpg",
+  },
 ];
 
 export default function AboutClient() {
@@ -160,50 +181,15 @@ export default function AboutClient() {
             </Stack>
 
             {/* Image placeholder */}
-            <Box
+            <Image
+              src="https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/food/dessert.jpg"
+              alt="Kho hàng Green Point Việt Nam"
+              aspectRatio="4/3"
+              width="100%"
+              objectFit="cover"
               borderRadius="2xl"
-              overflow="hidden"
-              position="relative"
-              h={{ base: "64", md: "96" }}
-              bg="brand.800"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-            >
-              <Box
-                position="absolute"
-                inset="0"
-                opacity="0.1"
-                style={{
-                  backgroundImage:
-                    "repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 0,transparent 20px)",
-                }}
-              />
-              <Stack alignItems="center" gap="3" position="relative" zIndex="1">
-                <Box fontSize="6xl">🏭</Box>
-                <Text
-                  variant="paragraph-2"
-                  tone="inverse"
-                  className={css({ opacity: "0.7" })}
-                >
-                  {t("Kho hàng Green Point Việt Nam")}
-                </Text>
-              </Stack>
-              {/* Badge */}
-              <Box
-                position="absolute"
-                bottom="4"
-                left="4"
-                bg="brand.500"
-                px="3"
-                py="1.5"
-                borderRadius="full"
-              >
-                <Text variant="caption-1" weight="bold" tone="inverse">
-                  GREEN POINT VIỆT NAM
-                </Text>
-              </Box>
-            </Box>
+              fallback="https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/cup-on-a-table.jpg"
+            />
           </Grid>
         </Box>
 
@@ -267,26 +253,15 @@ export default function AboutClient() {
         <Box pb={{ base: "12", md: "20" }}>
           <Grid columns={{ base: 1, md: 2 }} gap="12" alignItems="center">
             {/* Image placeholder */}
-            <Box
+            <Image
+              src="https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/food/pot-mussels.jpg"
+              alt="Lĩnh vực hoạt động"
+              aspectRatio="4/3"
+              width="100%"
+              objectFit="cover"
               borderRadius="2xl"
-              overflow="hidden"
-              h={{ base: "64", md: "80" }}
-              bg="gray.800"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              position="relative"
-            >
-              <Box fontSize="7xl">🔧</Box>
-              <Box
-                position="absolute"
-                bottom="0"
-                left="0"
-                right="0"
-                h="1"
-                bg="brand.500"
-              />
-            </Box>
+              fallback="https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/cup-on-a-table.jpg"
+            />
 
             {/* Content */}
             <Stack gap="6">
@@ -455,25 +430,15 @@ export default function AboutClient() {
                   })}
                 >
                   {/* Image area */}
-                  <Box
-                    h="44"
-                    bg="gray.100"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    fontSize="5xl"
-                    position="relative"
-                  >
-                    {item.emoji}
-                    <Box
-                      position="absolute"
-                      bottom="0"
-                      left="0"
-                      right="0"
-                      h="3px"
-                      bg="brand.500"
-                    />
-                  </Box>
+                  <Image
+                    src={item.image}
+                    alt={item.name}
+                    aspectRatio="4/3"
+                    width="100%"
+                    objectFit="cover"
+                    borderRadius="0"
+                    fallback="https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/cup-on-a-table.jpg"
+                  />
                   {/* Label */}
                   <Box p="4">
                     <Text
