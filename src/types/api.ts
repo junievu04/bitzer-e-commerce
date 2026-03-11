@@ -1,0 +1,99 @@
+/**
+ * Category
+ */
+export interface CategoryDTO {
+  id: string;
+  slug: string;
+  name: {
+    vi: string;
+    en: string;
+  };
+  description?: {
+    vi?: string;
+    en?: string;
+  };
+  isActive: boolean;
+}
+
+/**
+ * Product
+ */
+export interface ProductDTO {
+  id: string;
+  name: {
+    vi: string;
+    en: string;
+  };
+  code: string;
+  slug: string;
+  price: number;
+  stock: number;
+  images: string[];
+  description: {
+    vi: string;
+    en: string;
+  };
+  specs: Record<string, string>;
+  category: CategoryDTO;
+  tags: string[];
+  isActive: boolean;
+}
+
+/**
+ * Service
+ */
+export interface ServiceDTO {
+  id: string;
+  name: {
+    vi: string;
+    en: string;
+  };
+  slug: string;
+  summary?: {
+    vi?: string;
+    en?: string;
+  };
+  description?: {
+    vi?: string;
+    en?: string;
+  };
+  images: string[];
+  isActive: boolean;
+}
+
+/**
+ * Layout
+ */
+export type LayoutType = "home" | "content" | string;
+
+export type LayoutComponentType =
+  | "hero-banner-carousel"
+  | "section"
+  | "text-block"
+  | "image"
+  | string;
+
+export interface LayoutComponentDetail {
+  title?: string;
+  description?: string;
+  image?: string;
+  ctaLink?: string;
+  components?: LayoutComponent[];
+}
+
+export interface LayoutComponent {
+  type: LayoutComponentType;
+  detail: LayoutComponentDetail;
+}
+
+export interface LayoutData {
+  type: LayoutType;
+  components: LayoutComponent[];
+}
+
+export interface LayoutDTO {
+  key: string; // "home", "about", ...
+  locale: string;
+  data: LayoutData;
+  updatedAt: string | null;
+}

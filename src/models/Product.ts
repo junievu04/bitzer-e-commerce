@@ -1,4 +1,4 @@
-import { Document, Schema, model, models } from "mongoose";
+import { Document, Schema, model, models, Types } from "mongoose";
 
 export interface IProduct extends Document {
   name: { vi: string; en: string };
@@ -9,7 +9,7 @@ export interface IProduct extends Document {
   images: string[];
   description: { vi: string; en: string };
   specs: Record<string, string>;
-  category: string;
+  category: Types.ObjectId;
   tags: string[];
   isActive: boolean;
   createdAt: Date;
@@ -29,7 +29,7 @@ const ProductSchema = new Schema<IProduct>(
     images: [{ type: String }],
     description: { vi: String, en: String },
     specs: { type: Map, of: String, default: {} },
-    category: { type: String, required: true },
+    category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
     tags: [String],
     isActive: { type: Boolean, default: true },
   },
