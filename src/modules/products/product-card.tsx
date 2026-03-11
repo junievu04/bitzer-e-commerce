@@ -2,17 +2,18 @@
 
 import Button from "@/components/button";
 import { Cart } from "@/components/icons";
+import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text";
 import { useCart } from "@/hooks";
 import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Center, Stack } from "@/vendors/styled-system/jsx";
-import Image from "next/image";
 import { useState } from "react";
 import { Product } from "./types";
 
-const PLACEHOLDER_IMAGE = "/file.svg";
+const PLACEHOLDER_IMAGE =
+  "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/breakfast.jpg";
 
 interface ProductCardProps {
   product: Product;
@@ -40,7 +41,13 @@ export function ProductCard({ product }: ProductCardProps) {
   };
 
   return (
-    <Link href={productUrl} hover="none" display="block" textDecoration="none">
+    <Link
+      href={productUrl}
+      hover="none"
+      display="block"
+      textDecoration="none"
+      maxW={{ base: "100%", md: "360px" }}
+    >
       <Box
         bg="white"
         borderRadius="lg"
@@ -54,15 +61,15 @@ export function ProductCard({ product }: ProductCardProps) {
           borderColor: "brand.300",
         }}
       >
-        <Center position="relative" h="180px" bg="gray.50" overflow="hidden">
-          <Image
-            src={imgSrc}
-            alt={product.name}
-            fill
-            style={{ objectFit: "contain", padding: "12px" }}
-            onError={() => setImgSrc(PLACEHOLDER_IMAGE)}
-          />
-        </Center>
+        <Image
+          src={imgSrc}
+          alt={product.name}
+          aspectRatio="1/1"
+          width="100%"
+          objectFit="cover"
+          borderRadius="0"
+          onError={() => setImgSrc(PLACEHOLDER_IMAGE)}
+        />
 
         <Stack gap="2" p="3">
           <Text

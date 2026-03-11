@@ -2,17 +2,18 @@
 
 import Button from "@/components/button";
 import { Paperplane } from "@/components/icons";
+import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text";
 import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Flex, Grid, Stack } from "@/vendors/styled-system/jsx";
-import Image from "next/image";
 import { useState } from "react";
 import { HeaderTitleWrapper } from "../layout/header-title-wrapper";
 import { SERVICES } from "./types";
 
-const PLACEHOLDER_IMAGE = "/file.svg";
+const PLACEHOLDER_IMAGE =
+  "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/cup-on-a-table.jpg";
 
 interface ServiceDetailClientProps {
   slug: string;
@@ -60,12 +61,15 @@ export function ServiceDetailClient({ slug }: ServiceDetailClientProps) {
         borderRadius="lg"
         overflow="hidden"
         mb="8"
+        className={css({ aspectRatio: { base: "16/9", md: "21/9" } })}
       >
         <Image
+          width="100%"
+          height="100%"
+          objectFit="cover"
+          borderRadius="lg"
           src={imgSrc}
           alt={service.name}
-          fill
-          style={{ objectFit: "cover" }}
           onError={() => setImgSrc(PLACEHOLDER_IMAGE)}
         />
         <Box position="absolute" inset="0" bg="gray.900" opacity="0.4" />
@@ -100,10 +104,12 @@ export function ServiceDetailClient({ slug }: ServiceDetailClientProps) {
                 bg="gray.100"
               >
                 <Image
+                  aspectRatio="4/3"
+                  width="100%"
+                  objectFit="cover"
+                  borderRadius="lg"
                   src={imgSrc}
                   alt={service.name}
-                  fill
-                  style={{ objectFit: "cover" }}
                 />
               </Box>
               <Box>

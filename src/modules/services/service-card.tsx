@@ -1,14 +1,15 @@
 "use client";
 
+import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Stack } from "@/vendors/styled-system/jsx";
-import Image from "next/image";
 import { useState } from "react";
 import { Service } from "./types";
 
-const PLACEHOLDER_IMAGE = "/file.svg";
+const PLACEHOLDER_IMAGE =
+  "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/breakfast.jpg";
 
 interface ServiceCardProps {
   service: Service;
@@ -25,6 +26,7 @@ export function ServiceCard({ service }: ServiceCardProps) {
       display="block"
       textDecoration="none"
       h="full"
+      maxW={{ base: "100%", md: "380px" }}
     >
       <Box
         h="full"
@@ -58,8 +60,10 @@ export function ServiceCard({ service }: ServiceCardProps) {
             <Image
               src={imgSrc}
               alt={service.name}
-              fill
-              style={{ objectFit: "cover" }}
+              aspectRatio="1/1"
+              width="100%"
+              objectFit="cover"
+              borderRadius="0"
               onError={() => setImgSrc(PLACEHOLDER_IMAGE)}
             />
           </Box>
@@ -71,7 +75,7 @@ export function ServiceCard({ service }: ServiceCardProps) {
             left="3"
             bg="brand.600"
             px="2.5"
-            py="0.5"
+            pb="1"
             borderRadius="full"
           >
             <Text variant="caption-2" weight="bold" tone="inverse" inline>

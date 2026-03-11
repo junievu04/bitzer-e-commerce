@@ -164,21 +164,7 @@ export function Header() {
           onChange={(e) => setQuery(e.target.value)}
           leftAdornment={MagnifyingGlass}
           action={
-            <Button
-              type="submit"
-              h="full"
-              px="4"
-              bg="brand.500"
-              color="white"
-              fontSize="sm"
-              fontWeight="600"
-              border="none"
-              cursor="pointer"
-              className={css({
-                _hover: { bg: "brand.600" },
-                borderRadius: "0",
-              })}
-            >
+            <Button type="submit" size="sm" flexShrink={0}>
               {t("Tìm")}
             </Button>
           }

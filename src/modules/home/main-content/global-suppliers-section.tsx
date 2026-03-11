@@ -1,11 +1,12 @@
 "use client";
 
 import Button from "@/components/button";
+import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text/text";
 import { MainContentWrapper } from "@/modules/home/main-content/main-content-wrapper";
 import { useIntl } from "@/utils/intl";
-import { Box, Center, Grid, HStack, Stack } from "@/vendors/styled-system/jsx";
+import { Box, Grid, HStack, Stack } from "@/vendors/styled-system/jsx";
 
 const BULLET_POINTS = [
   "Thương hiệu BITZER được biên rộng từ chất lượng và chuyên môn, được ứng dụng rộng rãi các dịch vụ. Các mạng lưới điểm và của mạng lưới nhau mạnh.",
@@ -63,21 +64,19 @@ export function GlobalSupplierSection() {
           </Stack>
 
           {/* Right — image placeholder */}
-          <Center
+          <Image
+            src="https://res.cloudinary.com/dsw4o0hjl/image/upload/cld-sample-4.jpg"
+            alt="Hình ảnh nhà máy / showroom"
+            aspectRatio="4/3"
+            width="100%"
+            objectFit="cover"
             borderRadius="2xl"
-            overflow="hidden"
-            bg="gray.200"
-            minH={{ base: "52", md: "80" }}
-            position="relative"
-            border="1px solid {colors.gray.200}"
-          >
-            <Stack gap="3" alignItems="center">
-              <Box fontSize="5xl">🏭</Box>
-              <Text variant="caption-1" tone="secondary" opacity="0.5">
-                {t("Hình ảnh nhà máy / showroom")}
-              </Text>
-            </Stack>
-          </Center>
+            fallback="https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/cup-on-a-table.jpg"
+            wrapperProps={{
+              border: "1px solid {colors.gray.200}",
+              minH: { base: "52", md: "80" },
+            }}
+          />
         </Grid>
       </Box>
     </MainContentWrapper>

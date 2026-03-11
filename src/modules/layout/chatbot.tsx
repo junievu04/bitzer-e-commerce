@@ -7,6 +7,7 @@ import {
   CrossDiagonal,
   TravelNavigation,
 } from "@/components/icons";
+import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text";
 import TextField from "@/components/text-field";
@@ -14,7 +15,6 @@ import { getChatbotResponse } from "@/constants/chatbot-rule";
 import { useIntl } from "@/utils/intl/use-intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Flex, Stack } from "@/vendors/styled-system/jsx";
-import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const MOCK_PRODUCTS = [
@@ -22,63 +22,72 @@ const MOCK_PRODUCTS = [
     id: "2DTS-2Y-40S",
     slug: "may-nen-bitzer-2dts-2y-40s",
     name: "Máy Nén Bitzer 2DTS-2Y-40S",
-    image: "/images/products/bitzer-compressor-1.png",
+    image:
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/dessert-on-a-plate.jpg",
     description: "Máy nén bán kín 2 xi lanh, công suất cao.",
   },
   {
     id: "2DES-3Y-40S",
     slug: "may-nen-bitzer-2des-3y-40s",
     name: "Máy Nén Bitzer 2DES-3Y-40S",
-    image: "/images/products/bitzer-compressor-1.png",
+    image:
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/dessert-on-a-plate.jpg",
     description: "Máy nén bán kín 2 xi lanh, hiệu suất cao.",
   },
   {
     id: "4TES-9Y-40S",
     slug: "may-nen-bitzer-4tes-9y-40s",
     name: "Máy Nén Bitzer 4TES-9Y-40S",
-    image: "/images/products/bitzer-compressor-1.png",
+    image:
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/dessert-on-a-plate.jpg",
     description: "Máy nén 4 xi lanh, kho lạnh công nghiệp.",
   },
   {
     id: "4CES-6Y-40S",
     slug: "may-nen-bitzer-4ces-6y-40s",
     name: "Máy Nén Bitzer 4CES-6Y-40S",
-    image: "/images/products/bitzer-compressor-1.png",
+    image:
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/dessert-on-a-plate.jpg",
     description: "Máy nén bán kín, tiết kiệm điện năng.",
   },
   {
     id: "HSK-5343-30",
     slug: "may-nen-truc-vit-bitzer-hsk-5343-30",
     name: "Máy Nén Trục Vít HSK-5343-30",
-    image: "/images/products/bitzer-compressor-1.png",
+    image:
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/dessert-on-a-plate.jpg",
     description: "Máy nén trục vít công suất lớn.",
   },
   {
     id: "4FES-3Y",
     slug: "4fes-3y",
     name: "Bitzer 4FES-3Y",
-    image: "/images/products/bitzer-compressor-1.png",
+    image:
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/dessert-on-a-plate.jpg",
     description: "Phụ tùng máy nén 4HP chính hãng.",
   },
   {
     id: "K013N008",
     slug: "k013n008",
     name: "Bitzer K013N008",
-    image: "/images/products/bitzer-compressor-1.png",
+    image:
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/dessert-on-a-plate.jpg",
     description: "Phụ tùng máy nén 4HP chính hãng.",
   },
   {
     id: "GAS-R22",
     slug: "gas-r22",
     name: "Gas Lạnh R22",
-    image: "/images/products/bitzer-compressor-1.png",
+    image:
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/dessert-on-a-plate.jpg",
     description: "Gas R22 dùng cho điều hòa và kho lạnh.",
   },
   {
     id: "GAS-R410A",
     slug: "gas-r410a",
     name: "Gas Lạnh R410A",
-    image: "/images/products/bitzer-compressor-1.png",
+    image:
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/dessert-on-a-plate.jpg",
     description: "Gas R410A thân thiện môi trường.",
   },
 ];
@@ -314,7 +323,7 @@ export const Chatbot = () => {
                             },
                           })}
                         >
-                          <Flex alignItems="center" gap="0">
+                          <Flex alignItems="center" gap="0" px="1">
                             {/* Image */}
                             <Box
                               position="relative"
@@ -324,9 +333,12 @@ export const Chatbot = () => {
                               bg="gray.100"
                             >
                               <Image
-                                src={product.image}
+                                aspectRatio="1/1"
+                                width="100%"
+                                height="100%"
+                                objectFit="cover"
+                                src="https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/dessert-on-a-plate.jpg"
                                 alt={product.name}
-                                fill
                                 style={{ objectFit: "cover" }}
                               />
                             </Box>

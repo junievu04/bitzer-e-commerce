@@ -7,6 +7,7 @@ import Text from "@/components/text";
 import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, HStack, Stack } from "@/vendors/styled-system/jsx";
+import { useMemo } from "react";
 import { ProductCard } from "./product-card";
 import { Product } from "./types";
 
@@ -20,6 +21,9 @@ export function SuggestedProductsSection({
   categorySlug,
 }: SuggestedProductsSectionProps) {
   const { t } = useIntl();
+  const isShowNavigation = useMemo(() => {
+    return products.length > 4;
+  }, [products]);
 
   if (products.length === 0) return null;
 
@@ -53,7 +57,7 @@ export function SuggestedProductsSection({
           </Link>
         </HStack>
 
-        <Carousel navigation pagination>
+        <Carousel navigation={isShowNavigation} pagination>
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}

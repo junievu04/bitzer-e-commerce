@@ -3,6 +3,7 @@
 import Breadcrumbs from "@/components/breadcrumbs";
 import Button from "@/components/button";
 import { Dustbin, Minus, Phone, Plus } from "@/components/icons";
+import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text";
 import { useCart } from "@/hooks";
@@ -16,9 +17,9 @@ import {
   HStack,
   Stack,
 } from "@/vendors/styled-system/jsx";
-import Image from "next/image";
 
-const PLACEHOLDER_IMAGE = "/file.svg";
+const PLACEHOLDER_IMAGE =
+  "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/breakfast.jpg";
 
 const formatPrice = (price: number | null, t: FormatMessage) => {
   if (price === null) return t("Liên hệ");
@@ -161,22 +162,15 @@ export function CartClient() {
                     <Link
                       href={`/products/${item.product.slug || item.product.id}`}
                     >
-                      <Box
-                        position="relative"
-                        w="80px"
-                        h="80px"
-                        bg="gray.50"
+                      <Image
+                        src={item.product.image || PLACEHOLDER_IMAGE}
+                        alt={item.product.name}
+                        aspectRatio="1/1"
+                        width="80px"
+                        objectFit="cover"
                         borderRadius="md"
-                        overflow="hidden"
-                        flexShrink={0}
-                      >
-                        <Image
-                          src={item.product.image || PLACEHOLDER_IMAGE}
-                          alt={item.product.name}
-                          fill
-                          style={{ objectFit: "contain", padding: "8px" }}
-                        />
-                      </Box>
+                        fallback={PLACEHOLDER_IMAGE}
+                      />
                     </Link>
                     <Stack gap="1" flex="1">
                       <Link

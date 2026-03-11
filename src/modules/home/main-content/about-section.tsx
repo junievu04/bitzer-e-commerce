@@ -1,11 +1,11 @@
 "use client";
 import Button from "@/components/button";
+import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text/text";
 import { MainContentWrapper } from "@/modules/home/main-content/main-content-wrapper";
 import { useIntl } from "@/utils/intl";
-import { css } from "@/vendors/styled-system/css";
-import { Box, Center, Grid, Stack } from "@/vendors/styled-system/jsx";
+import { Box, Grid, Stack } from "@/vendors/styled-system/jsx";
 
 export function AboutSection() {
   const { t } = useIntl();
@@ -37,56 +37,19 @@ export function AboutSection() {
           position="relative"
         >
           {/* Image / placeholder left */}
-          <Center
+          <Image
+            src="https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/dessert-on-a-plate.jpg"
+            alt="Hình ảnh công ty Green Point"
+            aspectRatio="4/3"
+            width="100%"
+            objectFit="cover"
             borderRadius="2xl"
-            overflow="hidden"
-            bg="brand.900"
-            minH={{ base: "52", md: "72" }}
-            position="relative"
-            boxShadow="0 24px 64px {colors.brand.900/0.5}"
-          >
-            <Box
-              position="absolute"
-              inset="0"
-              opacity="0.06"
-              backgroundImage="repeating-linear-gradient(45deg, #22c55e 0, #22c55e 1px, transparent 0, transparent 8px)"
-            />
-            <Stack gap="3" alignItems="center" position="relative">
-              <Box fontSize="5xl">🔩</Box>
-              <Text variant="caption-1" tone="inverse" opacity="0.4">
-                {t("Hình ảnh công ty")}
-              </Text>
-            </Stack>
-
-            {/* Bottom badge */}
-            <Box
-              position="absolute"
-              bottom="4"
-              right="4"
-              bg="brand.600"
-              px="4"
-              py="2"
-              borderRadius="lg"
-            >
-              <Text
-                variant="caption-1"
-                weight="bold"
-                tone="inverse"
-                inline
-                display="block"
-              >
-                GREEN POINT
-              </Text>
-              <Text
-                variant="caption-2"
-                tone="inverse"
-                className={css({ opacity: "0.7" })}
-              >
-                A SERVICE BY BITZER GROUP
-              </Text>
-            </Box>
-          </Center>
-
+            fallback="https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/cup-on-a-table.jpg"
+            wrapperProps={{
+              boxShadow: "0 24px 64px {colors.brand.900/0.5}",
+              minH: { base: "52", md: "72" },
+            }}
+          />
           {/* Text content right */}
           <Stack gap="5">
             <Stack gap="1">

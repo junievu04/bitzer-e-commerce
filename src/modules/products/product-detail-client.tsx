@@ -2,20 +2,21 @@
 
 import Button from "@/components/button";
 import { ArrowLeft, Cart, Phone } from "@/components/icons";
+import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text";
 import { useCart } from "@/hooks";
 import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Flex, Grid, Stack } from "@/vendors/styled-system/jsx";
-import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { HeaderTitleWrapper } from "../layout/header-title-wrapper";
 import { PRODUCT_CATEGORIES } from "./product-filter";
 import { SuggestedProductsSection } from "./suggested-products-section";
 import { Product } from "./types";
 
-const PLACEHOLDER_IMAGE = "/file.svg";
+const PLACEHOLDER_IMAGE =
+  "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/breakfast.jpg";
 
 interface ProductSpecification {
   label: string;
@@ -205,21 +206,19 @@ export function ProductDetailClient({ slug }: ProductDetailClientProps) {
   return (
     <HeaderTitleWrapper breadcrumbItems={breadcrumbItems}>
       <Grid columns={{ base: 1, lg: 2 }} gap="8">
-        <Box
-          bg="white"
-          borderRadius="lg"
-          p="6"
-          border="1px solid {colors.gray.200}"
-        >
-          <Box position="relative" h={{ base: "300px", md: "400px" }}>
-            <Image
-              src={imgSrc}
-              alt={product.name}
-              fill
-              style={{ objectFit: "contain" }}
-              onError={() => setImgSrc(PLACEHOLDER_IMAGE)}
-            />
-          </Box>
+        <Box maxW={{ base: "360px", lg: "480px" }} mx="auto" w="full">
+          <Image
+            aspectRatio="1/1"
+            width="100%"
+            objectFit="cover"
+            borderRadius="lg"
+            wrapperProps={{
+              border: "1px solid {colors.gray.200}",
+            }}
+            src={imgSrc}
+            alt={product.name}
+            onError={() => setImgSrc(PLACEHOLDER_IMAGE)}
+          />
         </Box>
 
         <Stack gap="4">

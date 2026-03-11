@@ -1,24 +1,22 @@
 "use client";
-import Button from "@/components/button";
 import { Carousel } from "@/components/carousel";
+import { Image } from "@/components/image";
 import Link from "@/components/link";
-import Text from "@/components/text/text";
 import { MainContentWrapper } from "@/modules/home/main-content/main-content-wrapper";
-import { useIntl } from "@/utils/intl";
-import { css } from "@/vendors/styled-system/css";
-import { Box, Flex, Stack } from "@/vendors/styled-system/jsx";
+import { Box } from "@/vendors/styled-system/jsx";
 
 // ─── Slide data ───────────────────────────────────────────────────────────────
-// Swap `bg` + `imgEmoji` for a real <Image src="..." fill> when photos are ready
 
 const SLIDES = [
   {
     id: 1,
-    bg: "linear-gradient(135deg, #052e16 0%, #14532d 60%, #166534 100%)",
-    imgEmoji: "🏭",
+    image:
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/landscapes/nature-mountains.jpg",
+    fallback:
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/landscapes/nature-mountains.jpg",
     tag: "Phụ tùng chính hãng",
     heading: ["Phụ tùng máy nén", "Bitzer chính hãng"],
-    accentLine: 1, // which heading line gets brand color
+    accentLine: 1,
     subtitle:
       "Hơn 500 sản phẩm phụ tùng, linh kiện điện lạnh. Giao hàng nhanh toàn quốc. Tư vấn kỹ thuật 24/7.",
     ctaPrimary: { label: "Xem sản phẩm", href: "/products" },
@@ -26,8 +24,10 @@ const SLIDES = [
   },
   {
     id: 2,
-    bg: "linear-gradient(135deg, #0a1628 0%, #0f2942 60%, #1a3a5c 100%)",
-    imgEmoji: "🔧",
+    image:
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/food/fish-vegetables.jpg",
+    fallback:
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/landscapes/beach-boat.jpg",
     tag: "Dịch vụ kỹ thuật",
     heading: ["Sửa chữa máy nén", "chuyên nghiệp"],
     accentLine: 1,
@@ -38,8 +38,10 @@ const SLIDES = [
   },
   {
     id: 3,
-    bg: "linear-gradient(135deg, #1c1008 0%, #3b1f05 60%, #78350f 100%)",
-    imgEmoji: "❄️",
+    image:
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/balloons.jpg",
+    fallback:
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/landscapes/girl-urban-view.jpg",
     tag: "Điện lạnh công nghiệp",
     heading: ["Giải pháp điện lạnh", "toàn diện"],
     accentLine: 1,
@@ -56,55 +58,79 @@ const SLIDES = [
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function HeroBannerCarousel() {
-  const { t } = useIntl();
+  //const { t } = useIntl();
   return (
     <MainContentWrapper>
-      <Box overflow="hidden">
-        <Carousel
-          variant="single"
-          loop
-          navigation
-          navPosition="inside"
-          pagination
-          gap={0}
-        >
-          {SLIDES.map((slide) => (
+      <Carousel
+        variant="single"
+        loop
+        navigation
+        navPosition="inside"
+        pagination
+        gap={0}
+      >
+        {SLIDES.map((slide) => (
+          <Link
+            key={slide.id}
+            href={slide.ctaPrimary.href}
+            display="block"
+            style={{ width: "100%", flexShrink: 0 }}
+          >
             <Box
-              key={slide.id}
+              position="relative"
+              minH={{ base: "64", md: "420px" }}
+              overflow="hidden"
+            >
+              <Image
+                src={slide.image}
+                alt={slide.tag}
+                width="100%"
+                height="100%"
+                aspectRatio="16/9"
+                objectFit="cover"
+                borderRadius="0"
+                fallback={slide.fallback}
+                wrapperProps={{ position: "absolute", inset: "0" }}
+              />
+            </Box>
+          </Link>
+        ))}
+        {/* {SLIDES.map((slide) => (
+          <Link
+            key={slide.id}
+            href={slide.ctaPrimary.href}
+            display="block"
+            style={{ width: "100%", flexShrink: 0 }}
+          >
+            <Box
               position="relative"
               minH={{ base: "64", md: "420px" }}
               display="flex"
               alignItems="center"
-              // force each slide to 100% width — critical for single variant
-              style={{ background: slide.bg, width: "100%", flexShrink: 0 }}
+              overflow="hidden"
             >
-              {/* Grid pattern overlay */}
+              <Image
+                src={slide.image}
+                alt={slide.tag}
+                width="100%"
+                height="100%"
+                objectFit="cover"
+                borderRadius="0"
+                fallback={slide.fallback}
+                wrapperProps={{
+                  position: "absolute",
+                  inset: "0",
+                }}
+              />
               <Box
                 position="absolute"
                 inset="0"
-                opacity="0.04"
                 style={{
-                  backgroundImage:
-                    "repeating-linear-gradient(0deg,#fff 0,#fff 1px,transparent 0,transparent 40px),repeating-linear-gradient(90deg,#fff 0,#fff 1px,transparent 0,transparent 40px)",
+                  background:
+                    "linear-gradient(90deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 55%, rgba(0,0,0,0.1) 100%)",
                 }}
               />
 
-              {/* Decorative right-side image */}
-              <Box
-                position="absolute"
-                right="8"
-                top="50%"
-                transform="translateY(-50%)"
-                display={{ base: "none", lg: "flex" }}
-                alignItems="center"
-                justifyContent="center"
-                opacity="0.12"
-                fontSize="220px"
-              >
-                {slide.imgEmoji}
-              </Box>
-
-              {/* Content */}
               <Stack
                 gap="5"
                 maxW="520px"
@@ -113,7 +139,6 @@ export function HeroBannerCarousel() {
                 position="relative"
                 zIndex="1"
               >
-                {/* Tag pill */}
                 <Box
                   display="inline-flex"
                   alignItems="center"
@@ -121,9 +146,10 @@ export function HeroBannerCarousel() {
                   px="3"
                   py="1"
                   borderRadius="full"
-                  border="1px solid {colors.brand.600}"
+                  border="1px solid"
+                  borderColor="brand.400"
                   w="fit-content"
-                  bgColor="brand.900/40"
+                  className={css({ bg: "brand.900/40" })}
                 >
                   <Box w="1.5" h="1.5" borderRadius="full" bg="brand.400" />
                   <Text
@@ -140,7 +166,6 @@ export function HeroBannerCarousel() {
                   </Text>
                 </Box>
 
-                {/* Heading */}
                 <Stack gap="0">
                   {slide.heading.map((line, i) => (
                     <Text
@@ -149,42 +174,42 @@ export function HeroBannerCarousel() {
                       weight="bold"
                       tone={i === slide.accentLine ? "trending" : "inverse"}
                       inline
-                      display="block"
-                      textTransform="uppercase"
+                      className={css({
+                        display: "block",
+                        lineHeight: "1.2",
+                        textTransform: "uppercase",
+                      })}
                     >
                       {t(line)}
                     </Text>
                   ))}
                 </Stack>
 
-                {/* Subtitle */}
                 <Text
                   variant="paragraph-1"
                   tone="inverse"
-                  opacity="0.75"
-                  maxW="460px"
+                  className={css({
+                    opacity: "0.85",
+                    lineHeight: "1.8",
+                    maxW: "460px",
+                  })}
                 >
                   {t(slide.subtitle)}
                 </Text>
 
-                {/* CTAs */}
                 <Flex gap="3" flexWrap="wrap" pt="2">
-                  <Link href={slide.ctaPrimary.href}>
-                    <Button variant="default" size="lg">
-                      {t(slide.ctaPrimary.label)}
-                    </Button>
-                  </Link>
-                  <Link href={slide.ctaSecondary.href}>
-                    <Button variant="highlight-plain" size="lg" onDark>
-                      {t(slide.ctaSecondary.label)}
-                    </Button>
-                  </Link>
+                  <Button variant="default" size="lg">
+                    {t(slide.ctaPrimary.label)}
+                  </Button>
+                  <Button variant="highlight-plain" size="lg" onDark>
+                    {t(slide.ctaSecondary.label)}
+                  </Button>
                 </Flex>
               </Stack>
             </Box>
-          ))}
-        </Carousel>
-      </Box>
+          </Link>
+        ))} */}
+      </Carousel>
     </MainContentWrapper>
   );
 }
