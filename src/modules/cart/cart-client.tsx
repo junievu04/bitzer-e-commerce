@@ -18,9 +18,6 @@ import {
   Stack,
 } from "@/vendors/styled-system/jsx";
 
-const PLACEHOLDER_IMAGE =
-  "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/breakfast.jpg";
-
 const formatPrice = (price: number | null, t: FormatMessage) => {
   if (price === null) return t("Liên hệ");
   return new Intl.NumberFormat("vi-VN", {
@@ -34,7 +31,7 @@ const handleContactToBuy = () => {
   window.location.href = "/contact?from=cart";
 };
 
-export default function CartClient() {
+export const CartClient = () => {
   const { t } = useIntl();
   const { items, totalItems, clearCart, removeFromCart, updateQuantity } =
     useCart();
@@ -163,13 +160,12 @@ export default function CartClient() {
                       href={`/products/${item.product.slug || item.product.id}`}
                     >
                       <Image
-                        src={item.product.image || PLACEHOLDER_IMAGE}
+                        src={item.product.image}
                         alt={item.product.name}
                         aspectRatio="1/1"
                         width="80px"
                         objectFit="cover"
                         borderRadius="md"
-                        fallback={PLACEHOLDER_IMAGE}
                       />
                     </Link>
                     <Stack gap="1" flex="1">
@@ -411,4 +407,4 @@ export default function CartClient() {
       </Grid>
     </Box>
   );
-}
+};

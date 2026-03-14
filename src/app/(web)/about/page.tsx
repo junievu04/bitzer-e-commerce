@@ -1,12 +1,7 @@
-import AboutClient from "@/modules/about/about-client";
-import LayoutContentWrapper from "@/modules/layout/layout-content-wrapper";
+import PageLayout from "@/modules/layout/page-layout";
 
 const page = () => {
-  return (
-    <LayoutContentWrapper>
-      <AboutClient />
-    </LayoutContentWrapper>
-  );
+  return <PageLayout layoutKey="about-1" />;
 };
 
 export default page;

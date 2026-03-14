@@ -2,17 +2,18 @@ import { connectDB } from "@/lib/mongodb";
 import { Layout } from "@/models/Layout";
 import { NextRequest, NextResponse } from "next/server";
 
-type Params = { type: string };
+type Params = { key: string };
 
 const DEFAULT_LOCALE = "vi";
 
-function buildDefaultLayout(type: string) {
-  const normalizedType = type.trim().toLowerCase();
+function buildDefaultLayout(key: string) {
+  const normalizedKey = key.trim().toLowerCase();
   return {
-    key: normalizedType,
+    layoutKey: normalizedKey,
+    name: "",
     locale: DEFAULT_LOCALE,
     data: {
-      type: normalizedType,
+      type: normalizedKey,
       components: [],
     },
     updatedAt: null,
@@ -25,9 +26,9 @@ export async function GET(
 ) {
   try {
     await connectDB();
-    const { type } = await ctx.params;
+    const { key } = await ctx.params;
 
-    const normalizedKey = type.trim().toLowerCase();
+    const normalizedKey = key.trim().toLowerCase();
     if (!normalizedKey) {
       return NextResponse.json(
         { error: "Invalid layout type" },
@@ -36,10 +37,17 @@ export async function GET(
     }
 
     const doc = await Layout.findOne({
-      key: normalizedKey,
+      layoutKey: normalizedKey,
       locale: DEFAULT_LOCALE,
     })
-      .select({ _id: 0, key: 1, locale: 1, data: 1, updatedAt: 1 })
+      .select({
+        _id: 0,
+        layoutKey: 1,
+        name: 1,
+        locale: 1,
+        data: 1,
+        updatedAt: 1,
+      })
       .lean();
 
     if (!doc) {
@@ -50,7 +58,7 @@ export async function GET(
 
     return NextResponse.json(doc, { status: 200 });
   } catch (err) {
-    console.error("GET /api/layouts/[type] error:", err);
+    console.error("GET /api/layouts/[key] error:", err);
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
 }

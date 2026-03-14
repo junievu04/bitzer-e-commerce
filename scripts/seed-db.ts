@@ -53,13 +53,14 @@ async function main() {
 
   // 4. Layout mẫu (home)
   await Layout.create({
-    key: "home",
+    layoutKey: "home-1",
+    name: "Trang chủ",
     locale: "vi",
     data: {
       type: "home",
       components: [
         {
-          type: "hero-banner-carousel",
+          tag: "hero-banner-carousel",
           detail: {
             title: "",
             subTitle: "",
@@ -93,7 +94,7 @@ async function main() {
           },
         },
         {
-          type: "intro-cards",
+          tag: "intro-cards",
           detail: {
             title: "",
             subTitle: "",
@@ -130,7 +131,7 @@ async function main() {
           },
         },
         {
-          type: "about-section",
+          tag: "about-section",
           detail: {
             title: "Dịch vụ Máy Nén Bitzer",
             subTitle: "Về chúng tôi - ĐẠI TÍN",
@@ -143,7 +144,7 @@ async function main() {
           },
         },
         {
-          type: "stats-strip",
+          tag: "stats-strip",
           detail: {
             title: "",
             subTitle: "",
@@ -173,7 +174,7 @@ async function main() {
           },
         },
         {
-          type: "global-supplier-section",
+          tag: "global-supplier-section",
           detail: {
             title: "ĐẠI TÍN",
             subTitle: "NHÀ CUNG CẤP DỊCH VỤ TOÀN CẦU",
@@ -202,7 +203,7 @@ async function main() {
           },
         },
         {
-          type: "cta-banner",
+          tag: "cta-banner",
           detail: {
             title: "Liên hệ ngay",
             subTitle: "",
@@ -213,7 +214,7 @@ async function main() {
           },
         },
         {
-          type: "news-section",
+          tag: "news-section",
           detail: {
             title: "Tin tức",
             subTitle: "Xem tất cả",

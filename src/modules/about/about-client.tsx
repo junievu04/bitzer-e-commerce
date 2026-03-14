@@ -8,8 +8,6 @@ import { css } from "@/vendors/styled-system/css";
 import { Box, Flex, Grid, HStack, Stack } from "@/vendors/styled-system/jsx";
 import AboutHeader from "./about-header";
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
-
 const STATS = [
   { num: "20+", label: "Năm kinh nghiệm" },
   { num: "500+", label: "Sản phẩm chính hãng" },

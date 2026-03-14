@@ -6,14 +6,14 @@ interface Props {
 }
 
 export default function LayoutComponentRenderer({ component }: Props) {
-  const { type, detail } = component;
+  const { tag, detail } = component;
 
-  const Component = layoutComponents[type];
+  const Component = layoutComponents[tag];
 
   if (!Component) {
     // Dev warning, không crash production
     if (process.env.NODE_ENV === "development") {
-      console.warn(`[LayoutRenderer] Unregistered component type: "${type}"`);
+      console.warn(`[LayoutRenderer] Unregistered component type: "${tag}"`);
     }
     return null;
   }

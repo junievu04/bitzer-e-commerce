@@ -64,16 +64,7 @@ export interface ServiceDTO {
 /**
  * Layout
  */
-export type LayoutType = "home" | "content" | string;
-
-export type LayoutComponentType =
-  | "hero-banner-carousel"
-  | "section"
-  | "text-block"
-  | "image"
-  | "footer-component"
-  | "header-component"
-  | string;
+export type LayoutType = "home" | "content";
 
 export interface LayoutComponentDetail {
   title?: string;
@@ -85,7 +76,7 @@ export interface LayoutComponentDetail {
 }
 
 export interface LayoutComponent {
-  type: LayoutComponentType;
+  tag: string; // e.g. "hero-banner-carousel", "section", "text-block", "image", "footer-component", "header-component"
   detail: LayoutComponentDetail;
 }
 
@@ -95,7 +86,8 @@ export interface LayoutData {
 }
 
 export interface LayoutDTO {
-  key: string; // "home", "about", ...
+  layoutKey: string; // e.g. "home-1"
+  name: string;
   locale: string;
   data: LayoutData;
   updatedAt: string | null;
