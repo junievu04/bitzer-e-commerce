@@ -1,17 +1,9 @@
 "use client";
 import { Envelope, Globe, Location, Phone } from "@/components/icons";
 import Text from "@/components/text";
+import { INFO_COMPANY } from "@/constants";
 import { useIntl } from "@/utils/intl";
 import { Box, Flex, Stack } from "@/vendors/styled-system/jsx";
-
-const COMPANY_INFO = {
-  name: "CÔNG TY TNHH TM VÀ DV CÔNG NGHỆ ĐIỆN LẠNH ĐẠI TÍN",
-  address:
-    "Tầng 12 - Tháp A2, Tòa nhà Viettel, 285 Cách Mạng Tháng Tám, P. Hoà Hưng, TP. Hồ Chí Minh",
-  phone: "0962 884 529",
-  email: "bitzerecommerce@gmail.com",
-  website: "www.congnghedaitin.com",
-};
 
 export const CompanyInfomation = () => {
   const { t } = useIntl();
@@ -23,7 +15,7 @@ export const CompanyInfomation = () => {
       border="1px solid {colors.gray.200}"
     >
       <Text variant="section-heading-2" weight="bold" tone="primary" mb="4">
-        {COMPANY_INFO.name}
+        {t(INFO_COMPANY.fullName)}
       </Text>
 
       <Stack gap="4">
@@ -36,7 +28,7 @@ export const CompanyInfomation = () => {
               {t("Địa chỉ")}:
             </Text>
             <Text variant="paragraph-2" tone="primary">
-              {COMPANY_INFO.address}
+              {t(INFO_COMPANY.address1)}
             </Text>
           </Box>
         </Flex>
@@ -51,10 +43,10 @@ export const CompanyInfomation = () => {
             tone="link"
             cursor="pointer"
             onClick={() =>
-              (window.location.href = `tel:${COMPANY_INFO.phone.replace(/\s/g, "")}`)
+              (window.location.href = `tel:${INFO_COMPANY.phone.replace(/\s/g, "")}`)
             }
           >
-            {COMPANY_INFO.phone}
+            {INFO_COMPANY.phone}
           </Text>
         </Flex>
 
@@ -67,10 +59,10 @@ export const CompanyInfomation = () => {
             tone="link"
             cursor="pointer"
             onClick={() =>
-              (window.location.href = `mailto:${COMPANY_INFO.email}`)
+              (window.location.href = `mailto:${INFO_COMPANY.email}`)
             }
           >
-            {COMPANY_INFO.email}
+            {INFO_COMPANY.email}
           </Text>
         </Flex>
 
@@ -83,10 +75,10 @@ export const CompanyInfomation = () => {
             tone="link"
             cursor="pointer"
             onClick={() =>
-              window.open(`https://${COMPANY_INFO.website}`, "_blank")
+              window.open(`https://${INFO_COMPANY.website}`, "_blank")
             }
           >
-            {COMPANY_INFO.website}
+            {INFO_COMPANY.website}
           </Text>
         </Flex>
       </Stack>

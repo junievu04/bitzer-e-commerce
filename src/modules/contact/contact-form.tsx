@@ -119,7 +119,7 @@ export const ContactForm = () => {
     } catch {
       setSubmitStatus({
         type: "error",
-        message: "Có lỗi xảy ra. Vui lòng thử lại sau.",
+        message: t("Có lỗi xảy ra. Vui lòng thử lại sau."),
       });
     } finally {
       setIsSubmitting(false);

@@ -6,7 +6,7 @@ import { HeaderTitleWrapper } from "../layout/components/header-title-wrapper";
 import { CompanyInfomation } from "./company-infomation";
 import { ContactForm } from "./contact-form";
 
-export default function ContactClient() {
+export const ContactClient = () => {
   const { t } = useIntl();
   const breadcrumbItems = [{ label: t("Liên hệ") }];
 
@@ -18,4 +18,4 @@ export default function ContactClient() {
       </Grid>
     </HeaderTitleWrapper>
   );
-}
+};
