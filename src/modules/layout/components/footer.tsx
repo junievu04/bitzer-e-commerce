@@ -1,17 +1,20 @@
 "use client";
 import {
   Envelope,
-  Facebook,
   Location,
-  Mail,
-  Messenger,
   Phone,
   ShieldTick,
   StarTickFilled,
-  Zalo,
 } from "@/components/icons";
+import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text/text";
+import {
+  INFO_COMPANY,
+  INFO_LINKS,
+  LOGO_IMAGE,
+  SOCIAL_LINKS,
+} from "@/constants";
 import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
 import {
@@ -22,54 +25,6 @@ import {
   HStack,
   Stack,
 } from "@/vendors/styled-system/jsx";
-
-// ─── Data ─────────────────────────────────────────────────────────────────────
-
-const PRODUCT_LINKS = [
-  { label: "Phụ tùng Bitzer", href: "/products?category=phu-tung-bitzer" },
-  { label: "Dịch vụ sửa chữa", href: "/products?category=dich-vu" },
-  { label: "Phụ tùng điện lạnh", href: "/products?category=dien-lanh" },
-  { label: "Gas lạnh", href: "/products?category=gas-lanh" },
-];
-
-const INFO_LINKS = [
-  { label: "Giới thiệu", href: "/about" },
-  { label: "Tin tức kỹ thuật", href: "/news" },
-  { label: "Liên hệ", href: "/contact" },
-  { label: "Chính sách bảo hành", href: "/warranty" },
-  { label: "Chính sách đổi trả", href: "/returns" },
-];
-
-const SOCIAL_LINKS = [
-  {
-    label: Facebook,
-    href: "https://facebook.com/YOUR_PAGE",
-    title: "Facebook",
-  },
-  {
-    label: Zalo,
-    href: "https://",
-    title: "Zalo",
-  },
-  {
-    label: Mail,
-    href: "https://",
-    title: "Mail",
-  },
-  {
-    label: Messenger,
-    href: "https://",
-    title: "Messenger",
-  },
-];
-
-const BOTTOM_LINKS = [
-  { label: "Điều khoản", href: "/terms" },
-  { label: "Bảo mật", href: "/privacy" },
-  { label: "Sitemap", href: "/sitemap.xml" },
-];
-
-// ─── Shared styles ────────────────────────────────────────────────────────────
 
 // Nav links: trắng 70% → trắng 100% on hover
 const navLinkCss = css({
@@ -82,15 +37,12 @@ const navLinkCss = css({
   _hover: { opacity: "1", textDecoration: "none" },
 });
 
-// Contact links: trắng 70% → brand.400 on hover
 const contactLinkCss = css({
   color: "white",
   opacity: "0.7",
   transition: "opacity 0.15s ease, color 0.15s ease",
   _hover: { opacity: "1", color: "brand.400", textDecoration: "none" },
 });
-
-// ─── ColHeading ───────────────────────────────────────────────────────────────
 
 function ColHeading({ children }: { children: React.ReactNode }) {
   return (
@@ -135,7 +87,7 @@ export default function Footer() {
                 alignItems="center"
                 gap="2.5"
               >
-                <Center
+                {/* <Center
                   w="10"
                   h="10"
                   borderRadius="lg"
@@ -145,26 +97,24 @@ export default function Footer() {
                   borderColor="brand.600"
                 >
                   <span style={{ fontSize: "20px", lineHeight: 1 }}>🔩</span>
-                </Center>
+                </Center> */}
+                <Image
+                  src={LOGO_IMAGE}
+                  alt={INFO_COMPANY.shortName}
+                  width="10"
+                  height="10"
+                  borderRadius="lg"
+                />
                 <Stack gap="0.5">
-                  <Box lineHeight="1">
-                    <Text
-                      variant="paragraph-1"
-                      weight="bold"
-                      tone="inverse"
-                      inline
-                    >
-                      BITZER
-                    </Text>
-                    <Text
-                      variant="paragraph-1"
-                      weight="bold"
-                      inline
-                      tone="trending"
-                    >
-                      shop
-                    </Text>
-                  </Box>
+                  <Text
+                    variant="paragraph-1"
+                    weight="bold"
+                    tone="inverse"
+                    inline
+                    lineHeight="1"
+                  >
+                    {t(INFO_COMPANY.shortName)}
+                  </Text>
                   <Text
                     variant="caption-2"
                     tone="inverse"
@@ -172,7 +122,7 @@ export default function Footer() {
                     letterSpacing="0.08em"
                     textTransform="uppercase"
                   >
-                    {t("Điện Lạnh Đại Tín")}
+                    {t("Máy nén Bitzer chính hãng")}
                   </Text>
                 </Stack>
               </Link>
@@ -180,10 +130,10 @@ export default function Footer() {
               {/* Tên đầy đủ + MST */}
               <Stack gap="1.5">
                 <Text weight="bold" tone="inverse" lineHeight="1.55">
-                  {t("CÔNG TY TNHH TM VÀ DV CÔNG NGHỆ ĐIỆN LẠNH ĐẠI TÍN")}
+                  {t(INFO_COMPANY.fullName)}
                 </Text>
                 <Text variant="caption-1" tone="inverse" opacity="0.8">
-                  MST: 0318617669
+                  {t("MST")}: {INFO_COMPANY.taxCode}
                 </Text>
               </Stack>
 
@@ -218,7 +168,6 @@ export default function Footer() {
             </Stack>
           </Stack>
 
-          {/* ── Col 2: Địa chỉ ───────────────────────────────────────────── */}
           <Stack gap="0">
             <ColHeading>{t("Địa chỉ")}</ColHeading>
             <Stack gap="6">
@@ -243,9 +192,7 @@ export default function Footer() {
                     lineHeight="1.7"
                     opacity="0.8"
                   >
-                    {t(
-                      "Tầng 12 - Tháp A2, Tòa nhà Viettel, 285 Cách Mạng Tháng Tám, P. Hoà Hưng, TP. Hồ Chí Minh",
-                    )}
+                    {t(INFO_COMPANY.address1)}
                   </Text>
                 </HStack>
               </Stack>
@@ -271,7 +218,7 @@ export default function Footer() {
                     lineHeight="1.7"
                     opacity="0.8"
                   >
-                    {t("8A Hẻm F11, Vĩnh Lộc A, Bình Chánh, TP. Hồ Chí Minh")}
+                    {t(INFO_COMPANY.address2)}
                   </Text>
                 </HStack>
               </Stack>
@@ -280,31 +227,6 @@ export default function Footer() {
 
           {/* ── Col 3: Sản phẩm + Thông tin ─────────────────────────────── */}
           <Stack gap="0">
-            <ColHeading>{t("Sản phẩm")}</ColHeading>
-            <Stack gap="2.5" mb="7">
-              {PRODUCT_LINKS.map((l) => (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  tone="inverse"
-                  hover="none"
-                  className={navLinkCss}
-                >
-                  <Box
-                    w="1.5"
-                    h="1.5"
-                    borderRadius="full"
-                    bg="brand.600"
-                    flexShrink={0}
-                  />
-                  <Text variant="paragraph-2" inline tone="inverse">
-                    {l.label}
-                  </Text>
-                </Link>
-              ))}
-            </Stack>
-
-            {/* Sub-heading Thông tin */}
             <Box pb="3" mb="4" borderBottom="1px solid {colors.gray.700}">
               <Text variant="paragraph-2" weight="bold" tone="inverse">
                 {t("Thông tin")}
@@ -327,14 +249,13 @@ export default function Footer() {
                     flexShrink={0}
                   />
                   <Text variant="paragraph-2" inline tone="inverse">
-                    {l.label}
+                    {t(l.label)}
                   </Text>
                 </Link>
               ))}
             </Stack>
           </Stack>
 
-          {/* ── Col 4: Liên Hệ + Social ──────────────────────────────────── */}
           <Stack gap="0">
             <ColHeading>{t("Liên hệ")}</ColHeading>
             <Stack gap="4" mb="7">
@@ -345,16 +266,16 @@ export default function Footer() {
                 </Box>
                 <Stack gap="0.5">
                   <Text variant="caption-1" weight="bold" tone="inverse">
-                    {t("Ms. Vân (Kinh doanh)")}
+                    {INFO_COMPANY.admin}
                   </Text>
                   <Link
-                    href="tel:0962884529"
+                    href={`tel:${INFO_COMPANY.phone.replace(/\s/g, "")}`}
                     tone="inverse"
                     hover="none"
                     className={contactLinkCss}
                   >
                     <Text variant="paragraph-2" inline tone="inverse">
-                      0962 884 529
+                      {INFO_COMPANY.phone}
                     </Text>
                   </Link>
                 </Stack>
@@ -370,7 +291,7 @@ export default function Footer() {
                     Email
                   </Text>
                   <Link
-                    href="mailto:info.congnghedaitin@gmail.com"
+                    href={`mailto:${INFO_COMPANY.email}`}
                     tone="inverse"
                     hover="none"
                     className={contactLinkCss}
@@ -381,7 +302,7 @@ export default function Footer() {
                       tone="inverse"
                       wordBreak="break-all"
                     >
-                      info.congnghedaitin@gmail.com
+                      {INFO_COMPANY.email}
                     </Text>
                   </Link>
                 </Stack>
@@ -404,7 +325,7 @@ export default function Footer() {
                 {SOCIAL_LINKS.map((s) => (
                   <Link
                     key={s.title}
-                    href={s.href}
+                    href={s.url}
                     tone="inverse"
                     hover="none"
                     title={s.title}
@@ -421,7 +342,7 @@ export default function Footer() {
                       transform: "translateY(-3px)",
                     }}
                   >
-                    {s.label && <s.label />}
+                    {s.icon && <s.icon />}
                   </Link>
                 ))}
               </HStack>
@@ -446,28 +367,9 @@ export default function Footer() {
           <Text variant="caption-1" tone="inverse">
             Copyright {new Date().getFullYear()} ©{" "}
             <Text variant="caption-1" weight="bold" tone="inverse" inline>
-              Điện Lạnh Đại Tín
+              {t(INFO_COMPANY.bio)}
             </Text>
           </Text>
-          <HStack gap="4">
-            {BOTTOM_LINKS.map(({ label, href }) => (
-              <Link
-                key={href}
-                href={href}
-                size="sm"
-                tone="inverse"
-                hover="none"
-                className={css({
-                  color: "white",
-                  opacity: "0.8",
-                  _hover: { opacity: "1", textDecoration: "underline" },
-                  transition: "opacity 0.15s ease",
-                })}
-              >
-                {label}
-              </Link>
-            ))}
-          </HStack>
         </Flex>
       </Box>
     </Box>

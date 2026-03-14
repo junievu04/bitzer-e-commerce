@@ -1,34 +1,20 @@
 "use client";
 
 import Button from "@/components/button";
-import {
-  CrossDiagonal,
-  Headset,
-  Messenger,
-  Phone,
-  Zalo,
-} from "@/components/icons";
+import { CrossDiagonal, Headset, Phone } from "@/components/icons";
 import Link from "@/components/link";
 import Text from "@/components/text";
+import { INFO_COMPANY, SOCIAL_LINKS } from "@/constants";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Flex } from "@/vendors/styled-system/jsx";
-import { useState } from "react";
+import React, { useState } from "react";
 
 const CONTACTS = [
+  ...SOCIAL_LINKS.slice(0, 2),
   {
-    label: "Zalo",
-    href: "https://zalo.me/0975187429",
-    icon: <Zalo />,
-  },
-  {
-    label: "Messenger",
-    href: "https://m.me/greenpointvietnam",
-    icon: <Messenger />,
-  },
-  {
-    label: "Hotline",
-    href: "tel:0975187429",
     icon: <Phone tone="inverse" />,
+    url: `tel:${INFO_COMPANY.phone.replace(/\s/g, "")}`,
+    title: "Hotline",
   },
 ];
 
@@ -41,7 +27,7 @@ export default function ContactButtons() {
         {/* Sub-buttons — slide up when open */}
         {CONTACTS.map((c, i) => (
           <Flex
-            key={c.label}
+            key={c.title}
             alignItems="center"
             gap="2"
             transition="opacity 0.2s ease, transform 0.25s ease"
@@ -67,14 +53,14 @@ export default function ContactButtons() {
                 weight="medium"
                 color="{colors.gray.800}"
               >
-                {c.label}
+                {c.title}
               </Text>
             </Box>
 
             {/* Icon circle */}
             <Link
-              href={c.href}
-              target={c.href.startsWith("tel") ? "_self" : "_blank"}
+              href={c.url}
+              target={c.url.startsWith("tel") ? "_self" : "_blank"}
               rel="noreferrer"
               display="flex"
               alignItems="center"
@@ -85,9 +71,15 @@ export default function ContactButtons() {
               transition="transform 0.2s ease"
               _hover={{ transform: "scale(1.12)" }}
               boxShadow="0 4px 14px {colors.gray.900/0.22}"
-              bg={c.href.startsWith("tel") ? "brand.500" : undefined}
+              bg={c.url.startsWith("tel") ? "brand.500" : undefined}
             >
-              {c.icon}
+              {c.icon &&
+                (React.isValidElement(c.icon)
+                  ? c.icon
+                  : (() => {
+                      const Icon = c.icon as React.ComponentType;
+                      return <Icon />;
+                    })())}
             </Link>
           </Flex>
         ))}

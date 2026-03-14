@@ -1,24 +1,17 @@
 "use client";
 import Button from "@/components/button";
 import { Cart, Icon3Lines, MagnifyingGlass } from "@/components/icons";
+import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text";
 import TextField from "@/components/text-field/text-field";
+import { INFO_COMPANY, LOGO_IMAGE, NAV_LINKS } from "@/constants";
 import { useCart } from "@/hooks";
 import { useIntl } from "@/utils/intl";
-import { css } from "@/vendors/styled-system/css";
 import { Box, Center, Flex, HStack, Stack } from "@/vendors/styled-system/jsx";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import LanguageSwitcher from "./language-switcher";
-
-const NAV_LINKS: { href: string; label: string }[] = [
-  { href: "/", label: "Trang chủ" },
-  { href: "/products", label: "Sản phẩm" },
-  { href: "/services", label: "Dịch vụ" },
-  { href: "/about", label: "Giới thiệu" },
-  { href: "/contact", label: "Liên hệ" },
-];
 
 export default function Header() {
   const { t } = useIntl();
@@ -70,22 +63,30 @@ export default function Header() {
         justifyContent="space-between"
       >
         {/* Logo */}
-        <Link href="/" display="flex" flexShrink={0}>
-          <Text variant="metric-2" tone="success">
-            BITZER
-          </Text>
-          <Text tone="neutral-light" variant="page-heading-2">
-            shop
-          </Text>
+        <Link
+          href="/"
+          display="flex"
+          flexShrink={0}
+          alignItems="center"
+          gap="1"
+        >
+          <Image
+            src={LOGO_IMAGE}
+            alt={INFO_COMPANY.shortName}
+            width="10"
+            height="10"
+            borderRadius="lg"
+          />
+          <Text variant="metric-2">{INFO_COMPANY.shortName}</Text>
         </Link>
 
         {/* Desktop nav */}
         <HStack gap="5" display={{ base: "none", lg: "flex" }} flexShrink={0}>
           {links.map((l) => (
-            <Link key={l.href} href={l.href} transition="color 0.2s">
+            <Link key={l.pathname} href={l.pathname} transition="color 0.2s">
               <Text
                 weight="medium"
-                tone={isActive(l.href) ? "success" : "secondary"}
+                tone={isActive(l.pathname) ? "success" : "secondary"}
                 whiteSpace="nowrap"
                 _hover={{ color: "brand.600" }}
               >
@@ -183,13 +184,13 @@ export default function Header() {
         >
           {links.map((l) => (
             <Link
-              key={l.href}
-              href={l.href}
+              key={l.pathname}
+              href={l.pathname}
               onClick={() => setMenuOpen(false)}
               py="2"
               fontWeight="medium"
-              color={isActive(l.href) ? "brand.600" : "text.secondary"}
-              className={css({ _hover: { color: "brand.600" } })}
+              color={isActive(l.pathname) ? "brand.600" : "text.secondary"}
+              _hover={{ color: "brand.600" }}
             >
               {l.label}
             </Link>

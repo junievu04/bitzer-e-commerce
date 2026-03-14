@@ -7,6 +7,7 @@ import {
   IntroCards,
   StatsStrip,
 } from "@/modules/home/components";
+import { Footer } from "@/modules/layout/components";
 import dynamic, { DynamicOptionsLoadingProps } from "next/dynamic";
 import type { ComponentType } from "react";
 
@@ -41,6 +42,7 @@ const layoutComponents: Record<string, ComponentType<any>> = {
   "global-supplier-section": GlobalSupplierSection,
   "cta-banner": CtaBanner,
   "news-section": NewsSection,
+  "layout-footer": Footer,
 };
 
 export default layoutComponents;

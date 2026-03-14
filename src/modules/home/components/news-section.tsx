@@ -130,7 +130,7 @@ export default function NewsSection({ detail }: Props) {
                       <Text variant="caption-1" weight="bold" tone="link">
                         {t("Đọc thêm")}
                       </Text>
-                      <ArrowRight tone="link" />
+                      <ArrowRight size="xs" tone="link" />
                     </HStack>
                   )}
                 </Stack>
