@@ -8,7 +8,7 @@ import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, HStack, Stack } from "@/vendors/styled-system/jsx";
 import { useMemo } from "react";
-import { ProductCard } from "./product-card";
+import ProductCard from "./product-card";
 import { Product } from "./types";
 
 interface SuggestedProductsSectionProps {
@@ -16,7 +16,7 @@ interface SuggestedProductsSectionProps {
   categorySlug: string;
 }
 
-export function SuggestedProductsSection({
+export default function SuggestedProductsSection({
   products,
   categorySlug,
 }: SuggestedProductsSectionProps) {

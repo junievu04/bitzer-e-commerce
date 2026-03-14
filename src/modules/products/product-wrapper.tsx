@@ -2,11 +2,11 @@
 
 import { useIntl } from "@/utils/intl";
 import { Flex, Stack } from "@/vendors/styled-system/jsx";
-import { HeaderTitleWrapper } from "../layout/header-title-wrapper";
-import { ProductFilter } from "./product-filter";
-import { ProductList } from "./product-list";
-import { ProductPagination } from "./product-pagination";
-import { ProductSort } from "./product-sort";
+import { HeaderTitleWrapper } from "../layout/components/header-title-wrapper";
+import ProductFilter from "./product-filter";
+import ProductList from "./product-list";
+import ProductPagination from "./product-pagination";
+import ProductSort from "./product-sort";
 import { PaginationState, Product, ProductFilterState } from "./types";
 
 interface ProductWrapperProps {
@@ -19,7 +19,7 @@ interface ProductWrapperProps {
   categorySlug?: string | null;
 }
 
-export function ProductWrapper({
+export default function ProductWrapper({
   products,
   filter,
   pagination,

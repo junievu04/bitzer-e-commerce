@@ -34,7 +34,7 @@ const handleContactToBuy = () => {
   window.location.href = "/contact?from=cart";
 };
 
-export function CartClient() {
+export default function CartClient() {
   const { t } = useIntl();
   const { items, totalItems, clearCart, removeFromCart, updateQuantity } =
     useCart();

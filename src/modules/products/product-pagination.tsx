@@ -16,7 +16,7 @@ interface ProductPaginationProps {
   onPageChange: (page: number) => void;
 }
 
-export function ProductPagination({
+export default function ProductPagination({
   pagination,
   onPageChange,
 }: ProductPaginationProps) {
@@ -96,7 +96,7 @@ export function ProductPagination({
               {page}
             </Text>
           </Center>
-        )
+        ),
       )}
 
       <Button

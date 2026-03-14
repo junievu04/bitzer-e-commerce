@@ -6,7 +6,7 @@ import Text from "@/components/text/text";
 import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Flex, Grid, HStack, Stack } from "@/vendors/styled-system/jsx";
-import { AboutHeader } from "./about-header";
+import AboutHeader from "./about-header";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 

@@ -32,7 +32,7 @@ const CONTACTS = [
   },
 ];
 
-export function ContactButtons() {
+export default function ContactButtons() {
   const [open, setOpen] = useState(false);
 
   return (

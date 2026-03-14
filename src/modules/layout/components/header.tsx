@@ -10,7 +10,7 @@ import { css } from "@/vendors/styled-system/css";
 import { Box, Center, Flex, HStack, Stack } from "@/vendors/styled-system/jsx";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { LanguageSwitcher } from "./language-switcher";
+import LanguageSwitcher from "./language-switcher";
 
 const NAV_LINKS: { href: string; label: string }[] = [
   { href: "/", label: "Trang chủ" },
@@ -20,7 +20,7 @@ const NAV_LINKS: { href: string; label: string }[] = [
   { href: "/contact", label: "Liên hệ" },
 ];
 
-export function Header() {
+export default function Header() {
   const { t } = useIntl();
   const { totalItems } = useCart();
   const router = useRouter();

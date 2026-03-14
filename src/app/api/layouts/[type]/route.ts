@@ -29,7 +29,10 @@ export async function GET(
 
     const normalizedKey = type.trim().toLowerCase();
     if (!normalizedKey) {
-      return NextResponse.json({ error: "Invalid layout type" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid layout type" },
+        { status: 400 },
+      );
     }
 
     const doc = await Layout.findOne({
@@ -40,23 +43,14 @@ export async function GET(
       .lean();
 
     if (!doc) {
-      return NextResponse.json(
-        {
-          layout: buildDefaultLayout(normalizedKey),
-        },
-        { status: 200 },
-      );
+      return NextResponse.json(buildDefaultLayout(normalizedKey), {
+        status: 200,
+      });
     }
 
-    return NextResponse.json(
-      {
-        layout: doc,
-      },
-      { status: 200 },
-    );
+    return NextResponse.json(doc, { status: 200 });
   } catch (err) {
     console.error("GET /api/layouts/[type] error:", err);
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
 }
-

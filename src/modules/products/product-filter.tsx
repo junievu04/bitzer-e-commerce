@@ -31,7 +31,10 @@ interface ProductFilterProps {
   onFilterChange: (filter: ProductFilterState) => void;
 }
 
-export function ProductFilter({ filter, onFilterChange }: ProductFilterProps) {
+export default function ProductFilter({
+  filter,
+  onFilterChange,
+}: ProductFilterProps) {
   const handleCategoryChange = (slug: string) => {
     onFilterChange({
       ...filter,

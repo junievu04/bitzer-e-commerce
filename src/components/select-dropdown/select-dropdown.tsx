@@ -44,7 +44,7 @@ const getDropdownPositionStyles = (position: DropdownPosition) => {
   }
 };
 
-export function SelectDropdown<T extends string = string>({
+export default function SelectDropdown<T extends string = string>({
   options,
   value,
   onChange,

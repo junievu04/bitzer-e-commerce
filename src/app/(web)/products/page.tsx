@@ -1,4 +1,4 @@
-import { LayoutContentWrapper } from "@/modules/layout/layout-content-wrapper";
+import LayoutContentWrapper from "@/modules/layout/layout-content-wrapper";
 import ProductsClient from "@/modules/products/products-client";
 
 const page = () => {

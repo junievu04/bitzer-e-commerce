@@ -2,15 +2,15 @@
 import Button from "@/components/button";
 import Link from "@/components/link";
 import Text from "@/components/text/text";
-import { MainContentWrapper } from "@/modules/home/main-content/main-content-wrapper";
+import MainContentWrapper from "@/modules/home/components/main-content-wrapper";
 import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Flex } from "@/vendors/styled-system/jsx";
 
-export function CtaBanner() {
+export default function CtaBanner() {
   const { t } = useIntl();
   return (
-    <MainContentWrapper>
+    <MainContentWrapper id="cta-banner">
       <Box
         py={{ base: "12", md: "16" }}
         px="5"

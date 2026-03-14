@@ -1,11 +1,11 @@
 "use client";
 
 import { useIntl } from "@/utils/intl";
-import { HeaderTitleWrapper } from "../layout/header-title-wrapper";
-import { ServiceList } from "./service-list";
+import { HeaderTitleWrapper } from "../layout/components/header-title-wrapper";
+import ServiceList from "./service-list";
 import { SERVICES } from "./types";
 
-export function ServicesClient() {
+export default function ServicesClient() {
   const { t } = useIntl();
 
   const breadcrumbItems = [{ label: t("Dịch vụ"), href: "/services" }];

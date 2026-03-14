@@ -22,7 +22,7 @@ const SORT_OPTIONS: SelectOption<ProductFilterState["sortBy"]>[] = [
   { value: "name-desc", label: "Tên: Z-A" },
 ];
 
-export function ProductSort({
+export default function ProductSort({
   filter,
   onFilterChange,
   totalItems,

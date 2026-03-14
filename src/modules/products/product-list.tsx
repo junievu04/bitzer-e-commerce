@@ -6,14 +6,14 @@ import Link from "@/components/link";
 import Text from "@/components/text";
 import { useIntl } from "@/utils/intl";
 import { Center, Grid, Stack } from "@/vendors/styled-system/jsx";
-import { ProductCard } from "./product-card";
+import ProductCard from "./product-card";
 import { Product } from "./types";
 
 interface ProductListProps {
   products: Product[];
 }
 
-export function ProductList({ products }: ProductListProps) {
+export default function ProductList({ products }: ProductListProps) {
   const { t } = useIntl();
 
   if (products.length === 0) {

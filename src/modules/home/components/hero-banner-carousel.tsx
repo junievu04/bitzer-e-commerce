@@ -2,65 +2,51 @@
 import { Carousel } from "@/components/carousel";
 import { Image } from "@/components/image";
 import Link from "@/components/link";
-import { MainContentWrapper } from "@/modules/home/main-content/main-content-wrapper";
+import MainContentWrapper from "@/modules/home/components/main-content-wrapper";
+import { LayoutComponentDetail } from "@/types/api";
 import { Box } from "@/vendors/styled-system/jsx";
 
-// ─── Slide data ───────────────────────────────────────────────────────────────
+interface Slide {
+  id: string;
+  image: string;
+  ctaLink: string;
+}
 
-const SLIDES = [
+interface Props {
+  detail: LayoutComponentDetail;
+}
+
+const defaultSlides: Slide[] = [
   {
-    id: 1,
+    id: "hero-banner-1",
     image:
-      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/landscapes/nature-mountains.jpg",
-    fallback:
-      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/landscapes/nature-mountains.jpg",
-    tag: "Phụ tùng chính hãng",
-    heading: ["Phụ tùng máy nén", "Bitzer chính hãng"],
-    accentLine: 1,
-    subtitle:
-      "Hơn 500 sản phẩm phụ tùng, linh kiện điện lạnh. Giao hàng nhanh toàn quốc. Tư vấn kỹ thuật 24/7.",
-    ctaPrimary: { label: "Xem sản phẩm", href: "/products" },
-    ctaSecondary: { label: "Tư vấn ngay", href: "/contact" },
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/hero-banner-1.jpg",
+    ctaLink: "/products",
   },
   {
-    id: 2,
+    id: "hero-banner-2",
     image:
-      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/food/fish-vegetables.jpg",
-    fallback:
-      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/landscapes/beach-boat.jpg",
-    tag: "Dịch vụ kỹ thuật",
-    heading: ["Sửa chữa máy nén", "chuyên nghiệp"],
-    accentLine: 1,
-    subtitle:
-      "Đội ngũ kỹ sư 15+ năm kinh nghiệm. Phục vụ tại chỗ trên toàn quốc. Cam kết bảo hành 12 tháng.",
-    ctaPrimary: { label: "Đặt lịch sửa chữa", href: "/contact" },
-    ctaSecondary: { label: "Xem dịch vụ", href: "/products?category=dich-vu" },
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/hero-banner-2.jpg",
+    ctaLink: "/services",
   },
   {
-    id: 3,
+    id: "hero-banner-3",
     image:
-      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/balloons.jpg",
-    fallback:
-      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/landscapes/girl-urban-view.jpg",
-    tag: "Điện lạnh công nghiệp",
-    heading: ["Giải pháp điện lạnh", "toàn diện"],
-    accentLine: 1,
-    subtitle:
-      "Cung cấp đầy đủ gas lạnh, phụ kiện điện lạnh công nghiệp. Đại lý chính thức tại Việt Nam.",
-    ctaPrimary: {
-      label: "Xem giải pháp",
-      href: "/products?category=dien-lanh",
-    },
-    ctaSecondary: { label: "Liên hệ ngay", href: "/contact" },
+      "https://res.cloudinary.com/dsw4o0hjl/image/upload/hero-banner-3.jpg",
+    ctaLink: "/contact",
   },
 ];
 
-// ─── Component ────────────────────────────────────────────────────────────────
-
-export function HeroBannerCarousel() {
+export default function HeroBannerCarousel({ detail }: Props) {
   //const { t } = useIntl();
+  const object = detail.components?.[0] as { slides: Slide[] };
+  if (!object || !object.slides) {
+    return null;
+  }
+  const slides = object.slides || defaultSlides;
+
   return (
-    <MainContentWrapper>
+    <MainContentWrapper id="hero-banner-carousel">
       <Carousel
         variant="single"
         loop
@@ -69,10 +55,10 @@ export function HeroBannerCarousel() {
         pagination
         gap={0}
       >
-        {SLIDES.map((slide) => (
+        {slides.map((slide) => (
           <Link
             key={slide.id}
-            href={slide.ctaPrimary.href}
+            href={slide.ctaLink}
             display="block"
             style={{ width: "100%", flexShrink: 0 }}
           >
@@ -83,13 +69,12 @@ export function HeroBannerCarousel() {
             >
               <Image
                 src={slide.image}
-                alt={slide.tag}
+                alt={slide.id}
                 width="100%"
                 height="100%"
                 aspectRatio="16/9"
                 objectFit="cover"
                 borderRadius="0"
-                fallback={slide.fallback}
                 wrapperProps={{ position: "absolute", inset: "0" }}
               />
             </Box>

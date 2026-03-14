@@ -3,7 +3,7 @@ import Text from "@/components/text/text";
 import { css } from "@/vendors/styled-system/css";
 import { Box, HStack, Stack } from "@/vendors/styled-system/jsx";
 
-export function AboutHeader({
+export default function AboutHeader({
   label,
   title,
   center = false,

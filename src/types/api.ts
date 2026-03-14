@@ -71,14 +71,17 @@ export type LayoutComponentType =
   | "section"
   | "text-block"
   | "image"
+  | "footer-component"
+  | "header-component"
   | string;
 
 export interface LayoutComponentDetail {
   title?: string;
+  subTitle?: string;
   description?: string;
   image?: string;
   ctaLink?: string;
-  components?: LayoutComponent[];
+  components?: unknown[];
 }
 
 export interface LayoutComponent {

@@ -4,7 +4,9 @@ interface LayoutContentWrapperProps {
   children: React.ReactNode;
 }
 
-export function LayoutContentWrapper({ children }: LayoutContentWrapperProps) {
+export default function LayoutContentWrapper({
+  children,
+}: LayoutContentWrapperProps) {
   return (
     <Flex direction="column" maxW={1304} mx="auto" w="full" py="1">
       {children}

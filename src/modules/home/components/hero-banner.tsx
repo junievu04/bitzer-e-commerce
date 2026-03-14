@@ -2,11 +2,11 @@
 import Button from "@/components/button";
 import Link from "@/components/link";
 import Text from "@/components/text";
-import { MainContentWrapper } from "@/modules/home/main-content/main-content-wrapper";
+import MainContentWrapper from "@/modules/home/components/main-content-wrapper";
 import { useIntl } from "@/utils/intl";
 import { Box, Flex, Stack } from "@/vendors/styled-system/jsx";
 
-export function HeroBanner() {
+export default function HeroBanner() {
   const { t } = useIntl();
   return (
     <MainContentWrapper>

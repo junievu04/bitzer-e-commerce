@@ -5,7 +5,7 @@ import { Box, Flex, Stack } from "@/vendors/styled-system/jsx";
 import useEmblaCarousel from "embla-carousel-react";
 import { forwardRef, ReactNode, useCallback, useEffect, useState } from "react";
 import PaginationBullet from "./pagination-bullet";
-import { ScrollButton } from "./scroll-button";
+import ScrollButton from "./scroll-button";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

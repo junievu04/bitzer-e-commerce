@@ -9,7 +9,7 @@ import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Flex, Grid, Stack } from "@/vendors/styled-system/jsx";
 import { useState } from "react";
-import { HeaderTitleWrapper } from "../layout/header-title-wrapper";
+import { HeaderTitleWrapper } from "../layout/components/header-title-wrapper";
 import { SERVICES } from "./types";
 
 const PLACEHOLDER_IMAGE =
@@ -19,7 +19,9 @@ interface ServiceDetailClientProps {
   slug: string;
 }
 
-export function ServiceDetailClient({ slug }: ServiceDetailClientProps) {
+export default function ServiceDetailClient({
+  slug,
+}: ServiceDetailClientProps) {
   const { t } = useIntl();
   const service = SERVICES.find((s) => s.slug === slug);
   const [imgSrc, setImgSrc] = useState(service?.image || PLACEHOLDER_IMAGE);

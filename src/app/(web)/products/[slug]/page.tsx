@@ -1,4 +1,4 @@
-import { LayoutContentWrapper } from "@/modules/layout/layout-content-wrapper";
+import LayoutContentWrapper from "@/modules/layout/layout-content-wrapper";
 import { ProductDetailClient } from "@/modules/products/product-detail-client";
 
 interface ProductDetailPageProps {

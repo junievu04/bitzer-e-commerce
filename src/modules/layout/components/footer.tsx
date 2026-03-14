@@ -111,7 +111,7 @@ function ColHeading({ children }: { children: React.ReactNode }) {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export function Footer() {
+export default function Footer() {
   const { t } = useIntl();
   return (
     <Box as="footer" style={{ backgroundColor: "#03070f" }}>

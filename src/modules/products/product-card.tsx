@@ -27,7 +27,7 @@ const formatPrice = (price: number | null, t: FormatMessage) => {
   }).format(price);
 };
 
-export function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product }: ProductCardProps) {
   const { t } = useIntl();
   const { addToCart } = useCart();
   const [imgSrc, setImgSrc] = useState(product.image || PLACEHOLDER_IMAGE);

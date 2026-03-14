@@ -38,7 +38,10 @@ const StyledButton = styled("button", {
   },
 });
 
-export function ScrollButton({ direction, ...props }: ScrollButtonProps) {
+export default function ScrollButton({
+  direction,
+  ...props
+}: ScrollButtonProps) {
   return (
     <StyledButton direction={direction} aria-label={direction} {...props}>
       <svg

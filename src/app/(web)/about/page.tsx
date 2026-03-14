@@ -1,5 +1,5 @@
 import AboutClient from "@/modules/about/about-client";
-import { LayoutContentWrapper } from "@/modules/layout/layout-content-wrapper";
+import LayoutContentWrapper from "@/modules/layout/layout-content-wrapper";
 
 const page = () => {
   return (

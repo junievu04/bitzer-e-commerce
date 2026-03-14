@@ -1,7 +1,9 @@
-import { Chatbot } from "@/modules/layout/chatbot";
-import { ContactButtons } from "@/modules/layout/contact-buttons";
-import { Footer } from "@/modules/layout/footer";
-import { Header } from "@/modules/layout/header";
+import {
+  Chatbot,
+  ContactButtons,
+  Footer,
+  Header,
+} from "@/modules/layout/components";
 import { styled } from "@/vendors/styled-system/jsx";
 
 const Wrapper = styled("div", {

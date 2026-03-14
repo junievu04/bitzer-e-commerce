@@ -15,7 +15,7 @@ interface ServiceCardProps {
   service: Service;
 }
 
-export function ServiceCard({ service }: ServiceCardProps) {
+export default function ServiceCard({ service }: ServiceCardProps) {
   const [imgSrc, setImgSrc] = useState(service.image || PLACEHOLDER_IMAGE);
   const serviceUrl = `/services/${service.slug}`;
 

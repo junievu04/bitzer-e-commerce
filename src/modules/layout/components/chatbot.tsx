@@ -108,7 +108,7 @@ const SUGGESTION_TOPICS = [
 
 type Message = { type: "user" | "bot"; content: string; products?: string[] };
 
-export const Chatbot = () => {
+export default function Chatbot() {
   const { t } = useIntl();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -497,4 +497,4 @@ export const Chatbot = () => {
       )}
     </Box>
   );
-};
+}

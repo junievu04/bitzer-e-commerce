@@ -10,9 +10,9 @@ import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Flex, Grid, Stack } from "@/vendors/styled-system/jsx";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { HeaderTitleWrapper } from "../layout/header-title-wrapper";
+import { HeaderTitleWrapper } from "../layout/components/header-title-wrapper";
 import { PRODUCT_CATEGORIES } from "./product-filter";
-import { SuggestedProductsSection } from "./suggested-products-section";
+import SuggestedProductsSection from "./suggested-products-section";
 import { Product } from "./types";
 
 const PLACEHOLDER_IMAGE =
@@ -143,7 +143,9 @@ const hadnleContactToBuy = () => {
   window.location.href = "/contact";
 };
 
-export function ProductDetailClient({ slug }: ProductDetailClientProps) {
+export default function ProductDetailClient({
+  slug,
+}: ProductDetailClientProps) {
   const { t } = useIntl();
   const { addToCart } = useCart();
   const product = MOCK_PRODUCTS.find((p) => p.slug === slug || p.id === slug);

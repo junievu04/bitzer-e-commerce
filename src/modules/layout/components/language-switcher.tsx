@@ -3,7 +3,7 @@
 import { useIntl } from "@/utils/intl";
 import { Box, HStack } from "@/vendors/styled-system/jsx";
 
-export function LanguageSwitcher() {
+export default function LanguageSwitcher() {
   const { lang, toggle } = useIntl();
   return (
     <HStack

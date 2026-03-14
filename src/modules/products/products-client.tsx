@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
 import { PRODUCT_CATEGORIES } from "./product-filter";
-import { ProductWrapper } from "./product-wrapper";
+import ProductWrapper from "./product-wrapper";
 import { PaginationState, Product, ProductFilterState } from "./types";
 
 const MOCK_PRODUCTS: Product[] = [
