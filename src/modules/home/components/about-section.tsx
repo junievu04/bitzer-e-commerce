@@ -3,7 +3,7 @@ import Button from "@/components/button";
 import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text/text";
-import { DaiTinImage } from "@/constants";
+import { DAITIN_IMAGE } from "@/constants";
 import MainContentWrapper from "@/modules/home/components/main-content-wrapper";
 import { LayoutComponentDetail } from "@/types/api";
 import { useIntl } from "@/utils/intl";
@@ -49,13 +49,13 @@ export default function AboutSection({ detail }: Props) {
           position="relative"
         >
           <Image
-            src={image || DaiTinImage}
+            src={image || DAITIN_IMAGE}
             alt="Hình ảnh công ty ĐẠI TÍN"
             aspectRatio="4/3"
             width="100%"
             objectFit="cover"
             borderRadius="2xl"
-            fallback={DaiTinImage}
+            fallback={DAITIN_IMAGE}
             wrapperProps={{
               boxShadow: "0 24px 64px {colors.brand.900/0.5}",
               minH: { base: "52", md: "72" },

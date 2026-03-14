@@ -4,7 +4,7 @@ import Button from "@/components/button";
 import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text/text";
-import { DaiTinImage } from "@/constants";
+import { DAITIN_IMAGE } from "@/constants";
 import MainContentWrapper from "@/modules/home/components/main-content-wrapper";
 import { LayoutComponentDetail } from "@/types/api";
 import { useIntl } from "@/utils/intl";
@@ -84,13 +84,13 @@ export default function GlobalSupplierSection({ detail }: Props) {
 
           {/* Right — image placeholder */}
           <Image
-            src={image || DaiTinImage}
+            src={image || DAITIN_IMAGE}
             alt="title"
             aspectRatio="4/3"
             width="100%"
             objectFit="cover"
             borderRadius="2xl"
-            fallback={DaiTinImage}
+            fallback={DAITIN_IMAGE}
             wrapperProps={{
               border: "1px solid {colors.gray.200}",
               minH: { base: "52", md: "80" },
