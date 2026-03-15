@@ -4,43 +4,130 @@ import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text/text";
 import { DAITIN_IMAGE } from "@/constants";
+import AboutHeader from "@/modules/about/about-header";
 import MainContentWrapper from "@/modules/home/components/main-content-wrapper";
 import { LayoutComponentDetail } from "@/types/api";
 import { useIntl } from "@/utils/intl";
-import { Box, Grid, Stack } from "@/vendors/styled-system/jsx";
+import { Box, Grid, HStack, Stack } from "@/vendors/styled-system/jsx";
+import { useMemo } from "react";
 
 interface Props {
   detail: LayoutComponentDetail;
 }
 
-const theme =
+interface BulletPoint {
+  id?: string;
+  text?: string;
+}
+
+type ComponentItem = { contents: string[] } | { bulletPoints: BulletPoint[] };
+
+const whiteGradient =
   "repeating-linear-gradient(-45deg, #fff 0, #fff 1px, transparent 0, transparent 12px)";
 
 export default function AboutSection({ detail }: Props) {
   const { t } = useIntl();
 
-  if (!detail) return null;
+  const {
+    title,
+    subTitle,
+    image,
+    cta,
+    label,
+    theme,
+    imagePosition = "left",
+    components,
+  } = detail;
 
-  const { title, subTitle, description, image, ctaLink } = detail;
+  const firstComponent = components?.[0] as ComponentItem | undefined;
+
+  const contents = useMemo(
+    () =>
+      firstComponent && "contents" in firstComponent
+        ? firstComponent.contents
+        : [],
+    [firstComponent],
+  );
+
+  const bulletPoints = useMemo(
+    () =>
+      firstComponent && "bulletPoints" in firstComponent
+        ? firstComponent.bulletPoints
+        : [],
+    [firstComponent],
+  );
+
+  const renderAboutHeader = useMemo(() => {
+    if (label && title) {
+      return <AboutHeader label={label} title={title} />;
+    }
+    if (bulletPoints.length > 0) {
+      return (
+        <>
+          <Text variant="page-heading-1" weight="bold" tone="primary">
+            {title && (
+              <Text variant="page-heading-1" weight="bold" tone="link" inline>
+                {t(title)}
+                {" - "}
+              </Text>
+            )}{" "}
+            {subTitle && t(subTitle)}
+          </Text>
+          <Box w="16" h="1" bg="warning.base" borderRadius="full" />
+        </>
+      );
+    }
+    return (
+      <Stack gap="1">
+        {subTitle && (
+          <Text
+            variant="caption-1"
+            weight="bold"
+            tone="inverse"
+            textTransform="uppercase"
+            opacity="0.7"
+          >
+            {t(subTitle)}
+          </Text>
+        )}
+        {title && (
+          <Text
+            variant="page-heading-2"
+            weight="bold"
+            tone="inverse"
+            textTransform="uppercase"
+          >
+            {t(title)}
+          </Text>
+        )}
+        <Box w="10" h="3px" bg="white" mt="1" opacity="0.4" />
+      </Stack>
+    );
+  }, [label, title, subTitle, bulletPoints, t]);
+
+  if (!detail) return null;
 
   return (
     <MainContentWrapper id="about-section">
       <Box
         py={{ base: "14", md: "20" }}
         px="5"
-        bg="brand.700"
+        bg={theme ? theme : "transparent"}
         position="relative"
         overflow="hidden"
         borderRadius="xl"
       >
-        <Box
-          position="absolute"
-          inset="0"
-          opacity="0.04"
-          style={{
-            backgroundImage: theme,
-          }}
-        />
+        {theme && (
+          <Box
+            position="absolute"
+            inset="0"
+            opacity="0.04"
+            pointerEvents="none"
+            style={{
+              backgroundImage: whiteGradient,
+            }}
+          />
+        )}
 
         <Grid
           columns={{ base: 1, lg: 2 }}
@@ -48,59 +135,86 @@ export default function AboutSection({ detail }: Props) {
           alignItems="center"
           position="relative"
         >
-          <Image
-            src={image || DAITIN_IMAGE}
-            alt="Hình ảnh công ty ĐẠI TÍN"
-            aspectRatio="4/3"
-            width="100%"
-            objectFit="cover"
-            borderRadius="2xl"
-            fallback={DAITIN_IMAGE}
-            wrapperProps={{
-              boxShadow: "0 24px 64px {colors.brand.900/0.5}",
-              minH: { base: "52", md: "72" },
-            }}
-          />
+          {imagePosition === "left" && (
+            <Image
+              src={image || DAITIN_IMAGE}
+              alt="Hình ảnh công ty ĐẠI TÍN"
+              aspectRatio="4/3"
+              width="100%"
+              objectFit="cover"
+              borderRadius="2xl"
+              fallback={DAITIN_IMAGE}
+              wrapperProps={{
+                boxShadow: "0 24px 64px {colors.brand.900/0.5}",
+                minH: { base: "52", md: "72" },
+              }}
+            />
+          )}
           <Stack gap="5">
-            <Stack gap="1">
-              {subTitle && (
+            {renderAboutHeader}
+
+            <Stack gap="4">
+              {contents.map((content, index) => (
                 <Text
-                  variant="caption-1"
-                  weight="bold"
-                  tone="inverse"
-                  textTransform="uppercase"
-                  opacity="0.7"
+                  key={index}
+                  variant="paragraph-1"
+                  tone={theme ? "inverse" : "primary"}
+                  opacity="0.85"
                 >
-                  {t(subTitle)}
+                  {t(content)}
                 </Text>
+              ))}
+
+              {bulletPoints.map(
+                (bp, i) =>
+                  bp.text && (
+                    <HStack key={bp.id ?? i} gap="3" alignItems="flex-start">
+                      <Box
+                        w="2"
+                        h="2"
+                        borderRadius="full"
+                        bg="brand.500"
+                        mt="2"
+                        flexShrink={0}
+                      />
+                      <Text variant="paragraph-2" tone="secondary">
+                        {t(bp.text)}
+                      </Text>
+                    </HStack>
+                  ),
               )}
-              {title && (
-                <Text
-                  variant="page-heading-2"
-                  weight="bold"
-                  tone="inverse"
-                  textTransform="uppercase"
-                >
-                  {t(title)}
-                </Text>
-              )}
-              <Box w="10" h="3px" bg="white" mt="1" opacity="0.4" />
             </Stack>
 
-            {description && (
-              <Text variant="paragraph-1" tone="inverse" opacity="0.85">
-                {t(description)}
-              </Text>
+            {cta?.link && cta?.text && (
+              <Box pt="2">
+                <Link href={cta.link || "/about"}>
+                  <Button
+                    variant={theme ? "secondary" : "default"}
+                    size="lg"
+                    onDark={theme ? true : false}
+                  >
+                    {t(cta.text)}
+                  </Button>
+                </Link>
+              </Box>
             )}
-
-            <Box pt="2">
-              <Link href={ctaLink || "/about"}>
-                <Button variant="secondary" size="lg" onDark>
-                  {t("Tìm hiểu thêm")}
-                </Button>
-              </Link>
-            </Box>
           </Stack>
+
+          {imagePosition === "right" && (
+            <Image
+              src={image || DAITIN_IMAGE}
+              alt="Hình ảnh công ty ĐẠI TÍN"
+              aspectRatio="4/3"
+              width="100%"
+              objectFit="cover"
+              borderRadius="2xl"
+              fallback={DAITIN_IMAGE}
+              wrapperProps={{
+                boxShadow: "0 24px 64px {colors.brand.900/0.5}",
+                minH: { base: "52", md: "72" },
+              }}
+            />
+          )}
         </Grid>
       </Box>
     </MainContentWrapper>

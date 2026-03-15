@@ -2,7 +2,6 @@ import Skeleton from "@/components/skeleton";
 import {
   AboutSection,
   CtaBanner,
-  GlobalSupplierSection,
   HeroBannerCarousel,
   IntroCards,
   StatsStrip,
@@ -39,7 +38,6 @@ const layoutComponents: Record<string, ComponentType<any>> = {
   "intro-cards": IntroCards,
   "about-section": AboutSection,
   "stats-strip": StatsStrip,
-  "global-supplier-section": GlobalSupplierSection,
   "cta-banner": CtaBanner,
   "news-section": NewsSection,
   "layout-footer": Footer,

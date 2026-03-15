@@ -1,3 +1,5 @@
+import { ButtonVariants } from "@/components/button/button";
+
 /**
  * Category
  */
@@ -69,9 +71,17 @@ export type LayoutType = "home" | "content";
 export interface LayoutComponentDetail {
   title?: string;
   subTitle?: string;
+  label?: string;
   description?: string;
   image?: string;
-  ctaLink?: string;
+  imagePosition?: "left" | "right";
+  cta?: {
+    link: string;
+    text: string;
+    position?: "left" | "right" | "center";
+    variant?: ButtonVariants;
+  };
+  theme?: string;
   components?: unknown[];
 }
 

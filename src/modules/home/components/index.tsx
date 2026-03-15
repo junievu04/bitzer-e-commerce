@@ -1,6 +1,5 @@
 export { default as AboutSection } from "./about-section";
 export { default as CtaBanner } from "./cta-banner";
-export { default as GlobalSupplierSection } from "./global-suppliers-section";
 export { default as HeroBanner } from "./hero-banner";
 export { default as HeroBannerCarousel } from "./hero-banner-carousel";
 export { default as IntroCards } from "./intro-cards";

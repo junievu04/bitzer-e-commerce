@@ -24,7 +24,8 @@ interface NewsItem {
 export default function NewsSection({ detail }: Props) {
   const { t } = useIntl();
   if (!detail) return null;
-  const { title, subTitle, ctaLink, components } = detail;
+  const { title, cta, components } = detail;
+  const { link: ctaLink, text: ctaText } = cta ?? {};
 
   const newsItems = components as NewsItem[];
 
@@ -49,11 +50,11 @@ export default function NewsSection({ detail }: Props) {
               <Box w="12" h="3px" bg="brand.500" borderRadius="full" />
             </Stack>
 
-            {subTitle && ctaLink && (
+            {ctaText && ctaLink && (
               <Link href={ctaLink} tone="link" hover="none">
                 <HStack gap="1" alignItems="center">
                   <Text variant="caption-1" weight="bold" tone="link">
-                    {t(subTitle)}
+                    {t(ctaText)}
                   </Text>
                   <ArrowRight size="xs" tone="link" />
                 </HStack>

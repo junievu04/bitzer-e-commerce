@@ -66,7 +66,10 @@ async function main() {
             subTitle: "",
             description: "",
             image: "",
-            ctaLink: "",
+            cta: {
+              link: "",
+              text: "",
+            },
             components: [
               {
                 slides: [
@@ -100,7 +103,10 @@ async function main() {
             subTitle: "",
             description: "",
             image: "",
-            ctaLink: "",
+            cta: {
+              link: "",
+              text: "",
+            },
             components: [
               {
                 id: "intro-card-1",
@@ -135,12 +141,22 @@ async function main() {
           detail: {
             title: "Dịch vụ Máy Nén Bitzer",
             subTitle: "Về chúng tôi - ĐẠI TÍN",
-            description:
-              "Mạng lưới ĐẠI TÍN chủ yếu để đây ứng đến tất cả người tiêu dùng khách hàng. Không tin vào hơn 50 trong tiêu chỉ của mạng lưới đó là khách hàng hiện diện ở đây. Dịch vụ của chuyên gia ĐẠI TÍN cung cấp tất cả đa dạng, để kỹ sư đến kỹ thuật. Để đáp ứng những thông tiếp theo từ tay của khách hàng.",
+            description: "",
             image:
               "https://res.cloudinary.com/dsw4o0hjl/image/upload/dai-tin-image.jpg",
-            ctaLink: "/about",
-            components: [],
+            cta: {
+              link: "/about",
+              text: "Tìm hiểu thêm",
+            },
+            theme: "brand.700",
+            components: [
+              {
+                contents: [
+                  "Mạng lưới ĐẠI TÍN chủ yếu để đây ứng đến tất cả người tiêu dùng khách hàng. Không tin vào hơn 50 trong tiêu chỉ của mạng lưới đó là khách hàng hiện diện ở đây. Dịch vụ của chuyên gia ĐẠI TÍN cung cấp tất cả đa dạng, để kỹ sư đến kỹ thuật. Để đáp ứng những thông tiếp theo từ tay của khách hàng.",
+                  "Công ty ĐẠI TÍN là đại lý nhượng quyền duy nhất của tập đoàn Bitzer Đức chuyên cung cấp dịch vụ sửa chữa, bảo dưỡng, phụ tùng và dầu nhớt cho hệ thống lạnh tại Việt Nam.",
+                ],
+              },
+            ],
           },
         },
         {
@@ -150,7 +166,10 @@ async function main() {
             subTitle: "",
             description: "",
             image: "",
-            ctaLink: "",
+            cta: {
+              link: "",
+              text: "",
+            },
             components: [
               {
                 id: "stats-strip-1",
@@ -174,14 +193,18 @@ async function main() {
           },
         },
         {
-          tag: "global-supplier-section",
+          tag: "about-section",
           detail: {
             title: "ĐẠI TÍN",
             subTitle: "NHÀ CUNG CẤP DỊCH VỤ TOÀN CẦU",
             description: "",
             image:
               "https://res.cloudinary.com/dsw4o0hjl/image/upload/dai-tin-image-2.jpg",
-            ctaLink: "/about",
+            cta: {
+              link: "/about",
+              text: "Tìm hiểu thêm",
+            },
+            imagePosition: "right",
             components: [
               {
                 bulletPoints: [
@@ -209,7 +232,13 @@ async function main() {
             subTitle: "",
             description: "",
             image: "",
-            ctaLink: "/contact",
+            theme: "gray.800",
+            cta: {
+              link: "/contact",
+              text: "Liên hệ ngay",
+              position: "right",
+              variant: "default",
+            },
             components: [],
           },
         },
@@ -217,10 +246,14 @@ async function main() {
           tag: "news-section",
           detail: {
             title: "Tin tức",
-            subTitle: "Xem tất cả",
+            subTitle: "",
             description: "",
             image: "",
-            ctaLink: "/",
+            cta: {
+              link: "/",
+              text: "Xem tất cả",
+              position: "right",
+            },
             components: [
               {
                 id: "news-item-1",
