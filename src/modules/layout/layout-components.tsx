@@ -1,16 +1,16 @@
 import Skeleton from "@/components/skeleton";
+import { Footer } from "@/modules/layout/components";
 import {
   AboutSection,
   CtaBanner,
+  DynamicCardsAboutSection,
   HeroBannerCarousel,
   IntroCards,
   StatsStrip,
   ThemedBannerGridOverlay,
-} from "@/modules/home/components";
-import { Footer } from "@/modules/layout/components";
+} from "@/modules/layout/components/dynamic";
 import dynamic, { DynamicOptionsLoadingProps } from "next/dynamic";
 import type { ComponentType } from "react";
-import DynamicCardsAboutSection from "../home/components/dynamic-cards-about-section";
 
 type DynamicOptions = {
   loading?: (props: DynamicOptionsLoadingProps) => React.ReactNode | null;
@@ -27,7 +27,7 @@ const dynamicWithSkeleton = <P extends object>(
   });
 
 const NewsSection = dynamicWithSkeleton(
-  () => import("@/modules/home/components/news-section"),
+  () => import("@/modules/layout/components/dynamic/news-section"),
   {
     loading: () => <Skeleton height="400px" />,
   },

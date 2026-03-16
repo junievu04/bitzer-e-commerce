@@ -2,9 +2,9 @@
 import { Image } from "@/components/image";
 import Text from "@/components/text/text";
 import { DAITIN_IMAGE } from "@/constants";
+import { AboutCardProps } from "@/modules/layout/components/dynamic/dynamic-cards-about-section";
 import { useIntl } from "@/utils/intl";
 import { Box, HStack, Stack, VStack } from "@/vendors/styled-system/jsx";
-import { AboutCardProps } from "../home/components/dynamic-cards-about-section";
 
 export default function AboutCard({
   id,

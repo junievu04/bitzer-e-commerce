@@ -5,7 +5,7 @@ import Link from "@/components/link";
 import Text from "@/components/text/text";
 import { DAITIN_IMAGE } from "@/constants";
 import AboutHeader from "@/modules/about/about-header";
-import MainContentWrapper from "@/modules/home/components/main-content-wrapper";
+import { MainContentWrapper } from "@/modules/layout/components/dynamic";
 import { LayoutComponentDetail } from "@/types/api";
 import { useIntl } from "@/utils/intl";
 import { Box, Grid, HStack, Stack } from "@/vendors/styled-system/jsx";

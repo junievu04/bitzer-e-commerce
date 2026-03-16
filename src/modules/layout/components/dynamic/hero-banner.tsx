@@ -2,7 +2,7 @@
 import Button from "@/components/button";
 import Link from "@/components/link";
 import Text from "@/components/text";
-import MainContentWrapper from "@/modules/home/components/main-content-wrapper";
+import { MainContentWrapper } from "@/modules/layout/components/dynamic";
 import { useIntl } from "@/utils/intl";
 import { Box, Flex, Stack } from "@/vendors/styled-system/jsx";
 

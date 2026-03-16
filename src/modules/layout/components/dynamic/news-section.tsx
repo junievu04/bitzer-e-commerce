@@ -3,7 +3,7 @@ import { Carousel } from "@/components/carousel";
 import { ArrowRight, BoxesLines } from "@/components/icons";
 import Link from "@/components/link";
 import Text from "@/components/text/text";
-import MainContentWrapper from "@/modules/home/components/main-content-wrapper";
+import { MainContentWrapper } from "@/modules/layout/components/dynamic";
 import { LayoutComponentDetail } from "@/types/api";
 import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
