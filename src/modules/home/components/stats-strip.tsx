@@ -26,8 +26,7 @@ export default function StatsStrip({ detail }: Props) {
     <MainContentWrapper id="stats-strip">
       <Box
         bg="white"
-        borderTop="1px solid {colors.gray.100}"
-        borderBottom="1px solid {colors.gray.100}"
+        border="1px solid {colors.gray.200}"
         py={{ base: "8", md: "12" }}
         borderRadius="xl"
       >

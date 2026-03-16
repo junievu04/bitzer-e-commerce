@@ -31,6 +31,7 @@ export default function CtaBanner({ detail }: Props) {
           variant={ctaVariant}
           size="lg"
           transition="all 0.2s"
+          onDark={theme ? true : false}
           _hover={{
             bg: "brand.50",
             transform: "translateY(-2px)",
@@ -41,17 +42,19 @@ export default function CtaBanner({ detail }: Props) {
         </Button>
       </Link>
     );
-  }, [ctaText, ctaLink, ctaVariant, t]);
+  }, [ctaText, ctaLink, ctaVariant, t, theme]);
 
   return (
     <MainContentWrapper id="cta-banner">
       <Box
         py={{ base: "12", md: "16" }}
         px="5"
-        bg={theme ? theme : "transparent"}
         position="relative"
         borderRadius="xl"
         overflow="hidden"
+        style={{
+          background: theme ? theme : "transparent",
+        }}
       >
         {/* Subtle bg texture */}
         {theme && (
@@ -66,7 +69,6 @@ export default function CtaBanner({ detail }: Props) {
             }}
           />
         )}
-
         <Flex
           flexDirection={{ base: "column", md: "row" }}
           alignItems="center"

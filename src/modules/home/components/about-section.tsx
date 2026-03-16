@@ -31,6 +31,7 @@ export default function AboutSection({ detail }: Props) {
   const {
     title,
     subTitle,
+    description,
     image,
     cta,
     label,
@@ -112,10 +113,12 @@ export default function AboutSection({ detail }: Props) {
       <Box
         py={{ base: "14", md: "20" }}
         px="5"
-        bg={theme ? theme : "transparent"}
         position="relative"
         overflow="hidden"
         borderRadius="xl"
+        style={{
+          background: theme ? theme : "transparent",
+        }}
       >
         {theme && (
           <Box
@@ -154,6 +157,14 @@ export default function AboutSection({ detail }: Props) {
             {renderAboutHeader}
 
             <Stack gap="4">
+              {description && (
+                <Text
+                  variant="paragraph-1"
+                  tone={theme ? "inverse" : "primary"}
+                >
+                  {t(description)}
+                </Text>
+              )}
               {contents.map((content, index) => (
                 <Text
                   key={index}

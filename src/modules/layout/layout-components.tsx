@@ -5,10 +5,12 @@ import {
   HeroBannerCarousel,
   IntroCards,
   StatsStrip,
+  ThemedBannerGridOverlay,
 } from "@/modules/home/components";
 import { Footer } from "@/modules/layout/components";
 import dynamic, { DynamicOptionsLoadingProps } from "next/dynamic";
 import type { ComponentType } from "react";
+import DynamicCardsAboutSection from "../home/components/dynamic-cards-about-section";
 
 type DynamicOptions = {
   loading?: (props: DynamicOptionsLoadingProps) => React.ReactNode | null;
@@ -35,6 +37,8 @@ const NewsSection = dynamicWithSkeleton(
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const layoutComponents: Record<string, ComponentType<any>> = {
   "hero-banner-carousel": HeroBannerCarousel,
+  "themed-banner-grid-overlay": ThemedBannerGridOverlay,
+  "dynamic-cards-about-section": DynamicCardsAboutSection,
   "intro-cards": IntroCards,
   "about-section": AboutSection,
   "stats-strip": StatsStrip,
