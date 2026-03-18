@@ -4,16 +4,15 @@ import { Carousel } from "@/components/carousel";
 import { ArrowRight } from "@/components/icons";
 import Link from "@/components/link";
 import Text from "@/components/text";
+import type { ProductCard as ProductCardType } from "@/types/api";
 import { useIntl } from "@/utils/intl";
-import { css } from "@/vendors/styled-system/css";
 import { Box, HStack, Stack } from "@/vendors/styled-system/jsx";
 import { useMemo } from "react";
 import ProductCard from "./product-card";
-import { Product } from "./types";
 
 interface SuggestedProductsSectionProps {
-  products: Product[];
-  categorySlug: string;
+  products: ProductCardType[];
+  categorySlug?: string;
 }
 
 export default function SuggestedProductsSection({
@@ -36,7 +35,7 @@ export default function SuggestedProductsSection({
               variant="section-heading-1"
               weight="bold"
               tone="primary"
-              className={css({ textTransform: "uppercase" })}
+              textTransform="uppercase"
             >
               {t("Sản phẩm liên quan")}
             </Text>
@@ -44,7 +43,7 @@ export default function SuggestedProductsSection({
           </Stack>
 
           <Link
-            href={`/products?category=${categorySlug}`}
+            href={`/products?category=${categorySlug ?? "/products"}`}
             tone="link"
             hover="none"
           >
@@ -59,7 +58,9 @@ export default function SuggestedProductsSection({
 
         <Carousel navigation={isShowNavigation} pagination>
           {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <Box key={product.id} p="1">
+              <ProductCard key={product.id} product={product} />
+            </Box>
           ))}
         </Carousel>
       </Stack>

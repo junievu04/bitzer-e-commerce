@@ -1,53 +1,41 @@
 "use client";
 
-import { useIntl } from "@/utils/intl";
+import { ProductFilter, ProductList, ProductSort } from "@/modules/products";
+import type { CategoryDTO, ProductCard, ProductSortType } from "@/types/api";
 import { Flex, Stack } from "@/vendors/styled-system/jsx";
 import { HeaderTitleWrapper } from "../layout/components/header-title-wrapper";
-import ProductFilter from "./product-filter";
-import ProductList from "./product-list";
-import ProductPagination from "./product-pagination";
-import ProductSort from "./product-sort";
-import { PaginationState, Product, ProductFilterState } from "./types";
 
 interface ProductWrapperProps {
-  products: Product[];
-  filter: ProductFilterState;
-  pagination: PaginationState;
-  onFilterChange: (filter: ProductFilterState) => void;
-  onPageChange: (page: number) => void;
-  categoryTitle?: string;
-  categorySlug?: string | null;
+  products: ProductCard[];
+  categories: CategoryDTO[];
+  categorySlug: string;
+  sortBy: ProductSortType;
+  searchText: string;
+  totalLoaded: number;
+  onSortChange: (sort: ProductSortType) => void;
+  onCategoryChange: (categorySlug: string) => void;
+  onSearch: (text: string) => void;
 }
 
 export default function ProductWrapper({
   products,
-  filter,
-  pagination,
-  onFilterChange,
-  onPageChange,
-  categoryTitle,
+  categories,
   categorySlug,
+  sortBy,
+  searchText,
+  totalLoaded,
+  onSortChange,
+  onCategoryChange,
+  onSearch,
 }: ProductWrapperProps) {
-  const { t } = useIntl();
-
-  const startItem =
-    pagination.totalItems === 0
-      ? 0
-      : (pagination.currentPage - 1) * pagination.itemsPerPage + 1;
-  const endItem = Math.min(
-    pagination.currentPage * pagination.itemsPerPage,
-    pagination.totalItems,
-  );
-
-  const breadcrumbItems: { label: string; href?: string }[] = [
-    { label: t("Sản phẩm"), href: "/products" },
-  ];
-
-  if (categoryTitle && categoryTitle !== t("Tất cả sản phẩm")) {
-    breadcrumbItems.push({
-      label: categoryTitle,
-      href: `/products?category=${categorySlug}`,
-    });
+  const breadcrumbItems: {
+    label: string;
+    href?: string;
+    onClick?: () => void;
+  }[] = [{ label: "Sản phẩm", href: "/products" }];
+  const selectedCategory = categories?.find((c) => c.slug === categorySlug);
+  if (selectedCategory) {
+    breadcrumbItems.push({ label: selectedCategory.name });
   }
 
   return (
@@ -63,23 +51,19 @@ export default function ProductWrapper({
           borderRadius="lg"
           boxShadow="0 2px 8px token(colors.gray.900/0.06)"
         >
-          <ProductFilter filter={filter} onFilterChange={onFilterChange} />
-
+          <ProductFilter
+            categories={categories}
+            categorySlug={categorySlug}
+            onCategoryChange={onCategoryChange}
+          />
           <ProductSort
-            filter={filter}
-            onFilterChange={onFilterChange}
-            totalItems={pagination.totalItems}
-            startItem={startItem}
-            endItem={endItem}
+            sortBy={sortBy}
+            totalLoaded={totalLoaded}
+            onSortChange={onSortChange}
           />
         </Flex>
 
         <ProductList products={products} />
-
-        <ProductPagination
-          pagination={pagination}
-          onPageChange={onPageChange}
-        />
       </Stack>
     </HeaderTitleWrapper>
   );

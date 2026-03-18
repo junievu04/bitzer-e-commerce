@@ -1,49 +1,48 @@
-import { Document, Schema, model, models, Types } from "mongoose";
+import { Document, model, models, Schema, Types } from "mongoose";
 
 export interface IProduct extends Document {
-  name: { vi: string; en: string };
-  code: string;
+  name: string;
   slug: string;
   price: number;
   stock: number;
   images: string[];
-  description: { vi: string; en: string };
-  specs: Record<string, string>;
+  brief?: string;
+  description?: string;
+  specifications?: { label: string; value: string }[];
   category: Types.ObjectId;
-  tags: string[];
-  isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
 
 const ProductSchema = new Schema<IProduct>(
   {
-    name: {
-      vi: { type: String, required: true },
-      en: { type: String, required: true },
+    name: { type: String, required: true, trim: true },
+    slug: {
+      type: String,
+      required: true,
+      lowercase: true,
+      trim: true,
     },
-    code: { type: String, required: true, unique: true, uppercase: true },
-    slug: { type: String, required: true, unique: true, lowercase: true },
     price: { type: Number, required: true, min: 0 },
     stock: { type: Number, required: true, default: 0, min: 0 },
     images: [{ type: String }],
-    description: { vi: String, en: String },
-    specs: { type: Map, of: String, default: {} },
+    brief: { type: String },
+    description: { type: String },
+    specifications: [
+      {
+        label: { type: String },
+        value: { type: String },
+      },
+    ],
     category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
-    tags: [String],
-    isActive: { type: Boolean, default: true },
   },
   { timestamps: true },
 );
 
-ProductSchema.index({
-  "name.vi": "text",
-  "name.en": "text",
-  code: "text",
-  tags: "text",
-});
+ProductSchema.index({ name: "text" }, { default_language: "none" });
 ProductSchema.index({ category: 1, price: 1 });
-ProductSchema.index({ slug: 1 }, { unique: true });
+ProductSchema.index({ category: 1, createdAt: -1 });
+ProductSchema.index({ isActive: 1, createdAt: -1 });
 
 export const Product =
   models.Product || model<IProduct>("Product", ProductSchema);

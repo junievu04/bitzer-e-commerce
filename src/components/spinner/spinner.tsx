@@ -33,7 +33,7 @@ export interface SpinnerProps extends BoxProps {
 }
 
 const MAX_DISTANCE = 22;
-const DEFAULT_SIZE = 40;
+const DEFAULT_SIZE = 8;
 
 // radius = maxDistance - (strokeWidth / 2) to fit circle within viewBox
 const calculateRadius = (strokeWidth: number): number => {

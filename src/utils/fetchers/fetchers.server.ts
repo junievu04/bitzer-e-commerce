@@ -1,13 +1,12 @@
 "use server";
 
+import { FetchOptions } from "@/utils/fetchers/fetchers.utils";
 const getBaseUrl = () =>
   process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
 export interface ServerFetchOptions<TRequestBody = unknown>
-  extends Omit<RequestInit, "body"> {
+  extends FetchOptions<TRequestBody> {
   cache?: "force-cache" | "no-store";
-  body?: TRequestBody;
-  /** JWT for admin API auth. Sets Authorization: Bearer <token> */
   token?: string;
 }
 

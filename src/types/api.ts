@@ -5,40 +5,54 @@ import { ButtonVariants } from "@/components/button/button";
  */
 export interface CategoryDTO {
   id: string;
+  name: string;
   slug: string;
-  name: {
-    vi: string;
-    en: string;
-  };
-  description?: {
-    vi?: string;
-    en?: string;
-  };
   isActive: boolean;
+  description?: string;
 }
 
 /**
  * Product
  */
-export interface ProductDTO {
-  id: string;
-  name: {
-    vi: string;
-    en: string;
-  };
-  code: string;
+export type ProductSortType =
+  | "default"
+  | "price-asc"
+  | "price-desc"
+  | "name-asc"
+  | "name-desc";
+
+export interface ProductSpecification {
+  label: string;
+  value: string;
+}
+export interface ProductCategory {
+  name: string;
   slug: string;
-  price: number;
-  stock: number;
-  images: string[];
-  description: {
-    vi: string;
-    en: string;
-  };
-  specs: Record<string, string>;
+}
+export interface ProductCard {
+  id: string;
+  name: string;
+  slug: string;
+  stock?: number;
+  price?: number;
+  images?: string[];
+}
+export interface ProductDetail extends ProductCard {
+  brief?: string;
+  description?: string;
+  specifications?: ProductSpecification[];
   category: CategoryDTO;
-  tags: string[];
-  isActive: boolean;
+}
+export interface ProductSearchParams {
+  text?: string;
+  categorySlug?: string;
+  sortBy?: ProductSortType;
+  next?: string | null;
+}
+export interface ProductsDTO {
+  products: ProductCard[];
+  next: string | null;
+  searchParams: ProductSearchParams;
 }
 
 /**

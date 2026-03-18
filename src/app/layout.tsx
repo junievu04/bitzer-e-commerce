@@ -1,5 +1,6 @@
 import { CartProvider } from "@/hooks";
 import { IntlProvider } from "@/utils/intl";
+import TanStackQueryProvider from "@/vendors/tanstack-query/provider";
 import type { Metadata, Viewport } from "next";
 import { Be_Vietnam_Pro, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
@@ -104,7 +105,9 @@ export default function RootLayout({
     >
       <body>
         <IntlProvider>
-          <CartProvider>{children}</CartProvider>
+          <TanStackQueryProvider>
+            <CartProvider>{children}</CartProvider>
+          </TanStackQueryProvider>
         </IntlProvider>
       </body>
     </html>
