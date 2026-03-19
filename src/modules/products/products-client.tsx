@@ -5,7 +5,6 @@ import { House, MagnifyingGlass } from "@/components/icons";
 import Link from "@/components/link";
 import { Spinner } from "@/components/spinner";
 import Text from "@/components/text";
-import useInfiniteScroll from "@/hooks/use-infinite-scroll";
 import { ProductWrapper } from "@/modules/products";
 import {
   CategoryDTO,
@@ -20,6 +19,7 @@ import { isEmpty } from "lodash-es";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import fetchProducts from "./utils/fetch-products";
+import useInfiniteScroll from "@/hooks/use-infinite-scroll";
 
 interface Props {
   products?: ProductsDTO | null;
@@ -136,15 +136,20 @@ export default function ProductsClient({
   );
 
   useEffect(() => {
-    const category = urlSearchParams.get("category");
-    const text = urlSearchParams.get("text");
-    const sortBy = urlSearchParams.get("sortBy");
+    const category = urlSearchParams.get("category") ?? undefined;
+    const text = urlSearchParams.get("text") ?? undefined;
+    const sortBy =
+      (urlSearchParams.get("sortBy") as ProductSortType) ?? "default";
 
-    if (!category && !text && !sortBy) {
+    const hasFilters = text || category || sortBy !== "default";
+
+    if (!hasFilters) {
       setSearchParams(initialSearchParams);
       setAllProducts(initialData?.products ?? []);
       setNext(initialData?.next ?? null);
       setFetchEnabled(false);
+    } else {
+      setSearchParams({ text, categorySlug: category, sortBy, next: null });
     }
   }, [urlSearchParams]);
 

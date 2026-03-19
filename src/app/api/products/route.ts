@@ -64,8 +64,15 @@ export async function GET(request: NextRequest) {
     }
 
     if (text) {
-      const regex = new RegExp(text, "i");
-      query.$or = [{ name: regex }];
+      const normalized = text
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim();
+
+      const regex = new RegExp(normalized, "i");
+      const originalRegex = new RegExp(text, "i");
+
+      query.$or = [{ name: originalRegex }, { name: regex }];
     }
 
     if (categorySlug) {

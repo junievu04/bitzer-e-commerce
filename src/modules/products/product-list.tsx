@@ -1,5 +1,3 @@
-"use client";
-
 import type { ProductCard as ProductCardType } from "@/types/api";
 import { Grid } from "@/vendors/styled-system/jsx";
 import ProductCard from "./product-card";
