@@ -1,37 +1,25 @@
 "use client";
 
 import Button from "@/components/button";
-import { Paperplane } from "@/components/icons";
+import { ArrowLeft, Paperplane } from "@/components/icons";
 import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text";
+import { DAITIN_IMAGE } from "@/constants";
+import { ServiceDetail } from "@/types/api";
 import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Flex, Grid, Stack } from "@/vendors/styled-system/jsx";
-import { useState } from "react";
 import { HeaderTitleWrapper } from "../layout/components/header-title-wrapper";
-import { SERVICES } from "./types";
 
-const PLACEHOLDER_IMAGE =
-  "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/cup-on-a-table.jpg";
-
-interface ServiceDetailClientProps {
-  slug: string;
+interface Props {
+  data: ServiceDetail | null;
 }
 
-export default function ServiceDetailClient({
-  slug,
-}: ServiceDetailClientProps) {
+export default function ServiceDetailClient({ data }: Props) {
   const { t } = useIntl();
-  const service = SERVICES.find((s) => s.slug === slug);
-  const [imgSrc, setImgSrc] = useState(service?.image || PLACEHOLDER_IMAGE);
 
-  const handleRegister = () => {
-    if (typeof window === "undefined") return;
-    window.location.href = `/contact?service=${encodeURIComponent(slug)}`;
-  };
-
-  if (!service) {
+  if (!data) {
     return (
       <Box py="10" px="3">
         <Text variant="section-heading-1" tone="primary">
@@ -40,7 +28,7 @@ export default function ServiceDetailClient({
         <Box mt="4">
           <Link href="/services" tone="link">
             <Text tone="success" display="flex" alignItems="center" gap="1">
-              ← {t("Quay lại danh sách dịch vụ")}
+              <ArrowLeft tone="success" /> {t("Quay lại danh sách dịch vụ")}
             </Text>
           </Link>
         </Box>
@@ -48,9 +36,16 @@ export default function ServiceDetailClient({
     );
   }
 
+  const { name, slug, thumbnail, brief, description, features, images } = data;
+
+  const handleRegister = () => {
+    if (typeof window === "undefined") return;
+    window.location.href = `/contact?service=${encodeURIComponent(slug)}`;
+  };
+
   const breadcrumbItems: { label: string; href?: string }[] = [
     { label: t("Dịch vụ"), href: "/services" },
-    { label: service.name },
+    { label: t(name) },
   ];
 
   return (
@@ -70,9 +65,8 @@ export default function ServiceDetailClient({
           height="100%"
           objectFit="cover"
           borderRadius="lg"
-          src={imgSrc}
-          alt={service.name}
-          onError={() => setImgSrc(PLACEHOLDER_IMAGE)}
+          src={thumbnail || DAITIN_IMAGE}
+          alt={name}
         />
         <Box position="absolute" inset="0" bg="gray.900" opacity="0.4" />
         <Box position="absolute" bottom="0" left="0" right="0" p="6">
@@ -80,9 +74,9 @@ export default function ServiceDetailClient({
             variant="page-heading-1"
             weight="bold"
             tone="inverse"
-            className={css({ textShadow: "0 2px 4px rgba(0,0,0,0.5)" })}
+            textShadow="0 2px 4px rgba(0,0,0,0.5)"
           >
-            {service.name}
+            {t(name)}
           </Text>
         </Box>
       </Box>
@@ -91,13 +85,15 @@ export default function ServiceDetailClient({
       <Box maxW="900px" mx="auto">
         <Stack gap="8">
           {/* Intro */}
-          <Text variant="paragraph-1" tone="secondary">
-            {service.description}
-          </Text>
+          {brief && (
+            <Text variant="paragraph-1" tone="secondary">
+              {t(brief)}
+            </Text>
+          )}
 
           {/* Detailed section with image */}
-          {service.detailedDescription && (
-            <Grid columns={{ base: 1, md: 2 }} gap="6" alignItems="center">
+          {description && (
+            <Grid columns={{ base: 1, md: 2 }} gap="6">
               <Box
                 position="relative"
                 aspectRatio="4/3"
@@ -110,24 +106,29 @@ export default function ServiceDetailClient({
                   width="100%"
                   objectFit="cover"
                   borderRadius="lg"
-                  src={imgSrc}
-                  alt={service.name}
+                  src={images?.[0] || DAITIN_IMAGE}
+                  alt={name}
                 />
               </Box>
-              <Box>
-                <Text
-                  variant="paragraph-1"
-                  tone="secondary"
-                  whiteSpace="pre-wrap"
-                >
-                  {service.detailedDescription}
-                </Text>
-              </Box>
+              {description && (
+                <Stack gap="3">
+                  {description.map((item, index) => (
+                    <Text
+                      key={index}
+                      variant="paragraph-1"
+                      tone="secondary"
+                      whiteSpace="pre-wrap"
+                    >
+                      {t(item)}
+                    </Text>
+                  ))}
+                </Stack>
+              )}
             </Grid>
           )}
 
           {/* Features */}
-          {service.features && service.features.length > 0 && (
+          {features && features.length > 0 && (
             <Box
               p="6"
               bg="gray.50"
@@ -143,14 +144,14 @@ export default function ServiceDetailClient({
                 {t("Điểm nổi bật")}
               </Text>
               <Stack gap="3">
-                {service.features.map((feature, index) => (
+                {features.map((feature, index) => (
                   <Flex key={index} gap="3" align="flex-start">
                     <Text tone="success" fontWeight="bold">
                       {"/"}
                       {"/"}
                     </Text>
                     <Text variant="paragraph-2" tone="primary">
-                      {feature}
+                      {t(feature)}
                     </Text>
                   </Flex>
                 ))}
