@@ -1,27 +1,24 @@
 "use client";
 
+import { ArrowRight } from "@/components/icons";
 import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text";
+import { DAITIN_IMAGE } from "@/constants";
+import type { Service } from "@/types/api";
+import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Stack } from "@/vendors/styled-system/jsx";
-import { useState } from "react";
-import { Service } from "./types";
-
-const PLACEHOLDER_IMAGE =
-  "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/breakfast.jpg";
-
 interface ServiceCardProps {
   service: Service;
 }
 
 export default function ServiceCard({ service }: ServiceCardProps) {
-  const [imgSrc, setImgSrc] = useState(service.image || PLACEHOLDER_IMAGE);
-  const serviceUrl = `/services/${service.slug}`;
-
+  const { t } = useIntl();
+  const { slug, name, thumbnail, brief } = service;
   return (
     <Link
-      href={serviceUrl}
+      href={`/services/${slug}`}
       hover="none"
       display="block"
       textDecoration="none"
@@ -58,13 +55,12 @@ export default function ServiceCard({ service }: ServiceCardProps) {
             inset="0"
           >
             <Image
-              src={imgSrc}
+              src={thumbnail || DAITIN_IMAGE}
               alt={service.name}
               aspectRatio="1/1"
               width="100%"
               objectFit="cover"
               borderRadius="0"
-              onError={() => setImgSrc(PLACEHOLDER_IMAGE)}
             />
           </Box>
 
@@ -79,7 +75,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
             borderRadius="full"
           >
             <Text variant="caption-2" weight="bold" tone="inverse" inline>
-              Dịch vụ
+              {t("Dịch vụ")}
             </Text>
           </Box>
         </Box>
@@ -94,26 +90,20 @@ export default function ServiceCard({ service }: ServiceCardProps) {
             tone="primary"
             className={`service-title ${css({ transition: "color 0.2s ease", lineHeight: "1.3" })}`}
           >
-            {service.shortName || service.name}
+            {t(name)}
           </Text>
 
-          {service.description && (
-            <Text
-              variant="paragraph-2"
-              tone="secondary"
-              className={css({ lineHeight: "1.6" })}
-            >
-              {service.description}
+          {brief && (
+            <Text variant="paragraph-2" tone="secondary">
+              {t(brief)}
             </Text>
           )}
 
           <Box display="flex" alignItems="center" gap="1" pt="1">
             <Text variant="caption-1" weight="bold" tone="link" inline>
-              Xem chi tiết
+              {t("Xem chi tiết")}
             </Text>
-            <Text variant="caption-1" tone="link" inline>
-              →
-            </Text>
+            <ArrowRight size="xs" tone="link" />
           </Box>
         </Stack>
       </Box>

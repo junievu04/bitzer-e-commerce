@@ -1,5 +1,5 @@
 import LayoutContentWrapper from "@/modules/layout/layout-content-wrapper";
-import { ServiceDetailClient } from "@/modules/services/service-detail-client";
+import ServiceDetailClient from "@/modules/services/service-detail-client";
 
 interface ServiceDetailPageProps {
   params: Promise<{ slug: string }>;

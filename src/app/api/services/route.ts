@@ -1,11 +1,19 @@
+// app/api/services/route.ts
+
 import { connectDB } from "@/lib/mongodb";
 import { IService, Service } from "@/models/Service";
+import type {
+  ServiceDetail,
+  Service as ServiceDTO,
+  ServicesDTO,
+} from "@/types/api";
 import mongoose, { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
-import type { ServiceDTO } from "@/types/api";
 
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 50;
+
+type ServiceDoc = IService & { _id: Types.ObjectId };
 
 function parseLimit(searchParams: URLSearchParams): number {
   const raw = searchParams.get("limit");
@@ -15,17 +23,26 @@ function parseLimit(searchParams: URLSearchParams): number {
   return Math.min(n, MAX_LIMIT);
 }
 
-type ServiceDoc = IService & { _id: Types.ObjectId };
-
-function mapServiceToDTO(doc: ServiceDoc): ServiceDTO {
+function mapToListDTO(doc: ServiceDoc): ServiceDTO {
   return {
     id: String(doc._id),
     name: doc.name,
     slug: doc.slug,
-    summary: doc.summary,
-    description: doc.description,
+    thumbnail: doc.thumbnail,
+    brief: doc.brief,
+  };
+}
+
+function mapToDetailDTO(doc: ServiceDoc): ServiceDetail {
+  return {
+    id: String(doc._id),
+    name: doc.name,
+    slug: doc.slug,
+    thumbnail: doc.thumbnail,
+    brief: doc.brief,
     images: doc.images,
-    isActive: doc.isActive,
+    description: doc.description,
+    features: doc.features,
   };
 }
 
@@ -36,42 +53,32 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const limit = parseLimit(searchParams);
     const cursor = searchParams.get("cursor");
-    const includeInactive = searchParams.get("includeInactive") === "true";
 
-    const query: Record<string, unknown> = {};
-
-    if (!includeInactive) {
-      query.isActive = true;
-    }
+    const query: Record<string, unknown> = { isActive: true };
 
     if (cursor) {
       if (!mongoose.isValidObjectId(cursor)) {
         return NextResponse.json({ error: "Invalid cursor" }, { status: 400 });
       }
-      query._id = { $gt: new mongoose.Types.ObjectId(cursor) };
+      query._id = { $gt: new Types.ObjectId(cursor) };
     }
 
     const docs = await Service.find(query)
+      .select("name slug thumbnail brief")
       .sort({ _id: 1 })
       .limit(limit + 1)
       .lean<ServiceDoc[]>();
 
     const hasNext = docs.length > limit;
     const pageItems = hasNext ? docs.slice(0, -1) : docs;
-    const next =
-      hasNext && pageItems.length > 0
-        ? String(pageItems[pageItems.length - 1]._id)
-        : null;
 
-    const services = pageItems.map(mapServiceToDTO);
+    const result: ServicesDTO = {
+      data: pageItems.map(mapToListDTO),
+      next: hasNext ? String(pageItems.at(-1)?._id) : null,
+      isActive: true,
+    };
 
-    return NextResponse.json(
-      {
-        services,
-        next,
-      },
-      { status: 200 },
-    );
+    return NextResponse.json(result, { status: 200 });
   } catch (err) {
     console.error("GET /api/services error:", err);
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
@@ -82,25 +89,18 @@ export async function POST(request: NextRequest) {
   try {
     await connectDB();
 
-    const body = (await request.json()) as {
-      name: { vi: string; en: string };
-      slug?: string;
-      summary?: { vi?: string; en?: string };
-      description?: { vi?: string; en?: string };
-      images?: string[];
-      isActive?: boolean;
-    };
+    const body = (await request.json()) as Partial<IService>;
 
-    if (!body?.name?.vi || !body?.name?.en) {
+    if (!body.name) {
       return NextResponse.json(
-        { error: "Missing required fields (name.vi, name.en)" },
+        { error: "Missing required field: name" },
         { status: 400 },
       );
     }
 
     const slug =
       body.slug ??
-      body.name.vi
+      body.name
         .toLowerCase()
         .trim()
         .replace(/\s+/g, "-")
@@ -109,30 +109,21 @@ export async function POST(request: NextRequest) {
     const created = await Service.create({
       name: body.name,
       slug,
-      summary: {
-        vi: body.summary?.vi ?? "",
-        en: body.summary?.en ?? "",
-      },
-      description: {
-        vi: body.description?.vi ?? "",
-        en: body.description?.en ?? "",
-      },
+      thumbnail: body.thumbnail ?? "",
+      brief: body.brief ?? "",
       images: body.images ?? [],
+      description: Array.isArray(body.description) ? body.description : [],
+      features: Array.isArray(body.features) ? body.features : [],
       isActive: body.isActive ?? true,
     });
 
-    const service = mapServiceToDTO(created.toObject() as ServiceDoc);
-
-    return NextResponse.json(
-      {
-        service,
-      },
-      { status: 201 },
-    );
+    return NextResponse.json(mapToDetailDTO(created.toObject() as ServiceDoc), {
+      status: 201,
+    });
   } catch (err: unknown) {
-    if (typeof err === "object" && err && "code" in err && (err as { code?: number }).code === 11000) {
+    if ((err as { code?: number })?.code === 11000) {
       return NextResponse.json(
-        { error: "Duplicate service (slug already exists)" },
+        { error: "Slug already exists" },
         { status: 409 },
       );
     }
@@ -140,4 +131,3 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
 }
-

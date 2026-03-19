@@ -58,22 +58,21 @@ export interface ProductsDTO {
 /**
  * Service
  */
-export interface ServiceDTO {
+export interface Service {
   id: string;
-  name: {
-    vi: string;
-    en: string;
-  };
+  name: string;
   slug: string;
-  summary?: {
-    vi?: string;
-    en?: string;
-  };
-  description?: {
-    vi?: string;
-    en?: string;
-  };
-  images: string[];
+  thumbnail?: string;
+  brief?: string;
+}
+export interface ServiceDetail extends Service {
+  images?: string[];
+  description?: string[];
+  features?: string[];
+}
+export interface ServicesDTO {
+  data: Service[];
+  next: string | null;
   isActive: boolean;
 }
 

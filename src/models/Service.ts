@@ -1,20 +1,15 @@
+// models/Service.ts
+
 import { Document, Schema, model, models } from "mongoose";
 
 export interface IService extends Document {
-  name: {
-    vi: string;
-    en: string;
-  };
+  name: string;
   slug: string;
-  summary?: {
-    vi?: string;
-    en?: string;
-  };
-  description?: {
-    vi?: string;
-    en?: string;
-  };
+  thumbnail: string;
+  brief: string;
   images: string[];
+  description: string[];
+  features: string[];
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -22,10 +17,7 @@ export interface IService extends Document {
 
 const ServiceSchema = new Schema<IService>(
   {
-    name: {
-      vi: { type: String, required: true, trim: true },
-      en: { type: String, required: true, trim: true },
-    },
+    name: { type: String, required: true, trim: true },
     slug: {
       type: String,
       required: true,
@@ -33,23 +25,17 @@ const ServiceSchema = new Schema<IService>(
       lowercase: true,
       trim: true,
     },
-    summary: {
-      vi: { type: String, default: "" },
-      en: { type: String, default: "" },
-    },
-    description: {
-      vi: { type: String, default: "" },
-      en: { type: String, default: "" },
-    },
-    images: [{ type: String }],
+    thumbnail: { type: String, default: "" },
+    brief: { type: String, default: "" },
+    images: { type: [String], default: [] },
+    description: { type: [String], default: [] }, // ← string[]
+    features: { type: [String], default: [] },
     isActive: { type: Boolean, default: true },
   },
   { timestamps: true },
 );
 
-ServiceSchema.index({ slug: 1 }, { unique: true });
-ServiceSchema.index({ "name.vi": "text", "name.en": "text" });
+ServiceSchema.index({ name: "text" });
 
 export const Service =
   models.Service || model<IService>("Service", ServiceSchema);
-
