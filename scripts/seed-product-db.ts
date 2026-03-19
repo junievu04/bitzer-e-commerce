@@ -9,6 +9,10 @@ const CATEGORIES = [
   { name: "Máy Nén Hở Bitzer", slug: "may-nen-ho-bitzer" },
   { name: "Máy Nén Xoắn Ốc Bitzer", slug: "may-nen-xoan-oc-bitzer" },
   {
+    name: "Gas",
+    slug: "gas",
+  },
+  {
     name: "Bình Ngưng – Bình Tách Dầu – Bình Chứa",
     slug: "binh-ngung-tach-dau-chua",
   },
@@ -216,6 +220,48 @@ const PRODUCTS_BY_CATEGORY: Record<
         { label: "Môi chất", value: "R410A" },
         { label: "Công suất", value: "135 kW" },
         { label: "Điện áp", value: "380V / 50Hz" },
+      ],
+    },
+  ],
+  gas: [
+    {
+      name: "Gas Lạnh R134a Honeywell",
+      slug: "gas-lanh-r134a-honeywell",
+      price: 1850000,
+      stock: 25,
+      brief:
+        "Gas lạnh R134a chính hãng Honeywell, dùng cho hệ thống lạnh dân dụng và công nghiệp.",
+      description:
+        "Gas lạnh R134a Honeywell là môi chất lạnh phổ biến, thân thiện với môi trường, không phá hủy tầng ozone. Sản phẩm được sử dụng rộng rãi trong hệ thống điều hòa không khí, tủ lạnh công nghiệp và các thiết bị làm lạnh thương mại. Đảm bảo hiệu suất làm lạnh ổn định, an toàn và tiết kiệm năng lượng.",
+      specifications: [
+        { label: "Loại gas", value: "R134a" },
+        { label: "Thương hiệu", value: "Honeywell" },
+        { label: "Trọng lượng", value: "13.6 kg" },
+        { label: "Ứng dụng", value: "Điều hòa, kho lạnh, tủ đông" },
+      ],
+      images: [
+        "https://res.cloudinary.com/dsw4o0hjl/image/upload/product-1.jpg",
+        "https://res.cloudinary.com/dsw4o0hjl/image/upload/product-2.jpg",
+      ],
+    },
+    {
+      name: "Gas Lạnh R404A Dupont",
+      slug: "gas-lanh-r404a-dupont",
+      price: 2650000,
+      stock: 18,
+      brief:
+        "Gas lạnh R404A Dupont, chuyên dùng cho kho lạnh và hệ thống đông lạnh công nghiệp.",
+      description:
+        "Gas lạnh R404A Dupont là môi chất lạnh hỗn hợp HFC, được thiết kế cho các hệ thống lạnh nhiệt độ thấp và trung bình. Sản phẩm mang lại hiệu suất làm lạnh cao, ổn định và phù hợp cho các kho lạnh, dây chuyền cấp đông và bảo quản thực phẩm.",
+      specifications: [
+        { label: "Loại gas", value: "R404A" },
+        { label: "Thương hiệu", value: "Dupont" },
+        { label: "Trọng lượng", value: "10.9 kg" },
+        { label: "Ứng dụng", value: "Kho lạnh, cấp đông, siêu thị" },
+      ],
+      images: [
+        "https://res.cloudinary.com/dsw4o0hjl/image/upload/product-3.jpg",
+        "https://res.cloudinary.com/dsw4o0hjl/image/upload/product-4.jpg",
       ],
     },
   ],

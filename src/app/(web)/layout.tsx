@@ -4,6 +4,7 @@ import {
   Footer,
   Header,
 } from "@/modules/layout/components";
+import { fetchChatbotData } from "@/modules/layout/utils/fetch-chatbot-data";
 import { styled } from "@/vendors/styled-system/jsx";
 
 const Wrapper = styled("div", {
@@ -14,18 +15,20 @@ const Wrapper = styled("div", {
   },
 });
 
-export default function RootLayout({
+export default async function layout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const chatbotData = await fetchChatbotData();
+
   return (
     <Wrapper>
       <Header />
       <main style={{ flex: 1 }}>{children}</main>
       <Footer />
       <ContactButtons />
-      <Chatbot />
+      <Chatbot data={chatbotData} />
     </Wrapper>
   );
 }

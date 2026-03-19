@@ -36,11 +36,18 @@ export default function ServiceDetailClient({ data }: Props) {
     );
   }
 
-  const { name, slug, thumbnail, brief, description, features, images } = data;
-
+  const { name, thumbnail, brief, description, features, images, slug } = data;
   const handleRegister = () => {
     if (typeof window === "undefined") return;
-    window.location.href = `/contact?service=${encodeURIComponent(slug)}`;
+    const query = new URLSearchParams();
+    query.set(
+      "service",
+      JSON.stringify({
+        slug,
+        name,
+      }),
+    );
+    window.location.href = `/contact?${query.toString()}`;
   };
 
   const breadcrumbItems: { label: string; href?: string }[] = [

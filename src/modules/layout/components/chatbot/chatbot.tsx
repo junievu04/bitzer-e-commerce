@@ -11,104 +11,58 @@ import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text";
 import TextField from "@/components/text-field";
-import { getChatbotResponse } from "@/constants/chatbot-rule";
+import { DAITIN_IMAGE, INFO_COMPANY } from "@/constants";
+import type { ProductCard, Service } from "@/types/api";
 import { useIntl } from "@/utils/intl/use-intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Flex, Stack } from "@/vendors/styled-system/jsx";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type {
+  ChatbotData,
+  ChatRule,
+  Message,
+  SuggestionProduct,
+  SuggestionService,
+  TopicKey,
+} from "./chatbot.d";
+import { CHATBOT_RULES, SUGGESTION_TOPICS } from "./constant";
 
-const MOCK_PRODUCTS = [
-  {
-    id: "2DTS-2Y-40S",
-    slug: "may-nen-bitzer-2dts-2y-40s",
-    name: "Máy Nén Bitzer 2DTS-2Y-40S",
-    image:
-      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/dessert-on-a-plate.jpg",
-    description: "Máy nén bán kín 2 xi lanh, công suất cao.",
-  },
-  {
-    id: "2DES-3Y-40S",
-    slug: "may-nen-bitzer-2des-3y-40s",
-    name: "Máy Nén Bitzer 2DES-3Y-40S",
-    image:
-      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/dessert-on-a-plate.jpg",
-    description: "Máy nén bán kín 2 xi lanh, hiệu suất cao.",
-  },
-  {
-    id: "4TES-9Y-40S",
-    slug: "may-nen-bitzer-4tes-9y-40s",
-    name: "Máy Nén Bitzer 4TES-9Y-40S",
-    image:
-      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/dessert-on-a-plate.jpg",
-    description: "Máy nén 4 xi lanh, kho lạnh công nghiệp.",
-  },
-  {
-    id: "4CES-6Y-40S",
-    slug: "may-nen-bitzer-4ces-6y-40s",
-    name: "Máy Nén Bitzer 4CES-6Y-40S",
-    image:
-      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/dessert-on-a-plate.jpg",
-    description: "Máy nén bán kín, tiết kiệm điện năng.",
-  },
-  {
-    id: "HSK-5343-30",
-    slug: "may-nen-truc-vit-bitzer-hsk-5343-30",
-    name: "Máy Nén Trục Vít HSK-5343-30",
-    image:
-      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/dessert-on-a-plate.jpg",
-    description: "Máy nén trục vít công suất lớn.",
-  },
-  {
-    id: "4FES-3Y",
-    slug: "4fes-3y",
-    name: "Bitzer 4FES-3Y",
-    image:
-      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/dessert-on-a-plate.jpg",
-    description: "Phụ tùng máy nén 4HP chính hãng.",
-  },
-  {
-    id: "K013N008",
-    slug: "k013n008",
-    name: "Bitzer K013N008",
-    image:
-      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/dessert-on-a-plate.jpg",
-    description: "Phụ tùng máy nén 4HP chính hãng.",
-  },
-  {
-    id: "GAS-R22",
-    slug: "gas-r22",
-    name: "Gas Lạnh R22",
-    image:
-      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/dessert-on-a-plate.jpg",
-    description: "Gas R22 dùng cho điều hòa và kho lạnh.",
-  },
-  {
-    id: "GAS-R410A",
-    slug: "gas-r410a",
-    name: "Gas Lạnh R410A",
-    image:
-      "https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/dessert-on-a-plate.jpg",
-    description: "Gas R410A thân thiện môi trường.",
-  },
-];
-type ProductSuggestion = (typeof MOCK_PRODUCTS)[number];
-
-function getProduct(code: string): ProductSuggestion | undefined {
-  return MOCK_PRODUCTS.find((p) => p.id === code);
+interface ChatbotProps {
+  data?: ChatbotData | null;
 }
 
-const SUGGESTION_TOPICS = [
-  { label: "Máy nén", key: "compressor" },
-  { label: "Gas", key: "gas" },
-  { label: "Giá", key: "price" },
-  { label: "Sửa chữa", key: "repair" },
-  { label: "Bảo hành", key: "warranty" },
-  { label: "Khác", key: "other" },
-];
+function getChatbotResponse(message: string): ChatRule {
+  const lower = message.toLowerCase().trim();
+  for (const rule of CHATBOT_RULES) {
+    if (rule.keywords.some((kw) => lower.includes(kw))) {
+      return rule;
+    }
+  }
+  return {
+    keywords: [],
+    response: `"Vui lòng liên hệ hotline ${INFO_COMPANY.phone} hoặc chat trực tiếp qua Zalo/Messenger.`,
+  };
+}
 
-type Message = { type: "user" | "bot"; content: string; products?: string[] };
+function normalizeText(text?: string) {
+  return (text ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+}
 
-export default function Chatbot() {
+function matchServiceByTopic(service: SuggestionService, topic: TopicKey) {
+  const source = `${normalizeText(service.name)} ${normalizeText(service.brief)}`;
+  if (topic === "repair") {
+    return source.includes("sua chua") || source.includes("repair");
+  }
+  if (topic === "warranty") {
+    return source.includes("bao tri") || source.includes("maintenance");
+  }
+  return false;
+}
+
+export default function Chatbot({ data }: ChatbotProps) {
   const { t } = useIntl();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -116,6 +70,76 @@ export default function Chatbot() {
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   const [typing, setTyping] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const topicMap = useMemo(
+    () =>
+      new Map<string, TopicKey>([
+        ["compressor", "compressor"],
+        ["gas", "gas"],
+        ["repair", "repair"],
+        ["warranty", "warranty"],
+      ]),
+    [],
+  );
+
+  const productSuggestionsByTopic = useMemo(
+    () =>
+      new Map<string, ProductCard[]>(
+        (data?.suggestionProducts ?? []).map((item) => [
+          item.topiKey,
+          item.products,
+        ]),
+      ),
+    [data],
+  );
+  const serviceSuggestionsByTopic = useMemo(
+    () =>
+      new Map<string, Service[]>(
+        (data?.suggestionServices ?? []).map((item) => [
+          item.topicKey,
+          item.services,
+        ]),
+      ),
+    [data],
+  );
+
+  const getTopicSuggestions = useCallback(
+    (topic: TopicKey) => {
+      const rawProducts = (productSuggestionsByTopic.get(topic) ??
+        []) as SuggestionProduct[];
+      const rawServices = (serviceSuggestionsByTopic.get(topic) ??
+        []) as SuggestionService[];
+
+      const services =
+        topic === "repair" || topic === "warranty"
+          ? rawServices.filter((service) => matchServiceByTopic(service, topic))
+          : rawServices;
+
+      return {
+        products: rawProducts.slice(0, 2),
+        services: services.slice(0, 2),
+      };
+    },
+    [productSuggestionsByTopic, serviceSuggestionsByTopic],
+  );
+  const getFallbackLinkByTopic = useCallback(
+    (topic?: TopicKey) => {
+      if (!topic) return undefined;
+      if (topic === "compressor" || topic === "gas") {
+        return {
+          link: "/products",
+          label: t("Xem tất cả sản phẩm"),
+        };
+      }
+      if (topic === "repair" || topic === "warranty") {
+        return {
+          link: "/services",
+          label: t("Xem tất cả dịch vụ"),
+        };
+      }
+      return undefined;
+    },
+    [t],
+  );
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -129,35 +153,71 @@ export default function Chatbot() {
     ]);
   }, [open, t]);
 
-  const handleSendMessage = useCallback((text: string) => {
-    const trimmed = text.trim();
-    if (!trimmed) return;
-    setMessages((prev) => [...prev, { type: "user", content: trimmed }]);
-    setInput("");
-    setTyping(true);
-    setTimeout(() => {
-      setTyping(false);
-      const rule = getChatbotResponse(trimmed.toLowerCase());
-      setMessages((prev) => [
-        ...prev,
-        { type: "bot", content: rule.response, products: rule.products },
-      ]);
-    }, 600);
-  }, []);
+  const handleSendMessage = useCallback(
+    (text: string) => {
+      const trimmed = text.trim();
+      if (!trimmed) return;
+      setMessages((prev) => [...prev, { type: "user", content: trimmed }]);
+      setInput("");
+      setTyping(true);
+      setTimeout(() => {
+        const rule = getChatbotResponse(trimmed.toLowerCase());
+        const topic = rule.topic;
+        const suggestions = topic
+          ? getTopicSuggestions(topic)
+          : { products: [], services: [] };
+        const shouldShowFallback =
+          !!topic &&
+          suggestions.products.length === 0 &&
+          suggestions.services.length === 0;
+        setTyping(false);
+        setMessages((prev) => [
+          ...prev,
+          {
+            type: "bot",
+            content: rule.response,
+            suggestions,
+            fallbackLink: shouldShowFallback
+              ? getFallbackLinkByTopic(topic)
+              : undefined,
+          },
+        ]);
+      }, 600);
+    },
+    [getFallbackLinkByTopic, getTopicSuggestions],
+  );
 
-  const handleSelectTopic = useCallback((label: string, key: string) => {
-    setSelectedTopic(key);
-    setTyping(true);
-    setMessages([{ type: "user", content: label }]);
-    setTimeout(() => {
-      setTyping(false);
-      const rule = getChatbotResponse(key);
-      setMessages((prev) => [
-        ...prev,
-        { type: "bot", content: rule.response, products: rule.products },
-      ]);
-    }, 600);
-  }, []);
+  const handleSelectTopic = useCallback(
+    (label: string, key: string) => {
+      setSelectedTopic(key);
+      setTyping(true);
+      setMessages([{ type: "user", content: label }]);
+      setTimeout(() => {
+        const rule = getChatbotResponse(key);
+        const topic = topicMap.get(key);
+        const suggestions = topic
+          ? getTopicSuggestions(topic)
+          : { products: [], services: [] };
+        const shouldShowFallback =
+          !!topic &&
+          suggestions.products.length === 0 &&
+          suggestions.services.length === 0;
+        setTyping(false);
+        setMessages((prev) => [
+          ...prev,
+          {
+            type: "bot",
+            content: rule.response,
+            suggestions,
+            fallbackLink: shouldShowFallback
+              ? getFallbackLinkByTopic(topic)
+              : undefined,
+          },
+        ]);
+      }, 600);
+    },
+    [getFallbackLinkByTopic, getTopicSuggestions, topicMap],
+  );
 
   const handleReset = useCallback(() => {
     setSelectedTopic(null);
@@ -297,15 +357,14 @@ export default function Chatbot() {
                   </Text>
                 </Box>
 
-                {/* Product chips */}
-                {msg.products && msg.products.length > 0 && (
-                  <Stack gap="2" w="full">
-                    {msg.products.map((code) => {
-                      const product = getProduct(code);
-                      if (!product) return null;
-                      return (
+                {/* Product and service chips */}
+                {msg.suggestions &&
+                  (msg.suggestions.products.length > 0 ||
+                    msg.suggestions.services.length > 0) && (
+                    <Stack gap="2" w="full">
+                      {msg.suggestions.products.map((product) => (
                         <Link
-                          key={code}
+                          key={product.id}
                           href={`/products/${product.slug}`}
                           className={css({
                             display: "block",
@@ -324,7 +383,6 @@ export default function Chatbot() {
                           })}
                         >
                           <Flex alignItems="center" gap="0" px="1">
-                            {/* Image */}
                             <Box
                               position="relative"
                               w="16"
@@ -337,32 +395,20 @@ export default function Chatbot() {
                                 width="100%"
                                 height="100%"
                                 objectFit="cover"
-                                src="https://res.cloudinary.com/dsw4o0hjl/image/upload/samples/dessert-on-a-plate.jpg"
+                                src={product.images?.[0] || DAITIN_IMAGE}
                                 alt={product.name}
                                 style={{ objectFit: "cover" }}
                               />
                             </Box>
-
-                            {/* Info */}
                             <Stack gap="0.5" px="3" py="2" flex="1" minW="0">
-                              {/* Model code badge */}
-                              <Box
-                                display="inline-flex"
-                                alignSelf="flex-start"
-                                px="1.5"
-                                py="0.5"
-                                bg="brand.50"
-                                borderRadius="md"
+                              <Text
+                                variant="caption-2"
+                                weight="bold"
+                                tone="link"
+                                inline
                               >
-                                <Text
-                                  variant="caption-2"
-                                  weight="bold"
-                                  tone="link"
-                                  inline
-                                >
-                                  {code}
-                                </Text>
-                              </Box>
+                                {product.slug}
+                              </Text>
                               <Text
                                 variant="caption-1"
                                 weight="bold"
@@ -375,11 +421,9 @@ export default function Chatbot() {
                                 tone="secondary"
                                 truncate={1}
                               >
-                                {product.description}
+                                {t("Nhấn để xem chi tiết sản phẩm")}
                               </Text>
                             </Stack>
-
-                            {/* Arrow */}
                             <ArrowRight
                               pr="3"
                               flexShrink={0}
@@ -388,9 +432,98 @@ export default function Chatbot() {
                             />
                           </Flex>
                         </Link>
-                      );
-                    })}
-                  </Stack>
+                      ))}
+                      {msg.suggestions.services.map((service) => (
+                        <Link
+                          key={service.id}
+                          href={`/services/${service.slug}`}
+                          className={css({
+                            display: "block",
+                            textDecoration: "none",
+                            borderRadius: "xl",
+                            overflow: "hidden",
+                            border: "1.5px solid token(colors.gray.200)",
+                            bg: "white",
+                            transition: "all 0.2s ease",
+                            _hover: {
+                              borderColor: "warning.base",
+                              boxShadow:
+                                "0 4px 16px token(colors.warning.base/0.15)",
+                              transform: "translateY(-1px)",
+                            },
+                          })}
+                        >
+                          <Flex alignItems="center" gap="0" px="1">
+                            <Box
+                              position="relative"
+                              w="16"
+                              h="16"
+                              flexShrink={0}
+                              bg="gray.100"
+                            >
+                              <Image
+                                aspectRatio="1/1"
+                                width="100%"
+                                height="100%"
+                                objectFit="cover"
+                                src={service.thumbnail || DAITIN_IMAGE}
+                                alt={service.name}
+                                style={{ objectFit: "cover" }}
+                              />
+                            </Box>
+                            <Stack gap="0.5" px="3" py="2" flex="1" minW="0">
+                              <Text
+                                variant="caption-2"
+                                weight="bold"
+                                tone="link"
+                                inline
+                              >
+                                {t("Dịch vụ")}
+                              </Text>
+                              <Text
+                                variant="caption-1"
+                                weight="bold"
+                                truncate={1}
+                              >
+                                {service.name}
+                              </Text>
+                              <Text
+                                variant="caption-2"
+                                tone="secondary"
+                                truncate={1}
+                              >
+                                {service.brief ||
+                                  t("Nhấn để xem chi tiết dịch vụ")}
+                              </Text>
+                            </Stack>
+                            <ArrowRight
+                              pr="3"
+                              flexShrink={0}
+                              tone="warning"
+                              size="sm"
+                            />
+                          </Flex>
+                        </Link>
+                      ))}
+                    </Stack>
+                  )}
+                {msg.fallbackLink && (
+                  <Link
+                    href={msg.fallbackLink.link}
+                    display="flex"
+                    alignItems="center"
+                    gap="1"
+                    px="3"
+                    py="2"
+                    borderRadius="lg"
+                    border="1px solid token(colors.warning.base)"
+                    _hover={{ bg: "warning.light" }}
+                  >
+                    <Text variant="caption-1" tone="warning" inline>
+                      {msg.fallbackLink.label}
+                    </Text>
+                    <ArrowRight tone="warning" size="sm" />
+                  </Link>
                 )}
               </Flex>
             ))}

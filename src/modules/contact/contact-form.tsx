@@ -5,7 +5,6 @@ import Text from "@/components/text";
 import TextArea from "@/components/text-area/text-area";
 import TextField from "@/components/text-field";
 import { useCart } from "@/hooks";
-import { SERVICES } from "@/modules/services/types";
 import { useIntl } from "@/utils/intl";
 import { Box, Stack } from "@/vendors/styled-system/jsx";
 import { useSearchParams } from "next/navigation";
@@ -24,7 +23,8 @@ export const ContactForm = () => {
   const { items } = useCart();
   const searchParams = useSearchParams();
   const fromCart = searchParams.get("from") === "cart";
-  const serviceSlug = searchParams.get("service");
+  const productRaw = searchParams.get("product");
+  const serviceRaw = searchParams.get("service");
 
   const [formData, setFormData] = useState<ContactFormData>({
     name: "",
@@ -39,12 +39,21 @@ export const ContactForm = () => {
     message: string;
   } | null>(null);
 
+  const parseQueryObject = <T,>(value: string | null): T | null => {
+    if (!value) return null;
+    try {
+      return JSON.parse(value) as T;
+    } catch {
+      return null;
+    }
+  };
+
   useEffect(() => {
     if (fromCart && items.length > 0) {
       const cartContent = items
         .map((item) => {
           const price =
-            item.product.price !== null
+            item.product.price != null
               ? new Intl.NumberFormat("vi-VN", {
                   style: "currency",
                   currency: "VND",
@@ -55,11 +64,11 @@ export const ContactForm = () => {
         .join("\n\n");
 
       const totalPrice = items.reduce((sum, item) => {
-        if (item.product.price === null) return sum;
+        if (item.product.price == null) return sum;
         return sum + item.product.price * item.quantity;
       }, 0);
 
-      const hasContactPrice = items.some((item) => item.product.price === null);
+      const hasContactPrice = items.some((item) => item.product.price == null);
       const totalText = hasContactPrice
         ? "Liên hệ để biết giá"
         : new Intl.NumberFormat("vi-VN", {
@@ -71,16 +80,53 @@ export const ContactForm = () => {
         ...prev,
         message: `Tôi muốn đặt mua các sản phẩm sau:\n\n${cartContent}\n\n---\nTổng cộng: ${totalText}\n\nVui lòng liên hệ lại với tôi để xác nhận đơn hàng.`,
       }));
-    } else if (serviceSlug) {
-      const service = SERVICES.find((s) => s.slug === serviceSlug);
-      if (service) {
-        setFormData((prev) => ({
-          ...prev,
-          message: `Tôi quan tâm đến gói dịch vụ:\n\n- Dịch vụ: ${service.name}\n- Mã dịch vụ: ${service.id}\n\nVui lòng liên hệ lại với tôi để tư vấn chi tiết và đăng ký dịch vụ.`,
-        }));
-      }
+      return;
     }
-  }, [fromCart, items, serviceSlug]);
+
+    const product = parseQueryObject<{
+      name?: string;
+      slug?: string;
+      price?: number;
+    }>(productRaw);
+    const service = parseQueryObject<{
+      slug?: string;
+      name?: string;
+    }>(serviceRaw);
+
+    if (product) {
+      const priceText =
+        typeof product.price === "number" && !Number.isNaN(product.price)
+          ? new Intl.NumberFormat("vi-VN", {
+              style: "currency",
+              currency: "VND",
+            }).format(product.price)
+          : "Liên hệ";
+
+      setFormData((prev) => ({
+        ...prev,
+        message: `Tôi quan tâm đến sản phẩm sau:
+
+- Tên sản phẩm: ${product.name || "Không rõ"}
+- Mã sản phẩm:  ${product.slug || "Không rõ"}
+- Giá: ${priceText}
+
+Vui lòng liên hệ lại với tôi để tư vấn chi tiết và hỗ trợ mua hàng.`,
+      }));
+      return;
+    }
+
+    if (service) {
+      setFormData((prev) => ({
+        ...prev,
+        message: `Tôi quan tâm đến gói dịch vụ sau:
+
+- Tên dịch vụ: ${service.name || "Không rõ"}
+- Mã dịch vụ: ${service.slug || "Không rõ"}
+
+Vui lòng liên hệ lại với tôi để tư vấn chi tiết và đăng ký dịch vụ.`,
+      }));
+    }
+  }, [fromCart, items, productRaw, serviceRaw]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,

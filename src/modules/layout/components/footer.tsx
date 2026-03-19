@@ -227,11 +227,7 @@ export default function Footer() {
 
           {/* ── Col 3: Sản phẩm + Thông tin ─────────────────────────────── */}
           <Stack gap="0">
-            <Box pb="3" mb="4" borderBottom="1px solid {colors.gray.700}">
-              <Text variant="paragraph-2" weight="bold" tone="inverse">
-                {t("Thông tin")}
-              </Text>
-            </Box>
+            <ColHeading>{t("Thông tin")}</ColHeading>
             <Stack gap="2.5">
               {INFO_LINKS.map((l) => (
                 <Link

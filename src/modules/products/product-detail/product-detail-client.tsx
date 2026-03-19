@@ -27,9 +27,22 @@ const formatPrice = (price: number | null, t: FormatMessage) => {
   }).format(price);
 };
 
-const hadnleContactToBuy = () => {
+const hadnleContactToBuy = (params: {
+  slug: string;
+  name: string;
+  price?: number;
+}) => {
   if (typeof window === "undefined") return;
-  window.location.href = "/contact";
+  const query = new URLSearchParams();
+  query.set(
+    "product",
+    JSON.stringify({
+      name: params.name,
+      slug: params.slug,
+      price: params.price,
+    }),
+  );
+  window.location.href = `/contact?${query.toString()}`;
 };
 
 export default function ProductDetailClient({
@@ -40,6 +53,7 @@ export default function ProductDetailClient({
   const { addToCart } = useCart();
   const {
     name,
+    slug,
     images,
     price,
     stock,
@@ -160,7 +174,13 @@ export default function ProductDetailClient({
                 size="lg"
                 leftIcon={Phone}
                 disabled={isOutOfStock}
-                onClick={hadnleContactToBuy}
+                onClick={() =>
+                  hadnleContactToBuy({
+                    slug,
+                    name,
+                    price,
+                  })
+                }
               >
                 {t("Liên hệ tư vấn")}
               </Button>
