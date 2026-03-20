@@ -1,4 +1,5 @@
 import { connectDB } from "@/lib/mongodb";
+import { requireAdminToken } from "@/lib/admin-auth";
 import { Product } from "@/models/Product";
 import type { CategoryDTO, ProductDetail } from "@/types/api";
 import { NextRequest, NextResponse } from "next/server";
@@ -72,6 +73,9 @@ export async function PUT(
   ctx: { params: Promise<Params> },
 ) {
   try {
+    const unauthorizedResponse = await requireAdminToken(request);
+    if (unauthorizedResponse) return unauthorizedResponse;
+
     await connectDB();
     const { slug } = await ctx.params;
 
@@ -90,10 +94,24 @@ export async function PUT(
     const update: Record<string, unknown> = {};
     if (typeof body.name === "string" && body.name.trim())
       update.name = body.name.trim();
-    if (typeof body.price === "number") update.price = body.price;
-    if (typeof body.stock === "number") update.stock = body.stock;
+    if (typeof body.price === "number") {
+      if (body.price < 0) {
+        return NextResponse.json({ error: "Invalid price" }, { status: 400 });
+      }
+      update.price = body.price;
+    }
+    if (typeof body.stock === "number") {
+      if (body.stock < 0) {
+        return NextResponse.json({ error: "Invalid stock" }, { status: 400 });
+      }
+      update.stock = body.stock;
+    }
     if (typeof body.description === "string")
       update.description = body.description.trim() || undefined;
+
+    if (Object.keys(update).length === 0) {
+      return NextResponse.json({ error: "No fields to update" }, { status: 400 });
+    }
 
     const updated = await Product.findOneAndUpdate(
       { slug: normalizedSlug },
@@ -154,10 +172,13 @@ export async function PUT(
 }
 
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   ctx: { params: Promise<Params> },
 ) {
   try {
+    const unauthorizedResponse = await requireAdminToken(request);
+    if (unauthorizedResponse) return unauthorizedResponse;
+
     await connectDB();
     const { slug } = await ctx.params;
 

@@ -1,4 +1,5 @@
 import { uploadBuffer } from "@/lib/cloudinary";
+import { requireAdminToken } from "@/lib/admin-auth";
 import { connectDB } from "@/lib/mongodb";
 import { Category } from "@/models/Category";
 import { IProduct, Product } from "@/models/Product";
@@ -131,6 +132,9 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const unauthorizedResponse = await requireAdminToken(request);
+    if (unauthorizedResponse) return unauthorizedResponse;
+
     await connectDB();
 
     const form = await request.formData();

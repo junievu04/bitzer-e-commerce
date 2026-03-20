@@ -1,3 +1,4 @@
+import { requireAdminToken } from "@/lib/admin-auth";
 import { connectDB } from "@/lib/mongodb";
 import { Category } from "@/models/Category";
 import { Product } from "@/models/Product";
@@ -46,10 +47,13 @@ export async function GET(
 }
 
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   ctx: { params: Promise<Params> },
 ) {
   try {
+    const unauthorizedResponse = await requireAdminToken(request);
+    if (unauthorizedResponse) return unauthorizedResponse;
+
     await connectDB();
     const { id } = await ctx.params;
 

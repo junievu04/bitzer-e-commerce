@@ -34,15 +34,6 @@ export default function ThemedBannerGridOverlay({ detail }: Props) {
             "repeating-linear-gradient(0deg,#fff 0,#fff 1px,transparent 0,transparent 40px),repeating-linear-gradient(90deg,#fff 0,#fff 1px,transparent 0,transparent 40px)",
         }}
       />
-      {/* Left accent bar */}
-      <Box
-        position="absolute"
-        left="0"
-        top="0"
-        bottom="0"
-        w="1"
-        bg="brand.400"
-      />
 
       <Stack
         gap="3"

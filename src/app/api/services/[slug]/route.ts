@@ -1,5 +1,6 @@
 // app/api/services/[slug]/route.ts
 
+import { requireAdminToken } from "@/lib/admin-auth";
 import { connectDB } from "@/lib/mongodb";
 import { IService, Service } from "@/models/Service";
 import type { ServiceDetail } from "@/types/api";
@@ -57,6 +58,9 @@ export async function PUT(
   ctx: { params: Promise<Params> },
 ) {
   try {
+    const unauthorizedResponse = await requireAdminToken(request);
+    if (unauthorizedResponse) return unauthorizedResponse;
+
     await connectDB();
 
     const { slug } = await ctx.params;
@@ -102,10 +106,13 @@ export async function PUT(
 }
 
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   ctx: { params: Promise<Params> },
 ) {
   try {
+    const unauthorizedResponse = await requireAdminToken(request);
+    if (unauthorizedResponse) return unauthorizedResponse;
+
     await connectDB();
 
     const { slug } = await ctx.params;

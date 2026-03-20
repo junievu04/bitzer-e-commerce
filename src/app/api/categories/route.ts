@@ -1,9 +1,10 @@
+import { requireAdminToken } from "@/lib/admin-auth";
 import { connectDB } from "@/lib/mongodb";
 import { Category } from "@/models/Category";
 import type { CategoryDTO } from "@/types/api";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(_request: NextRequest) {
+export async function GET() {
   try {
     await connectDB();
 
@@ -28,6 +29,9 @@ export async function GET(_request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const unauthorizedResponse = await requireAdminToken(request);
+    if (unauthorizedResponse) return unauthorizedResponse;
+
     await connectDB();
 
     const body = (await request.json()) as {

@@ -1,5 +1,6 @@
 // app/api/services/route.ts
 
+import { requireAdminToken } from "@/lib/admin-auth";
 import { connectDB } from "@/lib/mongodb";
 import { IService, Service } from "@/models/Service";
 import type {
@@ -87,9 +88,12 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const unauthorizedResponse = await requireAdminToken(request);
+    if (unauthorizedResponse) return unauthorizedResponse;
+
     await connectDB();
 
-    const body = (await request.json()) as Partial<IService>;
+    const body = (await request.json()) as Partial<IService> & { info?: string };
 
     if (!body.name) {
       return NextResponse.json(
@@ -107,12 +111,16 @@ export async function POST(request: NextRequest) {
         .replace(/[^a-z0-9-]/g, "");
 
     const created = await Service.create({
-      name: body.name,
+      name: body.name.trim(),
       slug,
-      thumbnail: body.thumbnail ?? "",
-      brief: body.brief ?? "",
-      images: body.images ?? [],
-      description: Array.isArray(body.description) ? body.description : [],
+      thumbnail: "",
+      brief: (body.info ?? body.brief ?? "").trim(),
+      images: [],
+      description: Array.isArray(body.description)
+        ? body.description
+        : body.info
+          ? [body.info]
+          : [],
       features: Array.isArray(body.features) ? body.features : [],
       isActive: body.isActive ?? true,
     });
