@@ -38,6 +38,7 @@ export default function Header() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     const q = query.trim();
+    if (q === "") return;
     if (!q) router.push(`/products`);
     else router.push(`/products?text=${encodeURIComponent(q)}`);
   };

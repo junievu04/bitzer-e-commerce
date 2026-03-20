@@ -7,6 +7,7 @@ import type {
   ProductsDTO,
   ProductSearchParams,
 } from "@/types/api";
+import { normalize } from "@/utils/helpers/normalize";
 import mongoose, { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -64,15 +65,9 @@ export async function GET(request: NextRequest) {
     }
 
     if (text) {
-      const normalized = text
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .trim();
+      const normalizedText = normalize(text).replace(/\s+/g, "-");
 
-      const regex = new RegExp(normalized, "i");
-      const originalRegex = new RegExp(text, "i");
-
-      query.$or = [{ name: originalRegex }, { name: regex }];
+      query.slug = { $regex: new RegExp(normalizedText, "i") };
     }
 
     if (categorySlug) {
