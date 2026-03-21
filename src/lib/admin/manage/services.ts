@@ -2,21 +2,14 @@
 
 import { requireAdmin } from "@/lib/admin/admin-auth";
 import { connectDB } from "@/lib/mongodb";
-import { Service } from "@/models/Service";
+import { IService, Service } from "@/models/Service";
 import { ServiceDetail } from "@/types/api";
 import { ServiceFormInput } from "@/types/server-actions";
 import { buildSlug, parseLines } from "@/utils/helpers/shared-helpers";
 import { revalidatePath } from "next/cache";
 
-// Read
-
-export async function getServices(): Promise<ServiceDetail[]> {
-  await connectDB();
-  const docs = await Service.find({ isActive: true })
-    .sort({ createdAt: -1 })
-    .lean();
-
-  return docs.map((doc) => ({
+function mapDoc(doc: IService): ServiceDetail {
+  return {
     id: String(doc._id),
     name: doc.name,
     slug: doc.slug,
@@ -25,18 +18,30 @@ export async function getServices(): Promise<ServiceDetail[]> {
     images: doc.images ?? [],
     description: doc.description ?? [],
     features: doc.features ?? [],
-  }));
+  };
+}
+
+// Read
+
+export async function getServices(): Promise<ServiceDetail[]> {
+  await connectDB();
+  const docs = await Service.find({ isActive: true })
+    .sort({ createdAt: -1 })
+    .lean();
+  return docs.map(mapDoc);
 }
 
 // Create
 
-export async function createService(data: ServiceFormInput) {
+export async function createService(
+  data: ServiceFormInput,
+): Promise<{ success: boolean; data?: ServiceDetail; error?: string }> {
   await requireAdmin();
   if (!data.name?.trim())
     return { success: false, error: "Tên dịch vụ không được trống" };
   try {
     await connectDB();
-    await Service.create({
+    const created = await Service.create({
       name: data.name.trim(),
       slug: data.slug?.trim() ? buildSlug(data.slug) : buildSlug(data.name),
       brief: data.brief?.trim() ?? "",
@@ -47,7 +52,7 @@ export async function createService(data: ServiceFormInput) {
       isActive: true,
     });
     revalidatePath("/admin/services");
-    return { success: true };
+    return { success: true, data: mapDoc(created.toObject()) };
   } catch (e: unknown) {
     if ((e as { code?: number })?.code === 11000)
       return {
@@ -63,7 +68,10 @@ export async function createService(data: ServiceFormInput) {
 
 // Update
 
-export async function updateService(id: string, data: ServiceFormInput) {
+export async function updateService(
+  id: string,
+  data: ServiceFormInput,
+): Promise<{ success: boolean; data?: ServiceDetail; error?: string }> {
   await requireAdmin();
   if (!data.name?.trim())
     return { success: false, error: "Tên dịch vụ không được trống" };
@@ -84,7 +92,7 @@ export async function updateService(id: string, data: ServiceFormInput) {
     ).lean();
     if (!updated) return { success: false, error: "Không tìm thấy dịch vụ" };
     revalidatePath("/admin/services");
-    return { success: true };
+    return { success: true, data: mapDoc(updated) };
   } catch (e: unknown) {
     if ((e as { code?: number })?.code === 11000)
       return { success: false, error: "Slug đã tồn tại" };
@@ -103,10 +111,8 @@ export async function deleteService(
   await requireAdmin();
   try {
     await connectDB();
-
     const deleted = await Service.findByIdAndDelete(id).lean();
     if (!deleted) return { success: false, error: "Không tìm thấy dịch vụ" };
-
     revalidatePath("/admin/services");
     return { success: true };
   } catch (e: unknown) {

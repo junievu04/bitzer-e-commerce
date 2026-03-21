@@ -6,6 +6,7 @@ import TextArea from "@/components/text-area";
 import TextField from "@/components/text-field";
 import { createService, updateService } from "@/lib/admin/manage/services";
 import { ServiceDetail } from "@/types/api";
+import { ServiceFormInput } from "@/types/server-actions";
 import { Flex, Stack } from "@/vendors/styled-system/jsx";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
@@ -15,7 +16,7 @@ import ModalBackdrop from "../layout/modal-backdrop";
 interface Props {
   service?: ServiceDetail | null;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (data: ServiceDetail) => void;
 }
 
 export default function ServiceModal({ service, onClose, onSuccess }: Props) {
@@ -32,10 +33,11 @@ export default function ServiceModal({ service, onClose, onSuccess }: Props) {
     setForm((f) => ({ ...f, [key]: val }));
 
   const { mutate, isPending, error } = useMutation({
-    mutationFn: (payload: Parameters<typeof createService>[0]) =>
+    mutationFn: (payload: ServiceFormInput) =>
       isEdit ? updateService(service!.id, payload) : createService(payload),
-    onSuccess: () => {
-      onSuccess();
+    onSuccess: (res) => {
+      if (!res.success || !res.data) return;
+      onSuccess(res.data);
       onClose();
     },
   });

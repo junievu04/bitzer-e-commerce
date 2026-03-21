@@ -24,25 +24,22 @@ export default function ServiceManageClient({ initialServices }: Props) {
   const [editing, setEditing] = useState<ServiceDetail | null>(null);
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const [showAdd, setShowAdd] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const {
-    mutate: doDelete,
-    isPending,
-    error,
-  } = useMutation({
-    mutationFn: deleteService,
-    onSuccess: (data, id) => {
-      if (data?.success) {
-        setServices((prev) => prev.filter((s) => s.id !== id));
-      }
+  const { mutate: doDelete, error: deleteError } = useMutation({
+    mutationFn: (id: string) => {
+      setDeletingId(id);
+      return deleteService(id);
     },
-    onError: (error) => {
-      console.error(error);
+    onSuccess: (res, id) => {
+      setDeletingId(null);
+      if (res.success) setServices((prev) => prev.filter((s) => s.id !== id));
     },
+    onError: () => setDeletingId(null),
   });
+
   return (
     <Box p={{ base: "4", md: "8" }}>
-      {error && <ErrorBox message={error.message} />}
       <Stack gap="6">
         <Flex
           justifyContent="space-between"
@@ -63,27 +60,18 @@ export default function ServiceManageClient({ initialServices }: Props) {
           </Button>
         </Flex>
 
+        {deleteError && (
+          <ErrorBox
+            message={
+              deleteError instanceof Error
+                ? deleteError.message
+                : "Lỗi không xác định"
+            }
+          />
+        )}
+
         <Stack gap="3">
-          {isPending ? (
-            <>
-              {[1, 2, 3].map((i) => (
-                <Box
-                  key={i}
-                  bg="white"
-                  borderRadius="xl"
-                  border="1px solid {colors.gray.200}"
-                  p="4"
-                >
-                  <Flex gap="4" alignItems="center">
-                    <Skeleton flex="1" h="20px" />
-                    <Skeleton w="200px" h="16px" />
-                    <Skeleton w="80px" h="32px" borderRadius="md" />
-                    <Skeleton w="60px" h="32px" borderRadius="md" />
-                  </Flex>
-                </Box>
-              ))}
-            </>
-          ) : services.length === 0 ? (
+          {services.length === 0 ? (
             <Box
               bg="white"
               borderRadius="xl"
@@ -158,14 +146,18 @@ export default function ServiceManageClient({ initialServices }: Props) {
                     <Button
                       variant="plain"
                       size="sm"
-                      disabled={isPending}
-                      onClick={() => doDelete(svc.id)}
+                      disabled={deletingId === svc.id}
+                      onClick={() => setConfirmId(svc.id)}
                       className={css({
                         color: "danger.base",
                         _hover: { bg: "danger.light" },
                       })}
                     >
-                      {isPending ? "..." : "Xóa"}
+                      {deletingId === svc.id ? (
+                        <Skeleton w="24px" h="16px" />
+                      ) : (
+                        "Xóa"
+                      )}
                     </Button>
                   </Flex>
                 </Flex>
@@ -176,13 +168,25 @@ export default function ServiceManageClient({ initialServices }: Props) {
       </Stack>
 
       {showAdd && (
-        <ServiceModal onClose={() => setShowAdd(false)} onSuccess={() => {}} />
+        <ServiceModal
+          onClose={() => setShowAdd(false)}
+          onSuccess={(newSvc) => {
+            setServices((prev) => [newSvc, ...prev]);
+            setShowAdd(false);
+          }}
+        />
       )}
+
       {editing && (
         <ServiceModal
           service={editing}
           onClose={() => setEditing(null)}
-          onSuccess={() => {}}
+          onSuccess={(updated) => {
+            setServices((prev) =>
+              prev.map((s) => (s.id === updated.id ? updated : s)),
+            );
+            setEditing(null);
+          }}
         />
       )}
 
