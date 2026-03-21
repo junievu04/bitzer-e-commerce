@@ -6,6 +6,7 @@ import Text from "@/components/text";
 import TextField from "@/components/text-field";
 import { deleteProduct } from "@/lib/admin/manage/products";
 import { CategoryDTO, ProductDetail } from "@/types/api";
+import { formatPrice } from "@/utils/helpers/shared-helpers";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Flex, Stack } from "@/vendors/styled-system/jsx";
 import { useMutation } from "@tanstack/react-query";
@@ -14,14 +15,6 @@ import ConfirmDialog from "../layout/confirm-dialog";
 import ErrorBox from "../layout/error-box";
 import AddProductModal from "./add-product-modal";
 import EditProductModal from "./edit-product-modal";
-
-const formatPrice = (price?: number) =>
-  price === undefined
-    ? "—"
-    : new Intl.NumberFormat("vi-VN", {
-        style: "currency",
-        currency: "VND",
-      }).format(price);
 
 interface Props {
   initialProducts: ProductDetail[];

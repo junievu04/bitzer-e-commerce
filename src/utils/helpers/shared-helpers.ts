@@ -14,3 +14,11 @@ export function buildSlug(name: string): string {
     .replace(/\s+/g, "-")
     .replace(/[^a-z0-9-]/g, "");
 }
+
+export const formatPrice = (price?: number | null, t?: FormatMessage) => {
+  if (!price) return t ? t("Liên hệ") : "Liên hệ";
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  }).format(price);
+};

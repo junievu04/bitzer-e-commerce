@@ -6,7 +6,9 @@ import { Dustbin, Minus, Phone, Plus } from "@/components/icons";
 import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text";
+import { DAITIN_IMAGE } from "@/constants";
 import { useCart } from "@/hooks";
+import { formatPrice } from "@/utils/helpers/shared-helpers";
 import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
 import {
@@ -17,14 +19,6 @@ import {
   HStack,
   Stack,
 } from "@/vendors/styled-system/jsx";
-
-const formatPrice = (price: number | null, t: FormatMessage) => {
-  if (price === null) return t("Liên hệ");
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-  }).format(price);
-};
 
 const handleContactToBuy = () => {
   if (typeof window === "undefined") return;
@@ -37,7 +31,7 @@ export const CartClient = () => {
     useCart();
 
   const totalPrice = items.reduce((sum, item) => {
-    if (item.product.price === null) return sum;
+    if (!item.product.price) return sum;
     return sum + item.product.price * item.quantity;
   }, 0);
 
@@ -160,7 +154,7 @@ export const CartClient = () => {
                       href={`/products/${item.product.slug || item.product.id}`}
                     >
                       <Image
-                        src={item.product.image}
+                        src={item.product.images?.[0] || DAITIN_IMAGE}
                         alt={item.product.name}
                         aspectRatio="1/1"
                         width="80px"
@@ -276,7 +270,7 @@ export const CartClient = () => {
                   >
                     <Text tone="secondary">{t("Thành tiền")}:</Text>
                     <Text variant="paragraph-1" weight="bold" tone="success">
-                      {item.product.price !== null
+                      {!!item.product.price
                         ? formatPrice(item.product.price * item.quantity, t)
                         : t("Liên hệ")}
                     </Text>
@@ -290,7 +284,7 @@ export const CartClient = () => {
                       tone="success"
                       textAlign="center"
                     >
-                      {item.product.price !== null
+                      {!!item.product.price
                         ? formatPrice(item.product.price * item.quantity, t)
                         : t("Liên hệ")}
                     </Text>

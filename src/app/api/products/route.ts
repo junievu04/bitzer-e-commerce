@@ -6,7 +6,7 @@ import type {
   ProductsDTO,
   ProductSearchParams,
 } from "@/types/api";
-import { normalize } from "@/utils/helpers/normalize";
+import { buildSlug } from "@/utils/helpers/shared-helpers";
 import mongoose, { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -64,7 +64,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (text) {
-      const normalizedText = normalize(text).replace(/\s+/g, "-");
+      const normalizedText = buildSlug(text).replace(/\s+/g, "-");
 
       query.slug = { $regex: new RegExp(normalizedText, "i") };
     }

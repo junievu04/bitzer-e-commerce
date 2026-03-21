@@ -8,6 +8,7 @@ import Text from "@/components/text";
 import { DAITIN_IMAGE } from "@/constants";
 import { useCart } from "@/hooks";
 import type { ProductCard as ProductCardType } from "@/types/api";
+import { formatPrice } from "@/utils/helpers/shared-helpers";
 import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Center, Stack } from "@/vendors/styled-system/jsx";
@@ -15,14 +16,6 @@ import { useMemo } from "react";
 interface ProductCardProps {
   product: ProductCardType;
 }
-
-const formatPrice = (price: number | null, t: FormatMessage) => {
-  if (price === null) return t("Liên hệ");
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-  }).format(price);
-};
 
 export default function ProductCard({ product }: ProductCardProps) {
   const { t } = useIntl();

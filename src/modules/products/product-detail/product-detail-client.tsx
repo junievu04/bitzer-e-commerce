@@ -8,6 +8,7 @@ import Text from "@/components/text";
 import { DAITIN_IMAGE } from "@/constants";
 import { useCart } from "@/hooks";
 import type { ProductCard, ProductDetail } from "@/types/api";
+import { formatPrice } from "@/utils/helpers/shared-helpers";
 import { useIntl } from "@/utils/intl";
 import { Box, Flex, Grid, Stack } from "@/vendors/styled-system/jsx";
 import { isEmpty } from "lodash";
@@ -18,14 +19,6 @@ interface ProductDetailClientProps {
   product: ProductDetail;
   suggestions?: ProductCard[] | [];
 }
-
-const formatPrice = (price: number | null, t: FormatMessage) => {
-  if (price === null) return t("Liên hệ");
-  return new Intl.NumberFormat("vi-VN", {
-    style: "currency",
-    currency: "VND",
-  }).format(price);
-};
 
 const hadnleContactToBuy = (params: {
   slug: string;
