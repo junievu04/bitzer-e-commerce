@@ -1,13 +1,8 @@
 // app/api/services/route.ts
 
-import { requireAdminToken } from "@/lib/admin-auth";
 import { connectDB } from "@/lib/mongodb";
 import { IService, Service } from "@/models/Service";
-import type {
-  ServiceDetail,
-  Service as ServiceDTO,
-  ServicesDTO,
-} from "@/types/api";
+import type { Service as ServiceDTO, ServicesDTO } from "@/types/api";
 import mongoose, { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -31,19 +26,6 @@ function mapToListDTO(doc: ServiceDoc): ServiceDTO {
     slug: doc.slug,
     thumbnail: doc.thumbnail,
     brief: doc.brief,
-  };
-}
-
-function mapToDetailDTO(doc: ServiceDoc): ServiceDetail {
-  return {
-    id: String(doc._id),
-    name: doc.name,
-    slug: doc.slug,
-    thumbnail: doc.thumbnail,
-    brief: doc.brief,
-    images: doc.images,
-    description: doc.description,
-    features: doc.features,
   };
 }
 
@@ -82,60 +64,6 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(result, { status: 200 });
   } catch (err) {
     console.error("GET /api/services error:", err);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
-  }
-}
-
-export async function POST(request: NextRequest) {
-  try {
-    const unauthorizedResponse = await requireAdminToken(request);
-    if (unauthorizedResponse) return unauthorizedResponse;
-
-    await connectDB();
-
-    const body = (await request.json()) as Partial<IService> & { info?: string };
-
-    if (!body.name) {
-      return NextResponse.json(
-        { error: "Missing required field: name" },
-        { status: 400 },
-      );
-    }
-
-    const slug =
-      body.slug ??
-      body.name
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/g, "-")
-        .replace(/[^a-z0-9-]/g, "");
-
-    const created = await Service.create({
-      name: body.name.trim(),
-      slug,
-      thumbnail: "",
-      brief: (body.info ?? body.brief ?? "").trim(),
-      images: [],
-      description: Array.isArray(body.description)
-        ? body.description
-        : body.info
-          ? [body.info]
-          : [],
-      features: Array.isArray(body.features) ? body.features : [],
-      isActive: body.isActive ?? true,
-    });
-
-    return NextResponse.json(mapToDetailDTO(created.toObject() as ServiceDoc), {
-      status: 201,
-    });
-  } catch (err: unknown) {
-    if ((err as { code?: number })?.code === 11000) {
-      return NextResponse.json(
-        { error: "Slug already exists" },
-        { status: 409 },
-      );
-    }
-    console.error("POST /api/services error:", err);
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
 }

@@ -1,0 +1,88 @@
+"use server";
+
+import { requireAdmin } from "@/lib/admin/admin-auth";
+import { connectDB } from "@/lib/mongodb";
+import { Category } from "@/models/Category";
+import { Product } from "@/models/Product";
+import { CategoryDTO } from "@/types/api";
+import { Types } from "mongoose";
+import { revalidatePath } from "next/cache";
+
+// Read
+
+export async function getCategories(): Promise<CategoryDTO[]> {
+  await connectDB();
+  const docs = await Category.find().sort({ createdAt: -1 }).lean();
+  return docs.map((doc) => ({
+    id: String(doc._id),
+    name: doc.name,
+    slug: doc.slug,
+    description: doc.description,
+    isActive: doc.isActive,
+  }));
+}
+
+//Create
+
+export async function createCategory(data: {
+  name: string;
+  slug: string;
+  description?: string;
+  isActive?: boolean;
+}): Promise<{ success: boolean; error?: string }> {
+  await requireAdmin();
+  try {
+    await connectDB();
+    const requestData = {
+      name: data.name.trim(),
+      slug:
+        data.slug.trim() ||
+        data.name
+          .trim()
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .replace(/\s+/g, "-"),
+      description: data.description?.trim(),
+      isActive: true,
+    };
+    await Category.create(requestData);
+    revalidatePath("/admin/categories");
+    return { success: true };
+  } catch (e: unknown) {
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : "Lỗi không xác định",
+    };
+  }
+}
+
+// Delete
+
+export async function deleteCategory(
+  id: string,
+): Promise<{ success: boolean; error?: string }> {
+  await requireAdmin();
+  try {
+    await connectDB();
+    if (!Types.ObjectId.isValid(id))
+      return { success: false, error: "ID không hợp lệ" };
+    const objectId = new Types.ObjectId(id);
+    const productCount = await Product.countDocuments({ category: objectId });
+    if (productCount > 0) {
+      return {
+        success: false,
+        error: `Không thể xóa: còn ${productCount} sản phẩm thuộc danh mục này.`,
+      };
+    }
+    const deleted = await Category.findByIdAndDelete(objectId);
+    if (!deleted) return { success: false, error: "Không tìm thấy danh mục" };
+    revalidatePath("/admin/categories");
+    return { success: true };
+  } catch (e: unknown) {
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : "Lỗi không xác định",
+    };
+  }
+}

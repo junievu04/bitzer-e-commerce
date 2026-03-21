@@ -1,7 +1,5 @@
-import { requireAdminToken } from "@/lib/admin-auth";
 import { connectDB } from "@/lib/mongodb";
 import { Category } from "@/models/Category";
-import { Product } from "@/models/Product";
 import type { CategoryDTO } from "@/types/api";
 import { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
@@ -42,42 +40,6 @@ export async function GET(
     return NextResponse.json({ category }, { status: 200 });
   } catch (err) {
     console.error("GET /api/categories/[id] error:", err);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
-  }
-}
-
-export async function DELETE(
-  request: NextRequest,
-  ctx: { params: Promise<Params> },
-) {
-  try {
-    const unauthorizedResponse = await requireAdminToken(request);
-    if (unauthorizedResponse) return unauthorizedResponse;
-
-    await connectDB();
-    const { id } = await ctx.params;
-
-    const objectId = parseObjectId(id);
-    if (!objectId) {
-      return NextResponse.json({ error: "Invalid id" }, { status: 400 });
-    }
-
-    const productCount = await Product.countDocuments({ category: objectId });
-    if (productCount > 0) {
-      return NextResponse.json(
-        { error: "Cannot delete category with existing products." },
-        { status: 400 },
-      );
-    }
-
-    const deleted = await Category.findByIdAndDelete(objectId).lean();
-    if (!deleted) {
-      return NextResponse.json({ error: "Not found" }, { status: 404 });
-    }
-
-    return NextResponse.json({ success: true }, { status: 200 });
-  } catch (err) {
-    console.error("DELETE /api/categories/[id] error:", err);
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
   }
 }

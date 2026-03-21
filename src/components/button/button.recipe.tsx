@@ -101,13 +101,13 @@ export const buttonRecipe = cva({
         },
       },
       destructive: {
-        bgColor: "danger",
+        bgColor: "danger.base",
         color: "white",
         _hover: {
-          bgColor: { md: "danger.light" },
+          bgColor: { md: "danger.hover" },
         },
         _active: {
-          bgColor: "danger.light",
+          bgColor: "danger.hover",
         },
         _disabled: {
           bgColor: "danger.light",

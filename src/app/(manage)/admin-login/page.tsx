@@ -1,5 +1,11 @@
 "use client";
 
+import Button from "@/components/button";
+import { Image } from "@/components/image";
+import Text from "@/components/text";
+import TextField from "@/components/text-field";
+import { INFO_COMPANY, LOGO_IMAGE } from "@/constants";
+import { Box, Stack } from "@/vendors/styled-system/jsx";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, useState } from "react";
@@ -14,8 +20,8 @@ export default function AdminLoginPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault();
     setIsSubmitting(true);
     setErrorMessage("");
 
@@ -38,37 +44,98 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <main style={{ maxWidth: 420, margin: "80px auto", padding: 16 }}>
-      <h1 style={{ marginBottom: 12 }}>Admin Login</h1>
-      <form onSubmit={handleSubmit}>
-        <label style={{ display: "block", marginBottom: 8 }}>
-          Username
-          <input
-            style={{ width: "100%", marginTop: 4, padding: 8 }}
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            autoComplete="username"
-            required
-          />
-        </label>
-        <label style={{ display: "block", marginBottom: 12 }}>
-          Password
-          <input
-            style={{ width: "100%", marginTop: 4, padding: 8 }}
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            autoComplete="current-password"
-            required
-          />
-        </label>
-        {errorMessage ? (
-          <p style={{ color: "crimson", marginBottom: 12 }}>{errorMessage}</p>
-        ) : null}
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? "Đang đăng nhập..." : "Đăng nhập"}
-        </button>
-      </form>
-    </main>
+    <Box
+      minH="100vh"
+      bg="gray.50"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      px="4"
+    >
+      <Box
+        bg="white"
+        borderRadius="2xl"
+        border="1px solid {colors.gray.200}"
+        p={{ base: "6", md: "10" }}
+        w="full"
+        maxW="420px"
+        boxShadow="0 4px 24px {colors.gray.900/0.08}"
+      >
+        <Stack gap="6">
+          {/* Header */}
+          <Stack gap="1" alignItems="center">
+            <Box
+              w="12"
+              h="12"
+              borderRadius="xl"
+              bg="brand.500"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              mb="2"
+            >
+              <Image
+                src={LOGO_IMAGE}
+                alt={INFO_COMPANY.shortName}
+                width="10"
+                height="10"
+                borderRadius="lg"
+              />
+            </Box>
+            <Text variant="section-heading-1" weight="bold" tone="primary">
+              Admin Dashboard
+            </Text>
+            <Text variant="paragraph-2" tone="secondary">
+              Đăng nhập để quản lý hệ thống
+            </Text>
+          </Stack>
+
+          {/* Form */}
+          <Stack gap="4" as="form" onSubmit={handleSubmit}>
+            <TextField
+              label="Tên đăng nhập"
+              placeholder="Nhập tên đăng nhập"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              autoComplete="username"
+              required
+            />
+            <TextField
+              label="Mật khẩu"
+              placeholder="Nhập mật khẩu"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
+              required
+            />
+
+            {errorMessage && (
+              <Box
+                bg="danger.light"
+                borderRadius="md"
+                px="3"
+                py="2"
+                border="1px solid {colors.danger.base}"
+              >
+                <Text variant="caption-1" tone="error">
+                  {errorMessage}
+                </Text>
+              </Box>
+            )}
+
+            <Button
+              type="submit"
+              variant="default"
+              size="lg"
+              fullWidth
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Đang đăng nhập..." : "Đăng nhập"}
+            </Button>
+          </Stack>
+        </Stack>
+      </Box>
+    </Box>
   );
 }

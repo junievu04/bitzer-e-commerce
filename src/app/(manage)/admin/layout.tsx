@@ -1,38 +1,15 @@
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
+import AdminLayout from "@/modules/admin/layout/admin-layout";
+import { SessionProvider } from "next-auth/react";
 import { redirect } from "next/navigation";
+import { ReactNode } from "react";
 
-export default async function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function Layout({ children }: { children: ReactNode }) {
   const session = await auth();
-
-  if (!session?.user || session.user.role !== "admin") {
-    redirect("/admin-login");
-  }
-
+  if (!session) redirect("/admin-login");
   return (
-    <div style={{ maxWidth: 1100, margin: "0 auto", padding: 16 }}>
-      <header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: 16,
-        }}
-      >
-        <strong>Admin Panel</strong>
-        <form
-          action={async () => {
-            "use server";
-            await signOut({ redirectTo: "/admin-login" });
-          }}
-        >
-          <button type="submit">Đăng xuất</button>
-        </form>
-      </header>
-      {children}
-    </div>
+    <SessionProvider session={session}>
+      <AdminLayout>{children}</AdminLayout>
+    </SessionProvider>
   );
 }
