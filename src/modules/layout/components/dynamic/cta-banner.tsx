@@ -2,8 +2,8 @@
 import Button from "@/components/button";
 import Link from "@/components/link";
 import Text from "@/components/text/text";
+import { LayoutComponentDetail } from "@/modules/layout";
 import { MainContentWrapper } from "@/modules/layout/components/dynamic";
-import { LayoutComponentDetail } from "@/types/api";
 import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Flex, Stack } from "@/vendors/styled-system/jsx";

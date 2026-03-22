@@ -7,8 +7,8 @@ import {
 } from "@/components/icons";
 import Link from "@/components/link";
 import Text from "@/components/text/text";
+import { LayoutComponentDetail } from "@/modules/layout";
 import { MainContentWrapper } from "@/modules/layout/components/dynamic";
-import { LayoutComponentDetail } from "@/types/api";
 import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Center, Grid, HStack, Stack } from "@/vendors/styled-system/jsx";

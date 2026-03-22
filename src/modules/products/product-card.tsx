@@ -7,14 +7,15 @@ import Link from "@/components/link";
 import Text from "@/components/text";
 import { DAITIN_IMAGE } from "@/constants";
 import { useCart } from "@/hooks";
-import type { ProductCard as ProductCardType } from "@/types/api";
 import { formatPrice } from "@/utils/helpers/shared-helpers";
 import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Center, Stack } from "@/vendors/styled-system/jsx";
 import { useMemo } from "react";
+import type { ProductItem } from "./products";
+
 interface ProductCardProps {
-  product: ProductCardType;
+  product: ProductItem;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {

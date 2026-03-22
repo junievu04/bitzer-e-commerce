@@ -4,7 +4,7 @@ import { requireAdmin } from "@/lib/admin/admin-auth";
 import { connectDB } from "@/lib/mongodb";
 import { Category } from "@/models/Category";
 import { Product } from "@/models/Product";
-import { CategoryDTO } from "@/types/api";
+import type { CategoryDTO } from "@/modules/products";
 import { Types } from "mongoose";
 import { revalidatePath } from "next/cache";
 

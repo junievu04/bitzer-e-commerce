@@ -1,9 +1,9 @@
-import type { ProductCard as ProductCardType } from "@/types/api";
 import { Grid } from "@/vendors/styled-system/jsx";
 import ProductCard from "./product-card";
+import type { ProductItem } from "./products.d";
 
 interface ProductListProps {
-  products: ProductCardType[];
+  products: ProductItem[];
 }
 
 export default function ProductList({ products }: ProductListProps) {

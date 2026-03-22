@@ -1,7 +1,7 @@
 "use client";
 import Text from "@/components/text/text";
+import { LayoutComponentDetail } from "@/modules/layout";
 import { MainContentWrapper } from "@/modules/layout/components/dynamic";
-import { LayoutComponentDetail } from "@/types/api";
 import { useIntl } from "@/utils/intl";
 import { Box, Flex, Stack } from "@/vendors/styled-system/jsx";
 

@@ -2,7 +2,7 @@
 
 import { connectDB } from "@/lib/mongodb";
 import { IService, Service } from "@/models/Service";
-import type { Service as ServiceDTO, ServicesDTO } from "@/types/api";
+import type { Service as ServiceDTO, ServicesDTO } from "@/modules/services";
 import mongoose, { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 

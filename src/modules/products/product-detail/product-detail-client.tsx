@@ -7,17 +7,17 @@ import { Image } from "@/components/image";
 import Text from "@/components/text";
 import { DAITIN_IMAGE } from "@/constants";
 import { useCart } from "@/hooks";
-import type { ProductCard, ProductDetail } from "@/types/api";
 import { formatPrice } from "@/utils/helpers/shared-helpers";
 import { useIntl } from "@/utils/intl";
 import { Box, Flex, Grid, Stack } from "@/vendors/styled-system/jsx";
 import { isEmpty } from "lodash";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { HeaderTitleWrapper } from "../../layout/components/header-title-wrapper";
+import type { ProductDetail, ProductItem } from "../products.d";
 import SuggestedProductsSection from "../suggested-products-section";
 interface ProductDetailClientProps {
   product: ProductDetail;
-  suggestions?: ProductCard[] | [];
+  suggestions?: ProductItem[] | [];
 }
 
 const hadnleContactToBuy = (params: {

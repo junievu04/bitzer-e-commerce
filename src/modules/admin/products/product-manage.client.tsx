@@ -5,7 +5,7 @@ import Skeleton from "@/components/skeleton";
 import Text from "@/components/text";
 import TextField from "@/components/text-field";
 import { deleteProduct } from "@/lib/admin/manage/products";
-import { CategoryDTO, ProductDetail } from "@/types/api";
+import type { CategoryDTO, ProductDetail } from "@/modules/products";
 import { formatPrice } from "@/utils/helpers/shared-helpers";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Flex, Stack } from "@/vendors/styled-system/jsx";

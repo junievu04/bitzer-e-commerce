@@ -1,17 +1,10 @@
 import { connectDB } from "@/lib/mongodb";
 import { Product } from "@/models/Product";
-import type { CategoryDTO, ProductDetail } from "@/types/api";
+import type { CategoryDTO, ProductDetail } from "@/modules/products";
+import type { PopulatedCategory } from "@/types/server-actions";
 import { NextRequest, NextResponse } from "next/server";
 
 type Params = { slug: string };
-
-type PopulatedCategory = {
-  _id: { toString(): string };
-  name: string;
-  slug: string;
-  description?: string;
-  isActive: boolean;
-};
 
 export async function GET(
   _request: NextRequest,

@@ -1,7 +1,7 @@
 "use server";
 
-import type { Service, ServicesDTO } from "@/types/api";
 import { fetchResources } from "@/utils/fetchers/fetchers.server";
+import type { Service, ServicesDTO } from "../services.d";
 
 const fetchServices = async (): Promise<Service[] | null> => {
   try {

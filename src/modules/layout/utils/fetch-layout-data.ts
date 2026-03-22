@@ -1,6 +1,6 @@
 "use server";
 
-import type { LayoutData, LayoutDTO } from "@/types/api";
+import type { LayoutData, LayoutDTO } from "@/modules/layout";
 import { fetchResources } from "@/utils/fetchers/fetchers.server";
 
 const fetchLayoutData = async (

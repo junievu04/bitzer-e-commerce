@@ -1,6 +1,6 @@
 import { connectDB } from "@/lib/mongodb";
 import { IProduct, Product } from "@/models/Product";
-import type { ProductCard, ProductsDTO } from "@/types/api";
+import type { ProductItem, ProductsDTO } from "@/modules/products";
 import { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -9,7 +9,7 @@ const MAX_SUGGESTIONS = 8;
 
 function mapProductToCard(
   doc: IProduct & { _id: Types.ObjectId },
-): ProductCard {
+): ProductItem {
   return {
     id: String(doc._id),
     name: doc.name,

@@ -1,7 +1,7 @@
 "use server";
 
-import type { ProductsDTO, ProductSearchParams } from "@/types/api";
 import { fetchResources } from "@/utils/fetchers/fetchers.server";
+import type { ProductsDTO, ProductSearchParams } from "../products.d";
 
 interface FetchProductsParams {
   searchParams?: ProductSearchParams;

@@ -1,9 +1,9 @@
 "use client";
 
-import type { Service } from "@/types/api";
 import { useIntl } from "@/utils/intl";
 import { HeaderTitleWrapper } from "../layout/components/header-title-wrapper";
 import ServiceList from "./service-list";
+import type { Service } from "./services.d";
 
 export default function ServicesClient({
   services,

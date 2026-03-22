@@ -1,6 +1,6 @@
 "use client";
 import Text from "@/components/text";
-import { LayoutComponentDetail } from "@/types/api";
+import { LayoutComponentDetail } from "@/modules/layout";
 import { useIntl } from "@/utils/intl";
 import { Box, Stack } from "@/vendors/styled-system/jsx";
 

@@ -3,7 +3,7 @@
 import { requireAdmin } from "@/lib/admin/admin-auth";
 import { connectDB } from "@/lib/mongodb";
 import { IService, Service } from "@/models/Service";
-import { ServiceDetail } from "@/types/api";
+import type { ServiceDetail } from "@/modules/services";
 import { ServiceFormInput } from "@/types/server-actions";
 import { buildSlug, parseLines } from "@/utils/helpers/shared-helpers";
 import { revalidatePath } from "next/cache";

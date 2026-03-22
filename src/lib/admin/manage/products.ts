@@ -4,17 +4,10 @@ import { requireAdmin } from "@/lib/admin/admin-auth";
 import { connectDB } from "@/lib/mongodb";
 import { Category } from "@/models/Category";
 import { Product } from "@/models/Product";
-import { ProductDetail } from "@/types/api";
+import type { ProductDetail } from "@/modules/products";
+import type { PopulatedCategory } from "@/types/server-actions";
 import { Types } from "mongoose";
 import { revalidatePath } from "next/cache";
-
-type PopulatedCategory = {
-  _id: { toString(): string };
-  name: string;
-  slug: string;
-  description?: string;
-  isActive: boolean;
-};
 
 // Read
 

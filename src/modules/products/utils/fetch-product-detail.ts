@@ -1,7 +1,7 @@
 "use server";
 
-import type { ProductDetail } from "@/types/api";
 import { fetchResources } from "@/utils/fetchers/fetchers.server";
+import type { ProductDetail } from "../products.d";
 
 const fetchProductDetail = async (
   slug: string,

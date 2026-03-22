@@ -1,7 +1,7 @@
 "use server";
 
-import type { CategoryDTO } from "@/types/api";
 import { fetchResources } from "@/utils/fetchers/fetchers.server";
+import type { CategoryDTO } from "../products.d";
 
 const fetchCategories = async (): Promise<CategoryDTO[]> => {
   try {

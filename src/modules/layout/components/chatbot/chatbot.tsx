@@ -12,7 +12,8 @@ import Link from "@/components/link";
 import Text from "@/components/text";
 import TextField from "@/components/text-field";
 import { DAITIN_IMAGE, INFO_COMPANY } from "@/constants";
-import type { ProductCard, Service } from "@/types/api";
+import type { ProductItem } from "@/modules/products";
+import type { Service } from "@/modules/services";
 import { useIntl } from "@/utils/intl/use-intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Flex, Stack } from "@/vendors/styled-system/jsx";
@@ -83,7 +84,7 @@ export default function Chatbot({ data }: ChatbotProps) {
 
   const productSuggestionsByTopic = useMemo(
     () =>
-      new Map<string, ProductCard[]>(
+      new Map<string, ProductItem[]>(
         (data?.suggestionProducts ?? []).map((item) => [
           item.topiKey,
           item.products,

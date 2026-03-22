@@ -5,10 +5,10 @@ import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text";
 import { DAITIN_IMAGE } from "@/constants";
-import type { Service } from "@/types/api";
 import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Stack } from "@/vendors/styled-system/jsx";
+import type { Service } from "./services.d";
 interface ServiceCardProps {
   service: Service;
 }

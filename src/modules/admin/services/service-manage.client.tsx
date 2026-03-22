@@ -5,7 +5,7 @@ import Skeleton from "@/components/skeleton";
 import Text from "@/components/text";
 import { deleteService } from "@/lib/admin/manage/services";
 import ConfirmDialog from "@/modules/admin/layout/confirm-dialog";
-import { ServiceDetail } from "@/types/api";
+import type { ServiceDetail } from "@/modules/services";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Flex, Stack } from "@/vendors/styled-system/jsx";
 import { useMutation } from "@tanstack/react-query";

@@ -1,4 +1,4 @@
-import type { LayoutComponent } from "@/types/api";
+import type { LayoutComponent } from "@/modules/layout";
 import layoutComponents from "./layout-components";
 
 interface Props {

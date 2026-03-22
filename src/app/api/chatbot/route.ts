@@ -1,12 +1,13 @@
 import type { ChatbotData } from "@/modules/layout/components/chatbot/chatbot.d";
-import type { ProductCard, Service } from "@/types/api";
+import type { ProductItem } from "@/modules/products";
+import type { Service } from "@/modules/services";
 import { NextRequest, NextResponse } from "next/server";
 
 type TopicKey = "compressor" | "gas" | "repair" | "warranty";
 
 interface SuggestionResponse {
   topic: TopicKey;
-  products: ProductCard[];
+  products: ProductItem[];
   services: Service[];
 }
 

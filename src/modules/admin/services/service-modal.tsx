@@ -5,7 +5,7 @@ import Text from "@/components/text";
 import TextArea from "@/components/text-area";
 import TextField from "@/components/text-field";
 import { createService, updateService } from "@/lib/admin/manage/services";
-import { ServiceDetail } from "@/types/api";
+import type { ServiceDetail } from "@/modules/services";
 import { ServiceFormInput } from "@/types/server-actions";
 import { Flex, Stack } from "@/vendors/styled-system/jsx";
 import { useMutation } from "@tanstack/react-query";

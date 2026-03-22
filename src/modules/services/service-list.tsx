@@ -1,6 +1,6 @@
-import type { Service } from "@/types/api";
 import { Grid } from "@/vendors/styled-system/jsx";
 import ServiceCard from "./service-card";
+import type { Service } from "./services.d";
 
 interface ServiceListProps {
   services: Service[] | null;

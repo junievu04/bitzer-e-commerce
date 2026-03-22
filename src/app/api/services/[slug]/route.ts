@@ -1,7 +1,7 @@
 // app/api/services/[slug]/route.ts
 import { connectDB } from "@/lib/mongodb";
 import { IService, Service } from "@/models/Service";
-import type { ServiceDetail } from "@/types/api";
+import type { ServiceDetail } from "@/modules/services";
 import { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 

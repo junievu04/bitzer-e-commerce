@@ -4,14 +4,14 @@ import { Carousel } from "@/components/carousel";
 import { ArrowRight } from "@/components/icons";
 import Link from "@/components/link";
 import Text from "@/components/text";
-import type { ProductCard as ProductCardType } from "@/types/api";
 import { useIntl } from "@/utils/intl";
 import { Box, HStack, Stack } from "@/vendors/styled-system/jsx";
 import { useMemo } from "react";
 import ProductCard from "./product-card";
+import type { ProductItem } from "./products.d";
 
 interface SuggestedProductsSectionProps {
-  products: ProductCardType[];
+  products: ProductItem[];
   categorySlug?: string;
 }
 

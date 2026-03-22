@@ -4,7 +4,7 @@ import Text from "@/components/text";
 import TextArea from "@/components/text-area";
 import TextField from "@/components/text-field";
 import { createProduct } from "@/lib/admin/manage/products";
-import { CategoryDTO } from "@/types/api";
+import type { CategoryDTO } from "@/modules/products";
 import { Box, Flex, Grid, Stack, styled } from "@/vendors/styled-system/jsx";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";

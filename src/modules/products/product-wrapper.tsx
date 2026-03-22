@@ -1,20 +1,18 @@
 "use client";
 
 import { ProductFilter, ProductList, ProductSort } from "@/modules/products";
-import type { CategoryDTO, ProductCard, ProductSortType } from "@/types/api";
 import { Flex, Stack } from "@/vendors/styled-system/jsx";
 import { HeaderTitleWrapper } from "../layout/components/header-title-wrapper";
+import type { CategoryDTO, ProductItem, ProductSortType } from "./products.d";
 
 interface ProductWrapperProps {
-  products: ProductCard[];
+  products: ProductItem[];
   categories: CategoryDTO[];
   categorySlug: string;
   sortBy: ProductSortType;
-  searchText: string;
   totalLoaded: number;
   onSortChange: (sort: ProductSortType) => void;
   onCategoryChange: (categorySlug: string) => void;
-  onSearch: (text: string) => void;
 }
 
 export default function ProductWrapper({
@@ -22,11 +20,9 @@ export default function ProductWrapper({
   categories,
   categorySlug,
   sortBy,
-  searchText,
   totalLoaded,
   onSortChange,
   onCategoryChange,
-  onSearch,
 }: ProductWrapperProps) {
   const breadcrumbItems: {
     label: string;

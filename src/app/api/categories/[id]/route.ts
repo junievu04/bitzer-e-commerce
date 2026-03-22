@@ -1,6 +1,6 @@
 import { connectDB } from "@/lib/mongodb";
 import { Category } from "@/models/Category";
-import type { CategoryDTO } from "@/types/api";
+import type { CategoryDTO } from "@/modules/products";
 import { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 

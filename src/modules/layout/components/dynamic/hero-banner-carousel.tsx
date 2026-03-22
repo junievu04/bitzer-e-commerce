@@ -2,8 +2,8 @@
 import { Carousel } from "@/components/carousel";
 import { Image } from "@/components/image";
 import Link from "@/components/link";
+import { LayoutComponentDetail } from "@/modules/layout";
 import { MainContentWrapper } from "@/modules/layout/components/dynamic";
-import { LayoutComponentDetail } from "@/types/api";
 import { Box } from "@/vendors/styled-system/jsx";
 
 interface Slide {

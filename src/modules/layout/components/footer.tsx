@@ -322,6 +322,7 @@ export default function Footer() {
                   <Link
                     key={s.title}
                     href={s.url}
+                    target={s.url.startsWith("tel") ? "_self" : "_blank"}
                     tone="inverse"
                     hover="none"
                     title={s.title}

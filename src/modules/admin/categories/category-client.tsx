@@ -4,7 +4,7 @@ import Skeleton from "@/components/skeleton";
 import Text from "@/components/text";
 import { useMutation } from "@/hooks/use-mutate";
 import { deleteCategory } from "@/lib/admin/manage/categories";
-import { CategoryDTO } from "@/types/api";
+import type { CategoryDTO } from "@/modules/products";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Flex, Stack } from "@/vendors/styled-system/jsx";
 import { useState } from "react";

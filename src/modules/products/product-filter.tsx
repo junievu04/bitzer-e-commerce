@@ -1,5 +1,5 @@
 import { SelectDropdown, SelectOption } from "@/components/select-dropdown";
-import type { CategoryDTO } from "@/types/api";
+import type { CategoryDTO } from "./products.d";
 
 interface ProductFilterProps {
   categories: CategoryDTO[];

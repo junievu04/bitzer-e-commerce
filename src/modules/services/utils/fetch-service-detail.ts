@@ -1,7 +1,7 @@
 "use server";
 
-import type { ServiceDetail } from "@/types/api";
 import { fetchResources } from "@/utils/fetchers/fetchers.server";
+import type { ServiceDetail } from "../services.d";
 
 const fetchServiceDetail = async (
   slug: string,

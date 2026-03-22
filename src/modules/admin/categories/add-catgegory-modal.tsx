@@ -4,7 +4,7 @@ import Text from "@/components/text";
 import TextField from "@/components/text-field";
 import { useMutation } from "@/hooks/use-mutate";
 import { createCategory } from "@/lib/admin/manage/categories";
-import { CategoryDTO } from "@/types/api";
+import type { CategoryDTO } from "@/modules/products";
 import { Flex, Stack } from "@/vendors/styled-system/jsx";
 import { useState } from "react";
 import ErrorBox from "../layout/error-box";

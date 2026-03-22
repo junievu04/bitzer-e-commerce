@@ -2,10 +2,10 @@ import { connectDB } from "@/lib/mongodb";
 import { Category } from "@/models/Category";
 import { IProduct, Product } from "@/models/Product";
 import type {
-  ProductCard,
+  ProductItem,
   ProductsDTO,
   ProductSearchParams,
-} from "@/types/api";
+} from "@/modules/products";
 import { buildSlug } from "@/utils/helpers/shared-helpers";
 import mongoose, { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
@@ -23,7 +23,7 @@ function parseLimit(searchParams: URLSearchParams): number {
 
 function mapProductToCard(
   doc: IProduct & { _id: Types.ObjectId },
-): ProductCard {
+): ProductItem {
   return {
     id: String(doc._id),
     name: doc.name,

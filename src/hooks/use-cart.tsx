@@ -1,6 +1,9 @@
 "use client";
 
-import type { ProductCard as ProductCardType } from "@/types/api";
+import type {
+  ProductItem as ProductCardType,
+  ProductItem,
+} from "@/modules/products";
 import {
   createContext,
   ReactNode,
@@ -12,7 +15,7 @@ import {
 } from "react";
 
 export interface CartItem {
-  product: ProductCardType;
+  product: ProductItem;
   quantity: number;
 }
 
@@ -20,7 +23,7 @@ interface CartContextType {
   items: CartItem[];
   totalItems: number;
   totalQuantity: number;
-  addToCart: (product: ProductCardType, quantity?: number) => void;
+  addToCart: (product: ProductItem, quantity?: number) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;

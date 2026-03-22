@@ -1,8 +1,9 @@
 import { connectDB } from "@/lib/mongodb";
 import { Category } from "@/models/Category";
 import { Product, type IProduct } from "@/models/Product";
-import { Service, type IService } from "@/models/Service";
-import type { ProductCard, Service as ServiceDTO } from "@/types/api";
+import { Service as ServiceModel, type IService } from "@/models/Service";
+import type { ProductItem } from "@/modules/products";
+import type { Service } from "@/modules/services";
 import { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -13,11 +14,11 @@ type ServiceDoc = IService & { _id: Types.ObjectId };
 
 interface ChatbotSuggestionsResponse {
   topic: TopicKey;
-  products: ProductCard[];
-  services: ServiceDTO[];
+  products: ProductItem[];
+  services: Service[];
 }
 
-function mapProduct(doc: ProductDoc): ProductCard {
+function mapProduct(doc: ProductDoc): ProductItem {
   return {
     id: String(doc._id),
     name: doc.name,
@@ -28,7 +29,7 @@ function mapProduct(doc: ProductDoc): ProductCard {
   };
 }
 
-function mapService(doc: ServiceDoc): ServiceDTO {
+function mapService(doc: ServiceDoc): Service {
   return {
     id: String(doc._id),
     name: doc.name,
@@ -38,11 +39,13 @@ function mapService(doc: ServiceDoc): ServiceDTO {
   };
 }
 
-async function getProductsByTopic(topic: TopicKey): Promise<ProductCard[]> {
+async function getProductsByTopic(topic: TopicKey): Promise<ProductItem[]> {
   if (topic !== "compressor" && topic !== "gas") return [];
 
   const categoryQuery =
-    topic === "gas" ? { slug: { $regex: /gas/i } } : { slug: { $regex: /^may-nen/i } };
+    topic === "gas"
+      ? { slug: { $regex: /gas/i } }
+      : { slug: { $regex: /^may-nen/i } };
   const categories = await Category.find(categoryQuery)
     .select({ _id: 1 })
     .limit(10)
@@ -58,7 +61,7 @@ async function getProductsByTopic(topic: TopicKey): Promise<ProductCard[]> {
   return docs.map(mapProduct);
 }
 
-async function getServicesByTopic(topic: TopicKey): Promise<ServiceDTO[]> {
+async function getServicesByTopic(topic: TopicKey): Promise<Service[]> {
   if (topic !== "repair" && topic !== "warranty") return [];
 
   const serviceRegex =
@@ -66,7 +69,7 @@ async function getServicesByTopic(topic: TopicKey): Promise<ServiceDTO[]> {
       ? /(sua chua|sửa chữa|repair)/i
       : /(bao tri|bảo trì|maintenance)/i;
 
-  const docs = await Service.find({
+  const docs = await ServiceModel.find({
     isActive: true,
     $or: [
       { name: { $regex: serviceRegex } },
@@ -88,7 +91,10 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const topic = searchParams.get("topic") as TopicKey | null;
 
-    if (!topic || !["compressor", "gas", "repair", "warranty"].includes(topic)) {
+    if (
+      !topic ||
+      !["compressor", "gas", "repair", "warranty"].includes(topic)
+    ) {
       return NextResponse.json({ error: "Invalid topic" }, { status: 400 });
     }
 

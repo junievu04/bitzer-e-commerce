@@ -6,11 +6,11 @@ import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text";
 import { DAITIN_IMAGE } from "@/constants";
-import { ServiceDetail } from "@/types/api";
 import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Flex, Grid, Stack } from "@/vendors/styled-system/jsx";
 import { HeaderTitleWrapper } from "../layout/components/header-title-wrapper";
+import type { ServiceDetail } from "./services.d";
 
 interface Props {
   data: ServiceDetail | null;

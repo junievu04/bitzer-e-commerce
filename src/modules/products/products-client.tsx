@@ -5,21 +5,21 @@ import { House, MagnifyingGlass } from "@/components/icons";
 import Link from "@/components/link";
 import { Spinner } from "@/components/spinner";
 import Text from "@/components/text";
+import useInfiniteScroll from "@/hooks/use-infinite-scroll";
 import { ProductWrapper } from "@/modules/products";
-import {
-  CategoryDTO,
-  ProductCard,
-  ProductsDTO,
-  ProductSearchParams,
-  ProductSortType,
-} from "@/types/api";
 import { Box, Center, Stack } from "@/vendors/styled-system/jsx";
 import { useQuery } from "@tanstack/react-query";
 import { isEmpty } from "lodash-es";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  CategoryDTO,
+  ProductItem,
+  ProductsDTO,
+  ProductSearchParams,
+  ProductSortType,
+} from "./products.d";
 import fetchProducts from "./utils/fetch-products";
-import useInfiniteScroll from "@/hooks/use-infinite-scroll";
 
 interface Props {
   products?: ProductsDTO | null;
@@ -42,7 +42,7 @@ export default function ProductsClient({
   const elementRef = useRef<HTMLDivElement | null>(null);
   const isBottom = useInfiniteScroll(elementRef);
 
-  const [allProducts, setAllProducts] = useState<ProductCard[]>(
+  const [allProducts, setAllProducts] = useState<ProductItem[]>(
     initialData?.products ?? [],
   );
   const [next, setNext] = useState<string | null>(initialData?.next ?? null);
@@ -72,7 +72,6 @@ export default function ProductsClient({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isBottom]);
 
-  // Xử lý data trả về
   useEffect(() => {
     if (!data) return;
     setAllProducts((prev) =>
@@ -122,19 +121,6 @@ export default function ProductsClient({
     [urlSearchParams, updateUrl],
   );
 
-  const handleSearch = useCallback(
-    (text: string) => {
-      updateUrl(urlSearchParams.get("category") ?? null, text);
-      setSearchParams({
-        text: text || undefined,
-        categorySlug: urlSearchParams.get("category") ?? undefined,
-        sortBy: searchParams.sortBy,
-        next: null,
-      });
-    },
-    [urlSearchParams, searchParams.sortBy, updateUrl],
-  );
-
   useEffect(() => {
     const category = urlSearchParams.get("category") ?? undefined;
     const text = urlSearchParams.get("text") ?? undefined;
@@ -161,14 +147,12 @@ export default function ProductsClient({
         totalLoaded={allProducts.length}
         categorySlug={urlSearchParams.get("category") ?? ""}
         sortBy={searchParams.sortBy ?? "default"}
-        searchText={urlSearchParams.get("text") ?? ""}
         onSortChange={(s) =>
           handleFilterChange(s, urlSearchParams.get("category") ?? null)
         }
         onCategoryChange={(c) =>
           handleFilterChange(searchParams.sortBy ?? "default", c)
         }
-        onSearch={handleSearch}
       />
 
       {isLoading && (
