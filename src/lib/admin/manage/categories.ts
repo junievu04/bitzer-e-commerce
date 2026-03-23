@@ -5,7 +5,7 @@ import { connectDB } from "@/lib/mongodb";
 import { Category } from "@/models/Category";
 import { Product } from "@/models/Product";
 import type { CategoryDTO } from "@/modules/products";
-import { buildSlug } from "@/utils/helpers/shared-helpers";
+import { buildBaseSlug } from "@/utils/helpers/shared-helpers";
 import { Types } from "mongoose";
 import { revalidatePath } from "next/cache";
 
@@ -33,16 +33,21 @@ export async function createCategory(data: {
   await requireAdmin();
   try {
     await connectDB();
-    const requestData = {
+    await Category.create({
       name: data.name.trim(),
-      slug: buildSlug(data.name),
+      slug: buildBaseSlug(data.name),
       description: data.description?.trim(),
       isActive: true,
-    };
-    await Category.create(requestData);
+    });
     revalidatePath("/admin/categories");
     return { success: true };
   } catch (e: unknown) {
+    if ((e as { code?: number })?.code === 11000) {
+      return {
+        success: false,
+        error: "Tên danh mục này đã tồn tại, vui lòng đặt tên khác",
+      };
+    }
     return {
       success: false,
       error: e instanceof Error ? e.message : "Lỗi không xác định",

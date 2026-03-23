@@ -5,12 +5,15 @@ import TextArea from "@/components/text-area";
 import TextField from "@/components/text-field";
 import NumberField from "@/components/text-field/number-field";
 import { createProduct } from "@/lib/admin/manage/products";
-import type { CategoryDTO } from "@/modules/products";
+import type { CategoryDTO, ProductSpecification } from "@/modules/products";
+import type { ProductFormInput } from "@/types/server-actions";
+import { buildSlug } from "@/utils/helpers/shared-helpers";
 import { Box, Flex, Grid, Stack, styled } from "@/vendors/styled-system/jsx";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ErrorBox from "../layout/error-box";
 import ModalBackdrop from "../layout/modal-backdrop";
+import SpecificationFields from "./specification-fields";
 
 interface Props {
   categories: CategoryDTO[];
@@ -42,17 +45,24 @@ export default function AddProductModal({
   onClose,
   onSuccess,
 }: Props) {
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<ProductFormInput>({
     name: "",
-    slug: "",
     brief: "",
     description: "",
+    images: "",
     price: 0,
     stock: 0,
     categoryId: "",
+    specifications: [] as ProductSpecification[],
   });
+  const [slugPreview, setSlugPreview] = useState("");
   const set = (key: string, val: string | number) =>
     setForm((f) => ({ ...f, [key]: val }));
+
+  useEffect(() => {
+    /// eslint-disable-next-line react-hooks/exhaustive-deps
+    setSlugPreview(form.name ? buildSlug(form.name) : "");
+  }, [form.name]);
 
   const {
     mutate: handleSubmit,
@@ -84,11 +94,24 @@ export default function AddProductModal({
             />
           </Box>
           <Box gridColumn="span 2">
-            <TextField
-              label="Slug (tự tạo nếu để trống)"
-              value={form.slug}
-              onChange={(e) => set("slug", e.target.value)}
-            />
+            <Stack gap="1">
+              <Text variant="caption-1" weight="medium" tone="secondary">
+                Slug (tự tạo)
+              </Text>
+              <Text
+                variant="caption-1"
+                tone="secondary"
+                fontFamily="mono"
+                bg="gray.50"
+                px="3"
+                py="2"
+                borderRadius="md"
+                border="1px solid {colors.gray.200}"
+                minH="40px"
+              >
+                {slugPreview}
+              </Text>
+            </Stack>
           </Box>
           <NumberField
             label="Giá (VNĐ) *"
@@ -124,6 +147,14 @@ export default function AddProductModal({
             </Stack>
           </Box>
           <Box gridColumn="span 2">
+            <TextArea
+              label="Ảnh"
+              value={form.images}
+              message="Mỗi dòng = 1 URL ảnh, ảnh đầu tiên là thumbnail"
+              onChange={(e) => set("images", e.target.value)}
+            />
+          </Box>
+          <Box gridColumn="span 2">
             <TextField
               label="Mô tả ngắn"
               value={form.brief}
@@ -133,9 +164,17 @@ export default function AddProductModal({
           <Box gridColumn="span 2">
             <TextArea
               label="Mô tả chi tiết"
-              rows={4}
+              rows={6}
               value={form.description}
               onChange={(e) => set("description", e.target.value)}
+            />
+          </Box>
+          <Box gridColumn="span 2">
+            <SpecificationFields
+              value={form.specifications ?? []}
+              onChange={(specs) =>
+                setForm((f) => ({ ...f, specifications: specs }))
+              }
             />
           </Box>
         </Grid>
@@ -150,12 +189,13 @@ export default function AddProductModal({
             onClick={() =>
               handleSubmit({
                 name: form.name,
-                slug: form.slug,
                 brief: form.brief,
                 description: form.description,
                 price: Number(form.price),
                 stock: Number(form.stock),
                 categoryId: form.categoryId,
+                specifications: form.specifications,
+                images: form.images,
               })
             }
           >

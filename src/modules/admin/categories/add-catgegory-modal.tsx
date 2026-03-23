@@ -5,7 +5,7 @@ import TextField from "@/components/text-field";
 import { useMutation } from "@/hooks/use-mutate";
 import { createCategory } from "@/lib/admin/manage/categories";
 import type { CategoryDTO } from "@/modules/products";
-import { buildSlug } from "@/utils/helpers/shared-helpers";
+import { buildBaseSlug } from "@/utils/helpers/shared-helpers";
 import { Flex, Stack } from "@/vendors/styled-system/jsx";
 import { useEffect, useState } from "react";
 import ErrorBox from "../layout/error-box";
@@ -25,7 +25,7 @@ export default function AddCategoryModal({
 
   useEffect(() => {
     /// eslint-disable-next-line react-hooks/exhaustive-deps
-    setSlug(name ? buildSlug(name) : "");
+    setSlug(name ? buildBaseSlug(name) : "");
   }, [name]);
 
   const {

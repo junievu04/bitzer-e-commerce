@@ -6,7 +6,7 @@ import type {
   ProductsDTO,
   ProductSearchParams,
 } from "@/modules/products";
-import { buildSlug } from "@/utils/helpers/shared-helpers";
+import { normalizeText } from "@/utils/helpers/shared-helpers";
 import mongoose, { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -64,9 +64,12 @@ export async function GET(request: NextRequest) {
     }
 
     if (text) {
-      const normalizedText = buildSlug(text).replace(/\s+/g, "-");
+      const normalizedText = normalizeText(text).replace(/\s+/g, "-");
 
-      query.slug = { $regex: new RegExp(normalizedText, "i") };
+      query.$or = [
+        { slug: { $regex: new RegExp(normalizedText, "i") } },
+        { name: { $regex: new RegExp(text.trim(), "i") } },
+      ];
     }
 
     if (categorySlug) {

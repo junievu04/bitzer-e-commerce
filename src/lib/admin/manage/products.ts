@@ -3,66 +3,119 @@
 import { requireAdmin } from "@/lib/admin/admin-auth";
 import { connectDB } from "@/lib/mongodb";
 import { Category } from "@/models/Category";
-import { Product } from "@/models/Product";
-import type { ProductDetail } from "@/modules/products";
+import { IProduct, Product } from "@/models/Product";
+import type { ProductDetail, ProductSpecification } from "@/modules/products";
 import type {
   PopulatedCategory,
-  PopulatedProductSpecification,
+  ProductFormInput,
+  ProductUpdateInput,
 } from "@/types/server-actions";
+import {
+  buildSlug,
+  normalizeText,
+  parseLines,
+} from "@/utils/helpers/shared-helpers";
 import { Types } from "mongoose";
 import { revalidatePath } from "next/cache";
 
-// Read
+// ─── Constants ────────────────────────────────────────────────────────────────
 
-export async function getProducts(): Promise<ProductDetail[]> {
+const PAGE_SIZE = 20;
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function mapDoc(doc: IProduct): ProductDetail {
+  const cat = doc.category as unknown as PopulatedCategory;
+  const specifications = (doc.specifications ?? []) as ProductSpecification[];
+  return {
+    id: String(doc._id),
+    name: doc.name,
+    slug: doc.slug,
+    price: doc.price,
+    stock: doc.stock,
+    images: doc.images ?? [],
+    brief: doc.brief,
+    description: doc.description,
+    specifications: specifications.map((s) => ({
+      label: s.label,
+      value: s.value,
+    })),
+    category: {
+      id: String(cat?._id ?? ""),
+      name: cat?.name ?? "",
+      slug: cat?.slug ?? "",
+      description: cat?.description,
+      isActive: cat?.isActive ?? false,
+    },
+  };
+}
+
+// Pagination type
+
+export interface ProductPage {
+  products: ProductDetail[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+}
+
+// Read with pagination
+
+export async function getProducts(page = 1, search = ""): Promise<ProductPage> {
   await connectDB();
-  const docs = await Product.find()
-    .populate("category", "name slug description isActive")
-    .sort({ createdAt: -1 })
-    .lean();
 
-  return docs.map((doc) => {
-    const cat = doc.category as PopulatedCategory;
-    const specifications =
-      doc.specifications as PopulatedProductSpecification[];
-    return {
-      id: String(doc._id),
-      name: doc.name,
-      slug: doc.slug,
-      price: doc.price,
-      stock: doc.stock,
-      images: doc.images ?? [],
-      brief: doc.brief,
-      description: doc.description,
-      specifications: specifications.map(
-        (spec: PopulatedProductSpecification) => ({
-          label: spec.label,
-          value: spec.value,
-        }),
-      ),
-      category: {
-        id: String(cat?._id ?? ""),
-        name: cat?.name ?? "",
-        slug: cat?.slug ?? "",
-        description: cat?.description,
-        isActive: cat?.isActive ?? false,
-      },
-    };
-  });
+  const filter: Record<string, unknown> = {};
+  if (search.trim()) {
+    const normalizedText = normalizeText(search.trim()).replace(/\s+/g, "-");
+
+    filter.$or = [
+      { slug: { $regex: new RegExp(normalizedText, "i") } },
+      { name: { $regex: new RegExp(search.trim(), "i") } },
+    ];
+  }
+
+  const [total, docs] = await Promise.all([
+    Product.countDocuments(filter),
+    Product.find(filter)
+      .populate("category", "name slug description isActive")
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * PAGE_SIZE)
+      .limit(PAGE_SIZE)
+      .lean(),
+  ]);
+
+  console.log("junie test", total, docs.map(mapDoc));
+
+  const totalPages = Math.ceil(total / PAGE_SIZE);
+
+  return {
+    products: docs.map(mapDoc),
+    total,
+    page,
+    pageSize: PAGE_SIZE,
+    totalPages,
+    hasNext: page < totalPages,
+    hasPrev: page > 1,
+  };
 }
 
 // Create
 
-export async function createProduct(data: {
-  name: string;
-  slug?: string;
-  price: number;
-  stock: number;
-  categoryId: string;
-  brief?: string;
-  description?: string;
-}): Promise<{ success: boolean; error?: string }> {
+export async function createProduct(
+  data: ProductFormInput,
+): Promise<{ success: boolean; data?: ProductDetail; error?: string }> {
   await requireAdmin();
+
+  if (!data.name?.trim())
+    return { success: false, error: "Tên sản phẩm không được trống" };
+  if (!data.categoryId)
+    return { success: false, error: "Vui lòng chọn danh mục" };
+  if (typeof data.price !== "number" || data.price < 0)
+    return { success: false, error: "Giá không hợp lệ" };
+
   try {
     await connectDB();
 
@@ -72,28 +125,28 @@ export async function createProduct(data: {
     const category = await Category.findById(data.categoryId).lean();
     if (!category) return { success: false, error: "Không tìm thấy danh mục" };
 
-    const slug = (data.slug?.trim() || data.name)
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
-      .trim()
-      .replace(/\s+/g, "-")
-      .replace(/[^a-z0-9-]/g, "");
+    if (!data.name?.trim())
+      return { success: false, error: "Tên sản phẩm không được trống" };
 
-    await Product.create({
+    const created = await Product.create({
       name: data.name.trim(),
-      slug,
+      slug: buildSlug(data.name),
       price: data.price,
-      stock: data.stock,
-      images: [],
+      stock: data.stock ?? 0,
+      images: data.images ? parseLines(data.images) : [],
       brief: data.brief?.trim(),
       description: data.description?.trim(),
-      specifications: [],
+      specifications: data.specifications,
       category: new Types.ObjectId(data.categoryId),
     });
 
+    // Populate category để mapDoc hoạt động đúng
+    const populated = await Product.findById(created._id)
+      .populate("category", "name slug description isActive")
+      .lean();
+
     revalidatePath("/admin/products");
-    return { success: true };
+    return { success: true, data: mapDoc(populated) };
   } catch (e: unknown) {
     if ((e as { code?: number })?.code === 11000) {
       return {
@@ -111,9 +164,9 @@ export async function createProduct(data: {
 // Update
 
 export async function updateProduct(
-  slug: string,
-  data: { price?: number; stock?: number; description?: string },
-): Promise<{ success: boolean; error?: string }> {
+  id: string,
+  data: ProductUpdateInput,
+): Promise<{ success: boolean; data?: ProductDetail; error?: string }> {
   await requireAdmin();
   try {
     await connectDB();
@@ -123,17 +176,22 @@ export async function updateProduct(
     if (typeof data.stock === "number") update.stock = data.stock;
     if (typeof data.description === "string")
       update.description = data.description;
+    if (typeof data.images === "string")
+      update.images = data.images ? parseLines(data.images) : [];
+    if (data.specifications) update.specifications = data.specifications;
 
     const updated = await Product.findOneAndUpdate(
-      { slug: slug.trim().toLowerCase() },
+      { _id: new Types.ObjectId(id) },
       { $set: update },
       { new: true },
-    ).lean();
+    )
+      .populate("category", "name slug description isActive")
+      .lean();
 
     if (!updated) return { success: false, error: "Không tìm thấy sản phẩm" };
 
     revalidatePath("/admin/products");
-    return { success: true };
+    return { success: true, data: mapDoc(updated) };
   } catch (e: unknown) {
     return {
       success: false,
@@ -150,13 +208,10 @@ export async function deleteProduct(
   await requireAdmin();
   try {
     await connectDB();
-
     const deleted = await Product.findOneAndDelete({
       _id: new Types.ObjectId(id),
     }).lean();
-
     if (!deleted) return { success: false, error: "Không tìm thấy sản phẩm" };
-
     revalidatePath("/admin/products");
     return { success: true };
   } catch (e: unknown) {

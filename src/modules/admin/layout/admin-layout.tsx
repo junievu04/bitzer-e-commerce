@@ -1,17 +1,23 @@
 "use client";
 
 import Button from "@/components/button";
-import { Boxes, ClipboardPaper, Gear, ThumbsUp } from "@/components/icons";
+import {
+  Boxes,
+  ClipboardPaper,
+  Gear,
+  MagnifyingGlass,
+  ThumbsUp,
+} from "@/components/icons";
 import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text";
+import TextField from "@/components/text-field";
 import { INFO_COMPANY, LOGO_IMAGE } from "@/constants";
-import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Flex, Stack } from "@/vendors/styled-system/jsx";
 import { signOut, useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
-import { ReactNode } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { ReactNode, useState } from "react";
 
 // ─── Nav items ────────────────────────────────────────────────────────────────
 
@@ -22,12 +28,28 @@ const NAV_ITEMS = [
   { href: "/admin/services", label: "Dịch vụ", icon: ThumbsUp },
 ];
 
+// Pages có search
+const SEARCHABLE = ["/admin/products", "/admin/categories", "/admin/services"];
+
 // ─── Layout ───────────────────────────────────────────────────────────────────
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
-  const { t } = useIntl();
   const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { data: session } = useSession();
+
+  const isSearchable = SEARCHABLE.some((p) => pathname.startsWith(p));
+  const [searchInput, setSearchInput] = useState(
+    searchParams.get("search") ?? "",
+  );
+
+  function handleSearch() {
+    if (!isSearchable) return;
+    const params = new URLSearchParams();
+    if (searchInput.trim()) params.set("search", searchInput.trim());
+    router.push(`${pathname}?${params.toString()}`);
+  }
 
   return (
     <Flex minH="100vh" bg="gray.50">
@@ -103,7 +125,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                     tone="inverse"
                     className={css({ opacity: isActive ? "1" : "0.7" })}
                   >
-                    {t(item.label)}
+                    {item.label}
                   </Text>
                 </Flex>
               </Link>
@@ -142,15 +164,62 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               fullWidth
               onClick={() => signOut({ callbackUrl: "/admin-login" })}
             >
-              {t("Đăng xuất")}
+              Đăng xuất
             </Button>
           </Stack>
         </Box>
       </Box>
 
       {/* Main */}
-      <Box flex="1" overflow="auto">
-        {children}
+      <Box flex="1" overflow="auto" display="flex" flexDirection="column">
+        {/* Top bar với search */}
+        <Box
+          bg="white"
+          borderBottom="1px solid {colors.gray.200}"
+          px={{ base: "4", md: "8" }}
+          py="3"
+          position="sticky"
+          top="0"
+          zIndex="10"
+        >
+          <Flex alignItems="center" justifyContent="space-between" gap="4">
+            {/* Page title */}
+            <Text variant="paragraph-1" weight="bold" tone="primary">
+              {NAV_ITEMS.find((n) => pathname.startsWith(n.href))?.label ??
+                "Admin"}
+            </Text>
+
+            {/* Search — chỉ hiện trên trang có search */}
+            {isSearchable && (
+              <Flex
+                gap="2"
+                alignItems="center"
+                flex="1"
+                maxW="400px"
+                as="form"
+                onSubmit={(e: React.FormEvent) => {
+                  e.preventDefault();
+                  handleSearch();
+                }}
+              >
+                <Box flex="1">
+                  <TextField
+                    placeholder="Tìm theo tên, slug..."
+                    value={searchInput}
+                    leftAdornment={MagnifyingGlass}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                  />
+                </Box>
+                <Button type="submit" variant="default" size="sm">
+                  Tìm
+                </Button>
+              </Flex>
+            )}
+          </Flex>
+        </Box>
+
+        {/* Page content */}
+        <Box flex="1">{children}</Box>
       </Box>
     </Flex>
   );

@@ -14,6 +14,7 @@ import TextField from "@/components/text-field";
 import { DAITIN_IMAGE, INFO_COMPANY } from "@/constants";
 import type { ProductItem } from "@/modules/products";
 import type { Service } from "@/modules/services";
+import { normalizeText } from "@/utils/helpers/shared-helpers";
 import { useIntl } from "@/utils/intl/use-intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Flex, Stack } from "@/vendors/styled-system/jsx";
@@ -43,13 +44,6 @@ function getChatbotResponse(message: string): ChatRule {
     keywords: [],
     response: `"Vui lòng liên hệ hotline ${INFO_COMPANY.phone} hoặc chat trực tiếp qua Zalo/Messenger.`,
   };
-}
-
-function normalizeText(text?: string) {
-  return (text ?? "")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase();
 }
 
 function matchServiceByTopic(service: SuggestionService, topic: TopicKey) {

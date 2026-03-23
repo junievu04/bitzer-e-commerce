@@ -14,6 +14,7 @@ const CategorySchema = new Schema<ICategory>(
     name: { type: String, required: true, trim: true },
     slug: {
       type: String,
+      unique: true,
       lowercase: true,
       trim: true,
     },

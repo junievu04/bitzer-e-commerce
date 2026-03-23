@@ -1,70 +1,76 @@
 "use client";
 
 import Button from "@/components/button";
-import Skeleton from "@/components/skeleton";
 import Text from "@/components/text";
-import TextField from "@/components/text-field";
-import { deleteProduct } from "@/lib/admin/manage/products";
+import { useToast } from "@/components/toast";
+import { deleteProduct, type ProductPage } from "@/lib/admin/manage/products";
+import ConfirmDialog from "@/modules/admin/layout/confirm-dialog";
 import type { CategoryDTO, ProductDetail } from "@/modules/products";
 import { formatPrice } from "@/utils/helpers/shared-helpers";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Flex, Stack } from "@/vendors/styled-system/jsx";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
-import ConfirmDialog from "../layout/confirm-dialog";
-import ErrorBox from "../layout/error-box";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useTransition } from "react";
+import SkeletonRows from "../layout/skeleton-list";
 import AddProductModal from "./add-product-modal";
 import EditProductModal from "./edit-product-modal";
-
+import ProductPagination from "./product-pagination";
 interface Props {
-  initialProducts: ProductDetail[];
+  initialData: ProductPage;
   initialCategories: CategoryDTO[];
 }
 
-export default function ProductClient({
-  initialProducts,
+export default function ProductManageClient({
+  initialData,
   initialCategories,
 }: Props) {
-  const [products, setProducts] = useState<ProductDetail[]>(initialProducts);
-  const [search, setSearch] = useState("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { showSuccess, showError, toastElement } = useToast();
+
   const [showAdd, setShowAdd] = useState(false);
   const [editing, setEditing] = useState<ProductDetail | null>(null);
   const [confirmId, setConfirmId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
-  const {
-    mutate: handleDelete,
-    isPending,
-    error,
-  } = useMutation({
-    mutationFn: (id: string) => deleteProduct(id),
-    onSuccess: (data, id) => {
-      if (data?.success) {
-        setProducts((prev) => prev.filter((p) => p.id !== id));
+  function navigate(page: number) {
+    const params = new URLSearchParams(searchParams.toString());
+    if (page > 1) params.set("page", String(page));
+    else params.delete("page");
+    startTransition(() => {
+      router.push(`/admin/products?${params.toString()}`, { scroll: false });
+    });
+  }
+
+  function refreshCurrentPage() {
+    startTransition(() => router.refresh());
+  }
+
+  const { mutate: doDelete } = useMutation({
+    mutationFn: (id: string) => {
+      setDeletingId(id);
+      return deleteProduct(id);
+    },
+    onSuccess: (res) => {
+      setDeletingId(null);
+      if (res.success) {
+        showSuccess("Xóa sản phẩm thành công");
+        refreshCurrentPage();
+      } else {
+        showError(res.error ?? "Xóa thất bại");
       }
     },
-    onError: (error) => {
-      console.error(error);
+    onError: (e) => {
+      setDeletingId(null);
+      showError(e instanceof Error ? e.message : "Lỗi không xác định");
     },
   });
 
-  function handleAdded() {
-    window.location.reload();
-  }
-
-  function handleUpdated(id: string, price: number, stock: number) {
-    setProducts((prev) =>
-      prev.map((p) => (p.id === id ? { ...p, price, stock } : p)),
-    );
-  }
-
-  const filtered = products.filter(
-    (p) =>
-      p.name.toLowerCase().includes(search.toLowerCase()) ||
-      p.slug.toLowerCase().includes(search.toLowerCase()),
-  );
-
   return (
     <Box p={{ base: "4", md: "8" }}>
+      {toastElement}
       <Stack gap="6">
         <Flex
           justifyContent="space-between"
@@ -77,23 +83,13 @@ export default function ProductClient({
               Quản lý sản phẩm
             </Text>
             <Text variant="caption-1" tone="secondary">
-              {filtered.length} sản phẩm
+              {initialData.total} sản phẩm
             </Text>
           </Stack>
           <Button variant="default" onClick={() => setShowAdd(true)}>
             + Thêm sản phẩm
           </Button>
         </Flex>
-
-        <Box maxW="400px">
-          <TextField
-            placeholder="Tìm theo tên hoặc slug..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </Box>
-
-        {error && <ErrorBox message={error.message} />}
 
         <Box
           bg="white"
@@ -131,37 +127,20 @@ export default function ProductClient({
             <Box w="120px" />
           </Flex>
 
-          {isPending ? (
-            <Stack gap="0">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <Flex
-                  key={i}
-                  px="4"
-                  py="4"
-                  gap="4"
-                  alignItems="center"
-                  borderBottom="1px solid {colors.gray.100}"
-                >
-                  <Skeleton flex="2" h="20px" />
-                  <Skeleton flex="1" h="16px" />
-                  <Skeleton flex="1" h="16px" />
-                  <Skeleton w="60px" h="16px" />
-                  <Skeleton w="110px" h="32px" borderRadius="md" />
-                </Flex>
-              ))}
-            </Stack>
-          ) : filtered.length === 0 ? (
+          {initialData.products.length === 0 ? (
             <Box px="4" py="12" textAlign="center">
               <Text tone="secondary">Không có sản phẩm nào</Text>
             </Box>
+          ) : isPending ? (
+            <SkeletonRows />
           ) : (
-            filtered.map((product, i) => (
+            initialData.products.map((product, i) => (
               <Flex
                 key={product.id}
                 px="4"
                 py="3"
                 borderBottom={
-                  i < filtered.length - 1
+                  i < initialData.products.length - 1
                     ? "1px solid {colors.gray.100}"
                     : "none"
                 }
@@ -212,36 +191,52 @@ export default function ProductClient({
                   <Button
                     variant="plain"
                     size="sm"
-                    disabled={isPending}
+                    disabled={deletingId === product.id}
                     onClick={() => setConfirmId(product.id)}
                     className={css({
                       color: "danger.base",
                       _hover: { bg: "danger.light" },
                     })}
                   >
-                    {isPending ? "..." : "Xóa"}
+                    {deletingId === product.id ? "..." : "Xóa"}
                   </Button>
                 </Flex>
               </Flex>
             ))
           )}
         </Box>
+
+        <ProductPagination
+          page={initialData.page}
+          totalPages={initialData.totalPages}
+          total={initialData.total}
+          pageSize={initialData.pageSize}
+          hasNext={initialData.hasNext}
+          hasPrev={initialData.hasPrev}
+          onPageChange={navigate}
+        />
       </Stack>
 
       {showAdd && (
         <AddProductModal
           categories={initialCategories}
           onClose={() => setShowAdd(false)}
-          onSuccess={handleAdded}
+          onSuccess={() => {
+            setShowAdd(false);
+            showSuccess("Thêm sản phẩm thành công");
+            navigate(1);
+          }}
         />
       )}
+
       {editing && (
         <EditProductModal
           product={editing}
           onClose={() => setEditing(null)}
-          onSuccess={(price, stock) => {
-            handleUpdated(editing.id, price, stock);
+          onSuccess={() => {
             setEditing(null);
+            showSuccess("Cập nhật sản phẩm thành công");
+            refreshCurrentPage();
           }}
         />
       )}
@@ -254,7 +249,7 @@ export default function ProductClient({
         cancelLabel="Huỷ"
         danger
         onConfirm={() => {
-          handleDelete(confirmId!);
+          doDelete(confirmId!);
           setConfirmId(null);
         }}
         onCancel={() => setConfirmId(null)}

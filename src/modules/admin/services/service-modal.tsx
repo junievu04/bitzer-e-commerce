@@ -23,7 +23,7 @@ interface Props {
 export default function ServiceModal({ service, onClose, onSuccess }: Props) {
   const isEdit = !!service;
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<ServiceFormInput>({
     name: service?.name ?? "",
     brief: service?.brief ?? "",
     thumbnail: service?.thumbnail ?? "",

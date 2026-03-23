@@ -4,12 +4,13 @@ import Text from "@/components/text";
 import TextArea from "@/components/text-area";
 import NumberField from "@/components/text-field/number-field";
 import { updateProduct } from "@/lib/admin/manage/products";
-import type { ProductDetail } from "@/modules/products";
+import type { ProductDetail, ProductSpecification } from "@/modules/products";
 import { Flex, Grid, Stack } from "@/vendors/styled-system/jsx";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import ErrorBox from "../layout/error-box";
 import ModalBackdrop from "../layout/modal-backdrop";
+import SpecificationFields from "./specification-fields";
 
 export default function EditProductModal({
   product,
@@ -23,22 +24,37 @@ export default function EditProductModal({
   const [price, setPrice] = useState(product.price ?? 0);
   const [stock, setStock] = useState(product.stock ?? 0);
   const [description, setDescription] = useState(product.description ?? "");
+  const [images, setImages] = useState(product.images?.join("\n") ?? "");
+  const [specifications, setSpecifications] = useState(
+    product.specifications ?? [],
+  );
   const {
     mutate: handleSubmit,
     isPending,
     error,
   } = useMutation({
     mutationFn: ({
-      slug,
+      id,
       price,
       stock,
       description,
+      images,
+      specifications,
     }: {
-      slug: string;
+      id: string;
       price?: number;
       stock?: number;
       description?: string;
-    }) => updateProduct(slug, { price, stock, description }),
+      images?: string;
+      specifications?: ProductSpecification[];
+    }) =>
+      updateProduct(id, {
+        price,
+        stock,
+        description,
+        images,
+        specifications,
+      }),
     onSuccess: () => {
       onSuccess(Number(price), Number(stock));
       onClose();
@@ -69,8 +85,19 @@ export default function EditProductModal({
           <NumberField label="Tồn kho" value={stock} onChange={setStock} />
           <TextArea
             label="Mô tả"
+            rows={6}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+          />
+          <TextArea
+            label="Ảnh"
+            value={images}
+            message="Mỗi dòng = 1 URL ảnh, ảnh đầu tiên là thumbnail"
+            onChange={(e) => setImages(e.target.value)}
+          />
+          <SpecificationFields
+            value={specifications}
+            onChange={(specs) => setSpecifications(specs)}
           />
         </Grid>
         {error && <ErrorBox message={error.message} />}
@@ -83,10 +110,12 @@ export default function EditProductModal({
             disabled={isPending}
             onClick={() =>
               handleSubmit({
-                slug: product.slug,
+                id: product.id,
                 price: Number(price),
                 stock: Number(stock),
                 description,
+                images,
+                specifications,
               })
             }
           >
