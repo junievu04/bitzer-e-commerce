@@ -2,7 +2,7 @@
 import Button from "@/components/button";
 import Text from "@/components/text";
 import TextArea from "@/components/text-area";
-import TextField from "@/components/text-field";
+import NumberField from "@/components/text-field/number-field";
 import { updateProduct } from "@/lib/admin/manage/products";
 import type { ProductDetail } from "@/modules/products";
 import { Flex, Grid, Stack } from "@/vendors/styled-system/jsx";
@@ -20,8 +20,8 @@ export default function EditProductModal({
   onClose: () => void;
   onSuccess: (price: number, stock: number) => void;
 }) {
-  const [price, setPrice] = useState(String(product.price ?? 0));
-  const [stock, setStock] = useState(String(product.stock ?? 0));
+  const [price, setPrice] = useState(product.price ?? 0);
+  const [stock, setStock] = useState(product.stock ?? 0);
   const [description, setDescription] = useState(product.description ?? "");
   const {
     mutate: handleSubmit,
@@ -60,20 +60,13 @@ export default function EditProductModal({
           </Text>
         </Stack>
         <Grid columns={1} gap="4">
-          <TextField
+          <NumberField
             label="Giá (VNĐ)"
             value={price}
-            type="number"
-            min="0"
-            onChange={(e) => setPrice(e.target.value)}
+            onChange={setPrice}
+            suffix="₫"
           />
-          <TextField
-            label="Tồn kho"
-            value={stock}
-            type="number"
-            min="0"
-            onChange={(e) => setStock(e.target.value)}
-          />
+          <NumberField label="Tồn kho" value={stock} onChange={setStock} />
           <TextArea
             label="Mô tả"
             value={description}

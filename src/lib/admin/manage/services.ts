@@ -43,10 +43,10 @@ export async function createService(
     await connectDB();
     const created = await Service.create({
       name: data.name.trim(),
-      slug: data.slug?.trim() ? buildSlug(data.slug) : buildSlug(data.name),
+      slug: buildSlug(data.name),
       brief: data.brief?.trim() ?? "",
-      thumbnail: "",
-      images: [],
+      thumbnail: data.thumbnail?.trim() ?? "",
+      images: data.images ? parseLines(data.images) : [],
       description: data.description ? parseLines(data.description) : [],
       features: data.features ? parseLines(data.features) : [],
       isActive: true,
@@ -55,10 +55,7 @@ export async function createService(
     return { success: true, data: mapDoc(created.toObject()) };
   } catch (e: unknown) {
     if ((e as { code?: number })?.code === 11000)
-      return {
-        success: false,
-        error: "Slug đã tồn tại, vui lòng đặt slug khác",
-      };
+      return { success: false, error: "Slug đã tồn tại, vui lòng thử lại" };
     return {
       success: false,
       error: e instanceof Error ? e.message : "Lỗi không xác định",
@@ -77,25 +74,29 @@ export async function updateService(
     return { success: false, error: "Tên dịch vụ không được trống" };
   try {
     await connectDB();
+
     const updated = await Service.findByIdAndUpdate(
       id,
       {
         $set: {
           name: data.name.trim(),
-          slug: data.slug?.trim() ? buildSlug(data.slug) : buildSlug(data.name),
+          slug: buildSlug(data.name),
           brief: data.brief?.trim() ?? "",
+          thumbnail: data.thumbnail?.trim() ?? "",
+          images: data.images ? parseLines(data.images) : [],
           description: data.description ? parseLines(data.description) : [],
           features: data.features ? parseLines(data.features) : [],
         },
       },
       { new: true },
     ).lean();
+
     if (!updated) return { success: false, error: "Không tìm thấy dịch vụ" };
     revalidatePath("/admin/services");
     return { success: true, data: mapDoc(updated) };
   } catch (e: unknown) {
     if ((e as { code?: number })?.code === 11000)
-      return { success: false, error: "Slug đã tồn tại" };
+      return { success: false, error: "Slug đã tồn tại, vui lòng thử lại" };
     return {
       success: false,
       error: e instanceof Error ? e.message : "Lỗi không xác định",

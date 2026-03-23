@@ -5,7 +5,10 @@ import { connectDB } from "@/lib/mongodb";
 import { Category } from "@/models/Category";
 import { Product } from "@/models/Product";
 import type { ProductDetail } from "@/modules/products";
-import type { PopulatedCategory } from "@/types/server-actions";
+import type {
+  PopulatedCategory,
+  PopulatedProductSpecification,
+} from "@/types/server-actions";
 import { Types } from "mongoose";
 import { revalidatePath } from "next/cache";
 
@@ -20,6 +23,8 @@ export async function getProducts(): Promise<ProductDetail[]> {
 
   return docs.map((doc) => {
     const cat = doc.category as PopulatedCategory;
+    const specifications =
+      doc.specifications as PopulatedProductSpecification[];
     return {
       id: String(doc._id),
       name: doc.name,
@@ -29,7 +34,12 @@ export async function getProducts(): Promise<ProductDetail[]> {
       images: doc.images ?? [],
       brief: doc.brief,
       description: doc.description,
-      specifications: doc.specifications,
+      specifications: specifications.map(
+        (spec: PopulatedProductSpecification) => ({
+          label: spec.label,
+          value: spec.value,
+        }),
+      ),
       category: {
         id: String(cat?._id ?? ""),
         name: cat?.name ?? "",
@@ -135,14 +145,14 @@ export async function updateProduct(
 // Delete
 
 export async function deleteProduct(
-  slug: string,
+  id: string,
 ): Promise<{ success: boolean; error?: string }> {
   await requireAdmin();
   try {
     await connectDB();
 
     const deleted = await Product.findOneAndDelete({
-      slug: slug.trim().toLowerCase(),
+      _id: new Types.ObjectId(id),
     }).lean();
 
     if (!deleted) return { success: false, error: "Không tìm thấy sản phẩm" };

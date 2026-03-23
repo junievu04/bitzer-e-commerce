@@ -3,6 +3,7 @@
 import Button from "@/components/button";
 import Skeleton from "@/components/skeleton";
 import Text from "@/components/text";
+import { useToast } from "@/components/toast";
 import { deleteService } from "@/lib/admin/manage/services";
 import ConfirmDialog from "@/modules/admin/layout/confirm-dialog";
 import type { ServiceDetail } from "@/modules/services";
@@ -18,6 +19,7 @@ interface Props {
 }
 
 export default function ServiceManageClient({ initialServices }: Props) {
+  const { showSuccess, showError, toastElement } = useToast();
   const [services, setServices] = useState<ServiceDetail[]>(
     initialServices ?? [],
   );
@@ -33,13 +35,19 @@ export default function ServiceManageClient({ initialServices }: Props) {
     },
     onSuccess: (res, id) => {
       setDeletingId(null);
-      if (res.success) setServices((prev) => prev.filter((s) => s.id !== id));
+      if (res.success) {
+        setServices((prev) => prev.filter((s) => s.id !== id));
+        showSuccess("Xóa dịch vụ thành công");
+      } else {
+        showError(res.error ?? "Xóa thất bại");
+      }
     },
     onError: () => setDeletingId(null),
   });
 
   return (
     <Box p={{ base: "4", md: "8" }}>
+      {toastElement}
       <Stack gap="6">
         <Flex
           justifyContent="space-between"

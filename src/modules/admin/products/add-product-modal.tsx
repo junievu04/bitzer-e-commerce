@@ -3,6 +3,7 @@ import Button from "@/components/button";
 import Text from "@/components/text";
 import TextArea from "@/components/text-area";
 import TextField from "@/components/text-field";
+import NumberField from "@/components/text-field/number-field";
 import { createProduct } from "@/lib/admin/manage/products";
 import type { CategoryDTO } from "@/modules/products";
 import { Box, Flex, Grid, Stack, styled } from "@/vendors/styled-system/jsx";
@@ -46,11 +47,11 @@ export default function AddProductModal({
     slug: "",
     brief: "",
     description: "",
-    price: "",
-    stock: "0",
+    price: 0,
+    stock: 0,
     categoryId: "",
   });
-  const set = (key: string, val: string) =>
+  const set = (key: string, val: string | number) =>
     setForm((f) => ({ ...f, [key]: val }));
 
   const {
@@ -89,19 +90,16 @@ export default function AddProductModal({
               onChange={(e) => set("slug", e.target.value)}
             />
           </Box>
-          <TextField
+          <NumberField
             label="Giá (VNĐ) *"
             value={form.price}
-            type="number"
-            min="0"
-            onChange={(e) => set("price", e.target.value)}
+            onChange={(val) => set("price", val)}
+            suffix="₫"
           />
-          <TextField
+          <NumberField
             label="Tồn kho"
             value={form.stock}
-            type="number"
-            min="0"
-            onChange={(e) => set("stock", e.target.value)}
+            onChange={(val) => set("stock", val)}
           />
           <Box gridColumn="span 2">
             <Stack gap="1">

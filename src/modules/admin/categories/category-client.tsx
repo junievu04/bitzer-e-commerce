@@ -2,6 +2,7 @@
 import Button from "@/components/button";
 import Skeleton from "@/components/skeleton";
 import Text from "@/components/text";
+import { useToast } from "@/components/toast";
 import { useMutation } from "@/hooks/use-mutate";
 import { deleteCategory } from "@/lib/admin/manage/categories";
 import type { CategoryDTO } from "@/modules/products";
@@ -19,6 +20,7 @@ interface Props {
 export default function CategoryClient({
   categories: initialCategories,
 }: Props) {
+  const { showSuccess, showError, toastElement } = useToast();
   const [categories, setCategories] = useState<CategoryDTO[]>(
     initialCategories ?? [],
   );
@@ -27,6 +29,7 @@ export default function CategoryClient({
 
   function handleAdded(cat: CategoryDTO) {
     setCategories((prev) => [cat, ...prev]);
+    showSuccess("Thêm danh mục thành công");
   }
 
   const {
@@ -41,11 +44,15 @@ export default function CategoryClient({
     const res = await doDelete(id);
     if (res?.success) {
       setCategories((prev) => prev.filter((c) => c.id !== id));
+      showSuccess("Xóa danh mục thành công");
+    } else {
+      showError(res?.error ?? "Xóa thất bại");
     }
   }
 
   return (
     <Box p={{ base: "4", md: "8" }}>
+      {toastElement}
       <Stack gap="6">
         <Flex
           justifyContent="space-between"

@@ -5,6 +5,7 @@ import { connectDB } from "@/lib/mongodb";
 import { Category } from "@/models/Category";
 import { Product } from "@/models/Product";
 import type { CategoryDTO } from "@/modules/products";
+import { buildSlug } from "@/utils/helpers/shared-helpers";
 import { Types } from "mongoose";
 import { revalidatePath } from "next/cache";
 
@@ -26,7 +27,6 @@ export async function getCategories(): Promise<CategoryDTO[]> {
 
 export async function createCategory(data: {
   name: string;
-  slug: string;
   description?: string;
   isActive?: boolean;
 }): Promise<{ success: boolean; error?: string }> {
@@ -35,14 +35,7 @@ export async function createCategory(data: {
     await connectDB();
     const requestData = {
       name: data.name.trim(),
-      slug:
-        data.slug.trim() ||
-        data.name
-          .trim()
-          .toLowerCase()
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-          .replace(/\s+/g, "-"),
+      slug: buildSlug(data.name),
       description: data.description?.trim(),
       isActive: true,
     };

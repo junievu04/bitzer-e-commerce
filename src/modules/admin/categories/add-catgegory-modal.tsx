@@ -5,8 +5,9 @@ import TextField from "@/components/text-field";
 import { useMutation } from "@/hooks/use-mutate";
 import { createCategory } from "@/lib/admin/manage/categories";
 import type { CategoryDTO } from "@/modules/products";
+import { buildSlug } from "@/utils/helpers/shared-helpers";
 import { Flex, Stack } from "@/vendors/styled-system/jsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ErrorBox from "../layout/error-box";
 import ModalBackdrop from "../layout/modal-backdrop";
 
@@ -21,6 +22,11 @@ export default function AddCategoryModal({
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
   const [localError, setLocalError] = useState("");
+
+  useEffect(() => {
+    /// eslint-disable-next-line react-hooks/exhaustive-deps
+    setSlug(name ? buildSlug(name) : "");
+  }, [name]);
 
   const {
     mutate,
@@ -37,14 +43,6 @@ export default function AddCategoryModal({
 
     const res = await mutate({
       name: name.trim(),
-      slug:
-        slug.trim() ||
-        name
-          .trim()
-          .toLowerCase()
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-          .replace(/\s+/g, "-"),
       description: description.trim(),
       isActive: true,
     });
@@ -74,11 +72,25 @@ export default function AddCategoryModal({
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-          <TextField
-            label="Slug (tự tạo nếu để trống)"
-            value={slug}
-            onChange={(e) => setSlug(e.target.value)}
-          />
+          {slug && (
+            <Stack gap="1">
+              <Text variant="caption-1" weight="medium" tone="secondary">
+                Slug (tự tạo)
+              </Text>
+              <Text
+                variant="caption-1"
+                tone="secondary"
+                fontFamily="mono"
+                bg="gray.50"
+                px="3"
+                py="2"
+                borderRadius="md"
+                border="1px solid {colors.gray.200}"
+              >
+                {slug}
+              </Text>
+            </Stack>
+          )}
           <TextField
             label="Mô tả"
             value={description}
