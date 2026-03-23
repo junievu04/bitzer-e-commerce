@@ -1,21 +1,17 @@
 import { connectDB } from "@/lib/mongodb";
+import { resolveLayoutLinks } from "@/lib/web/layout-resolvers";
 import { Layout } from "@/models/Layout";
 import { NextRequest, NextResponse } from "next/server";
 
 type Params = { key: string };
-
 const DEFAULT_LOCALE = "vi";
 
 function buildDefaultLayout(key: string) {
-  const normalizedKey = key.trim().toLowerCase();
   return {
-    layoutKey: normalizedKey,
+    layoutKey: key,
     name: "",
     locale: DEFAULT_LOCALE,
-    data: {
-      type: normalizedKey,
-      components: [],
-    },
+    data: { type: key, components: [] },
     updatedAt: null,
   };
 }
@@ -27,8 +23,8 @@ export async function GET(
   try {
     await connectDB();
     const { key } = await ctx.params;
-
     const normalizedKey = key.trim().toLowerCase();
+
     if (!normalizedKey) {
       return NextResponse.json(
         { error: "Invalid layout type" },
@@ -56,7 +52,15 @@ export async function GET(
       });
     }
 
-    return NextResponse.json(doc, { status: 200 });
+    // ─── Resolve serviceId/productId → slug links ─────────────────────────────
+    const resolvedComponents = await resolveLayoutLinks(
+      doc.data.components ?? [],
+    );
+
+    return NextResponse.json(
+      { ...doc, data: { ...doc.data, components: resolvedComponents } },
+      { status: 200 },
+    );
   } catch (err) {
     console.error("GET /api/layouts/[key] error:", err);
     return NextResponse.json({ error: "Internal error" }, { status: 500 });
