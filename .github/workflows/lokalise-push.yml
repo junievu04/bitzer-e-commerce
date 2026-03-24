@@ -57,7 +57,7 @@ jobs:
             }")
           echo "HTTP status: $RESPONSE"
           cat /tmp/vi_response.json
-          if [ "$RESPONSE" != "200" ] && [ "$RESPONSE" != "201" ]; then
+          if [ "$RESPONSE" != "200" ] && [ "$RESPONSE" != "201" ] && [ "$RESPONSE" != "202" ]; then
             echo "❌ Failed to push vi.json"
             exit 1
           fi
@@ -78,7 +78,7 @@ jobs:
             }")
           echo "HTTP status: $RESPONSE"
           cat /tmp/en_response.json
-          if [ "$RESPONSE" != "200" ] && [ "$RESPONSE" != "201" ]; then
+          if [ "$RESPONSE" != "200" ] && [ "$RESPONSE" != "201" ] && [ "$RESPONSE" != "202" ]; then
             echo "❌ Failed to push en.json"
             exit 1
           fi
