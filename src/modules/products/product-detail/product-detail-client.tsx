@@ -121,7 +121,7 @@ export default function ProductDetailClient({
             </Text>
 
             <Text variant="caption-1" tone="secondary">
-              {t("Loại sản phẩm")}: {category?.name || t("Không có")}
+              {t("Loại sản phẩm")}: {category?.name || t("Không có danh mục")}
             </Text>
 
             {price && (
