@@ -46,3 +46,6 @@ jobs:
           translations_path: languages
           file_ext: json
           flat_naming: true
+          lang_iso_infixes: |
+            en: en
+            vi_VN: vi_VN
