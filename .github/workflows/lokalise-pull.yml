@@ -31,7 +31,7 @@ jobs:
           base_lang: vi_VN
           flat_naming: true
           skip_include_tags: true
-          additional_params: '{"filter_langs": ["vi_VN", "en"], "directory_prefix": "languages/", "language_mapping": [{"original_language_iso": "en", "custom_language_iso": "en"}, {"original_language_iso": "en_US", "custom_language_iso": "en"}, {"original_language_iso": "vi_VN", "custom_language_iso": "vi"}]}'
+          additional_params: '{"filter_langs": ["vi", "en"], "directory_prefix": "languages/", "language_mapping": [{"original_language_iso": "en", "custom_language_iso": "en"}, {"original_language_iso": "en_US", "custom_language_iso": "en"}, {"original_language_iso": "vi", "custom_language_iso": "vi"}]}'
 
       - name: Debug - List files after Pull
         run: |
