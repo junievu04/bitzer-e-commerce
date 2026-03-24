@@ -47,6 +47,8 @@ jobs:
           file_ext: json
           flat_naming: true
           replace_modified: true
-          lang_iso_infixes: |
-            en: en
-            vi_VN: vi_VN
+
+      - name: Debug en.json content
+        run: |
+          echo "=== en.json ==="
+          cat languages/en.json | head -20
