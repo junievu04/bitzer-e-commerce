@@ -46,7 +46,8 @@ jobs:
           translations_path: languages
           file_ext: json
           flat_naming: true
-          replace_modified: true
+          rambo_mode: true
+          additional_params: "--replace-modified"
 
       - name: Debug en.json content
         run: |
