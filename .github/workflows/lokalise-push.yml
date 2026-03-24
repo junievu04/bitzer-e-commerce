@@ -1,6 +1,6 @@
 # Push translation files (languages/*.json) to Lokalise when pushing to main
 # Chạy thủ công: Actions → Push to Lokalise → Run workflow
-# Hoặc tự động khi push lên main (đã bật bên dưới)
+# Hoặc tự động khi push lên main
 name: Push to Lokalise
 
 on:
@@ -34,29 +34,39 @@ jobs:
       - name: Sync i18n keys from code
         run: npm run sync-keys
 
-      - name: Copy vi.json to vi_VN.json (Lokalise base = Vietnamese Vietnam)
-        run: cp languages/vi.json languages/vi_VN.json
-
-      - name: Push to Lokalise
-        uses: lokalise/lokalise-push-action@v5.0.0
-        with:
-          api_token: ${{ secrets.LOKALISE_API_TOKEN }}
-          project_id: ${{ vars.LOKALISE_PROJECT_ID }}
-          base_lang: vi_VN
-          translations_path: languages
-          file_ext: json
-          flat_naming: true
-          rambo_mode: true
-          additional_params: '{"replace-modified": true}'
-
-      - name: Debug en.json content
+      - name: Commit updated language files (if changed)
         run: |
-          echo "=== en.json ==="
-          cat languages/en.json | head -20
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add languages/en.json languages/vi.json
+          git diff --staged --quiet || git commit -m "chore: sync i18n keys [skip ci]"
+          git push
 
-      - name: Push all language files to Lokalise
+      - name: Push vi.json to Lokalise
         run: |
-          curl -X POST "https://api.lokalise.com/api2/projects/${{ vars.LOKALISE_PROJECT_ID }}/files/upload" \
+          RESPONSE=$(curl -s -o /tmp/vi_response.json -w "%{http_code}" \
+            -X POST "https://api.lokalise.com/api2/projects/${{ vars.LOKALISE_PROJECT_ID }}/files/upload" \
+            -H "X-Api-Token: ${{ secrets.LOKALISE_API_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"data\": \"$(base64 -w 0 languages/vi.json)\",
+              \"filename\": \"vi.json\",
+              \"lang_iso\": \"vi\",
+              \"replace_modified\": true,
+              \"format\": \"json\"
+            }")
+          echo "HTTP status: $RESPONSE"
+          cat /tmp/vi_response.json
+          if [ "$RESPONSE" != "200" ] && [ "$RESPONSE" != "201" ]; then
+            echo "❌ Failed to push vi.json"
+            exit 1
+          fi
+          echo "✅ vi.json pushed successfully"
+
+      - name: Push en.json to Lokalise
+        run: |
+          RESPONSE=$(curl -s -o /tmp/en_response.json -w "%{http_code}" \
+            -X POST "https://api.lokalise.com/api2/projects/${{ vars.LOKALISE_PROJECT_ID }}/files/upload" \
             -H "X-Api-Token: ${{ secrets.LOKALISE_API_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d "{
@@ -64,5 +74,12 @@ jobs:
               \"filename\": \"en.json\",
               \"lang_iso\": \"en\",
               \"replace_modified\": true,
-              \"distinguish_by_file\": false
-            }"
+              \"format\": \"json\"
+            }")
+          echo "HTTP status: $RESPONSE"
+          cat /tmp/en_response.json
+          if [ "$RESPONSE" != "200" ] && [ "$RESPONSE" != "201" ]; then
+            echo "❌ Failed to push en.json"
+            exit 1
+          fi
+          echo "✅ en.json pushed successfully"
