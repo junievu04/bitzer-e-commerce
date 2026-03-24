@@ -47,9 +47,22 @@ jobs:
           file_ext: json
           flat_naming: true
           rambo_mode: true
-          additional_params: "--replace-modified"
+          additional_params: '{"replace-modified": true}'
 
       - name: Debug en.json content
         run: |
           echo "=== en.json ==="
           cat languages/en.json | head -20
+
+      - name: Push all language files to Lokalise
+        run: |
+          curl -X POST "https://api.lokalise.com/api2/projects/${{ vars.LOKALISE_PROJECT_ID }}/files/upload" \
+            -H "X-Api-Token: ${{ secrets.LOKALISE_API_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"data\": \"$(base64 -w 0 languages/en.json)\",
+              \"filename\": \"en.json\",
+              \"lang_iso\": \"en\",
+              \"replace_modified\": true,
+              \"distinguish_by_file\": false
+            }"
