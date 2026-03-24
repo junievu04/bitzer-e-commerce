@@ -1,6 +1,8 @@
 "use server";
 
 import { requireAdmin } from "@/lib/admin/admin-auth";
+import { deleteKeysFromLokalise } from "@/lib/lokalise/delete-keys-lokalise";
+import { pushKeysToLokalise } from "@/lib/lokalise/push-key-lokalise";
 import { connectDB } from "@/lib/mongodb";
 import { Category } from "@/models/Category";
 import { IProduct, Product } from "@/models/Product";
@@ -87,8 +89,6 @@ export async function getProducts(page = 1, search = ""): Promise<ProductPage> {
       .lean(),
   ]);
 
-  console.log("junie test", total, docs.map(mapDoc));
-
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
   return {
@@ -145,6 +145,17 @@ export async function createProduct(
       .populate("category", "name slug description isActive")
       .lean();
 
+    await pushKeysToLokalise([
+      { value: data.name },
+      { value: data.brief },
+      { value: created.description },
+      {
+        value: created.specifications?.flatMap((s: ProductSpecification) => [
+          s.label,
+          s.value,
+        ]),
+      },
+    ]);
     revalidatePath("/admin/products");
     return { success: true, data: mapDoc(populated) };
   } catch (e: unknown) {
@@ -190,6 +201,17 @@ export async function updateProduct(
 
     if (!updated) return { success: false, error: "Không tìm thấy sản phẩm" };
 
+    await pushKeysToLokalise([
+      { value: updated.name },
+      { value: updated.brief },
+      { value: updated.description },
+      {
+        value: updated.specifications?.flatMap((s: ProductSpecification) => [
+          s.label,
+          s.value,
+        ]),
+      },
+    ]);
     revalidatePath("/admin/products");
     return { success: true, data: mapDoc(updated) };
   } catch (e: unknown) {
@@ -212,6 +234,15 @@ export async function deleteProduct(
       _id: new Types.ObjectId(id),
     }).lean();
     if (!deleted) return { success: false, error: "Không tìm thấy sản phẩm" };
+    await deleteKeysFromLokalise([
+      deleted.name,
+      deleted.brief,
+      deleted.description,
+      deleted.specifications?.flatMap((s: ProductSpecification) => [
+        s.label,
+        s.value,
+      ]),
+    ]);
     revalidatePath("/admin/products");
     return { success: true };
   } catch (e: unknown) {

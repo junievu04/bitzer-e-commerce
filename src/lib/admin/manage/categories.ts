@@ -1,6 +1,8 @@
 "use server";
 
 import { requireAdmin } from "@/lib/admin/admin-auth";
+import { deleteKeysFromLokalise } from "@/lib/lokalise/delete-keys-lokalise";
+import { pushKeysToLokalise } from "@/lib/lokalise/push-key-lokalise";
 import { connectDB } from "@/lib/mongodb";
 import { Category } from "@/models/Category";
 import { Product } from "@/models/Product";
@@ -39,6 +41,10 @@ export async function createCategory(data: {
       description: data.description?.trim(),
       isActive: true,
     });
+    await pushKeysToLokalise([
+      { value: data.name },
+      { value: data.description },
+    ]);
     revalidatePath("/admin/categories");
     return { success: true };
   } catch (e: unknown) {
@@ -75,6 +81,7 @@ export async function deleteCategory(
     }
     const deleted = await Category.findByIdAndDelete(objectId);
     if (!deleted) return { success: false, error: "Không tìm thấy danh mục" };
+    await deleteKeysFromLokalise([deleted.name, deleted.description]);
     revalidatePath("/admin/categories");
     return { success: true };
   } catch (e: unknown) {

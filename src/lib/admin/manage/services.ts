@@ -1,6 +1,8 @@
 "use server";
 
 import { requireAdmin } from "@/lib/admin/admin-auth";
+import { deleteKeysFromLokalise } from "@/lib/lokalise/delete-keys-lokalise";
+import { pushKeysToLokalise } from "@/lib/lokalise/push-key-lokalise";
 import { connectDB } from "@/lib/mongodb";
 import { IService, Service } from "@/models/Service";
 import type { ServiceDetail } from "@/modules/services";
@@ -51,6 +53,12 @@ export async function createService(
       features: data.features ? parseLines(data.features) : [],
       isActive: true,
     });
+    await pushKeysToLokalise([
+      { value: data.name },
+      { value: data.brief },
+      { value: created.description },
+      { value: created.features },
+    ]);
     revalidatePath("/admin/services");
     return { success: true, data: mapDoc(created.toObject()) };
   } catch (e: unknown) {
@@ -90,7 +98,12 @@ export async function updateService(
       },
       { new: true },
     ).lean();
-
+    await pushKeysToLokalise([
+      { value: data.name },
+      { value: data.brief },
+      { value: updated.description },
+      { value: updated.features },
+    ]);
     if (!updated) return { success: false, error: "Không tìm thấy dịch vụ" };
     revalidatePath("/admin/services");
     return { success: true, data: mapDoc(updated) };
@@ -114,6 +127,12 @@ export async function deleteService(
     await connectDB();
     const deleted = await Service.findByIdAndDelete(id).lean();
     if (!deleted) return { success: false, error: "Không tìm thấy dịch vụ" };
+    await deleteKeysFromLokalise([
+      deleted.name,
+      deleted.brief,
+      deleted.description,
+      deleted.features,
+    ]);
     revalidatePath("/admin/services");
     return { success: true };
   } catch (e: unknown) {
