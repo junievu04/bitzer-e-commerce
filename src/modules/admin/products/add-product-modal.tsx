@@ -40,11 +40,14 @@ const Select = styled("select", {
   },
 });
 
+type Tab = "vi" | "en";
+
 export default function AddProductModal({
   categories,
   onClose,
   onSuccess,
 }: Props) {
+  const [activeTab, setActiveTab] = useState<Tab>("vi");
   const [form, setForm] = useState<ProductFormInput>({
     name: "",
     brief: "",
@@ -58,6 +61,14 @@ export default function AddProductModal({
   const [slugPreview, setSlugPreview] = useState("");
   const set = (key: string, val: string | number) =>
     setForm((f) => ({ ...f, [key]: val }));
+
+  // EN state
+  const [enName, setEnName] = useState("");
+  const [enBrief, setEnBrief] = useState("");
+  const [enDescription, setEnDescription] = useState("");
+  const [enSpecifications, setEnSpecifications] = useState<
+    ProductSpecification[]
+  >([]);
 
   useEffect(() => {
     /// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -85,100 +96,150 @@ export default function AddProductModal({
         <Text variant="section-heading-2" weight="bold" tone="primary">
           Thêm sản phẩm mới
         </Text>
-        <Grid columns={2} gap="4">
-          <Box gridColumn="span 2">
-            <TextField
-              label="Tên sản phẩm *"
-              value={form.name}
-              onChange={(e) => set("name", e.target.value)}
+
+        {/* Tab switcher */}
+        <Flex gap="2">
+          <Button
+            variant={activeTab === "vi" ? "default" : "secondary"}
+            size="sm"
+            onClick={() => setActiveTab("vi")}
+          >
+            🇻🇳 Tiếng Việt
+          </Button>
+          <Button
+            variant={activeTab === "en" ? "default" : "secondary"}
+            size="sm"
+            onClick={() => setActiveTab("en")}
+          >
+            🇬🇧 English
+          </Button>
+        </Flex>
+
+        {/* Tab VI */}
+        {activeTab === "vi" && (
+          <Grid columns={2} gap="4">
+            <Box gridColumn="span 2">
+              <TextField
+                label="Tên sản phẩm *"
+                value={form.name}
+                onChange={(e) => set("name", e.target.value)}
+              />
+            </Box>
+            <Box gridColumn="span 2">
+              <Stack gap="1">
+                <Text variant="caption-1" weight="medium" tone="secondary">
+                  Slug (tự tạo)
+                </Text>
+                <Text
+                  variant="caption-1"
+                  tone="secondary"
+                  fontFamily="mono"
+                  bg="gray.50"
+                  px="3"
+                  py="2"
+                  borderRadius="md"
+                  border="1px solid {colors.gray.200}"
+                  minH="40px"
+                >
+                  {slugPreview}
+                </Text>
+              </Stack>
+            </Box>
+            <NumberField
+              label="Giá (VNĐ) *"
+              value={form.price}
+              onChange={(val) => set("price", val)}
+              suffix="₫"
             />
-          </Box>
-          <Box gridColumn="span 2">
-            <Stack gap="1">
-              <Text variant="caption-1" weight="medium" tone="secondary">
-                Slug (tự tạo)
-              </Text>
-              <Text
-                variant="caption-1"
-                tone="secondary"
-                fontFamily="mono"
-                bg="gray.50"
-                px="3"
-                py="2"
-                borderRadius="md"
-                border="1px solid {colors.gray.200}"
-                minH="40px"
-              >
-                {slugPreview}
-              </Text>
-            </Stack>
-          </Box>
-          <NumberField
-            label="Giá (VNĐ) *"
-            value={form.price}
-            onChange={(val) => set("price", val)}
-            suffix="₫"
-          />
-          <NumberField
-            label="Tồn kho"
-            value={form.stock}
-            onChange={(val) => set("stock", val)}
-          />
-          <Box gridColumn="span 2">
-            <Stack gap="1">
-              <Text variant="paragraph-2" tone="primary">
-                Danh mục *
-              </Text>
-              <Select
-                value={form.categoryId}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                  set("categoryId", e.target.value)
+            <NumberField
+              label="Tồn kho"
+              value={form.stock}
+              onChange={(val) => set("stock", val)}
+            />
+            <Box gridColumn="span 2">
+              <Stack gap="1">
+                <Text variant="paragraph-2" tone="primary">
+                  Danh mục *
+                </Text>
+                <Select
+                  value={form.categoryId}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                    set("categoryId", e.target.value)
+                  }
+                >
+                  <option value="">-- Chọn danh mục --</option>
+                  {categories
+                    .filter((c) => c.isActive)
+                    .map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.name}
+                      </option>
+                    ))}
+                </Select>
+              </Stack>
+            </Box>
+            <Box gridColumn="span 2">
+              <TextArea
+                label="Ảnh"
+                value={form.images}
+                message="Mỗi dòng = 1 URL ảnh, ảnh đầu tiên là thumbnail"
+                onChange={(e) => set("images", e.target.value)}
+              />
+            </Box>
+            <Box gridColumn="span 2">
+              <TextField
+                label="Mô tả ngắn"
+                value={form.brief}
+                onChange={(e) => set("brief", e.target.value)}
+              />
+            </Box>
+            <Box gridColumn="span 2">
+              <TextArea
+                label="Mô tả chi tiết"
+                rows={6}
+                value={form.description}
+                onChange={(e) => set("description", e.target.value)}
+              />
+            </Box>
+            <Box gridColumn="span 2">
+              <SpecificationFields
+                value={form.specifications ?? []}
+                onChange={(specs) =>
+                  setForm((f) => ({ ...f, specifications: specs }))
                 }
-              >
-                <option value="">-- Chọn danh mục --</option>
-                {categories
-                  .filter((c) => c.isActive)
-                  .map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name}
-                    </option>
-                  ))}
-              </Select>
-            </Stack>
-          </Box>
-          <Box gridColumn="span 2">
-            <TextArea
-              label="Ảnh"
-              value={form.images}
-              message="Mỗi dòng = 1 URL ảnh, ảnh đầu tiên là thumbnail"
-              onChange={(e) => set("images", e.target.value)}
-            />
-          </Box>
-          <Box gridColumn="span 2">
+              />
+            </Box>
+          </Grid>
+        )}
+
+        {/* Tab EN — chỉ content fields */}
+        {activeTab === "en" && (
+          <Grid columns={1} gap="4">
             <TextField
-              label="Mô tả ngắn"
-              value={form.brief}
-              onChange={(e) => set("brief", e.target.value)}
+              label="Name (EN)"
+              value={enName}
+              onChange={(e) => setEnName(e.target.value)}
             />
-          </Box>
-          <Box gridColumn="span 2">
+            <TextField
+              label="Brief (EN)"
+              value={enBrief}
+              onChange={(e) => setEnBrief(e.target.value)}
+            />
             <TextArea
-              label="Mô tả chi tiết"
+              label="Description (EN)"
               rows={6}
-              value={form.description}
-              onChange={(e) => set("description", e.target.value)}
+              value={enDescription}
+              onChange={(e) => setEnDescription(e.target.value)}
             />
-          </Box>
-          <Box gridColumn="span 2">
             <SpecificationFields
-              value={form.specifications ?? []}
-              onChange={(specs) =>
-                setForm((f) => ({ ...f, specifications: specs }))
-              }
+              value={enSpecifications}
+              onChange={setEnSpecifications}
             />
-          </Box>
-        </Grid>
+          </Grid>
+        )}
+
         {error && <ErrorBox message={error.message} />}
+
         <Flex gap="3" justifyContent="flex-end">
           <Button variant="plain" onClick={onClose}>
             Hủy
@@ -196,6 +257,17 @@ export default function AddProductModal({
                 categoryId: form.categoryId,
                 specifications: form.specifications,
                 images: form.images,
+                translations: {
+                  en: {
+                    name: enName || undefined,
+                    brief: enBrief || undefined,
+                    description: enDescription || undefined,
+                    specifications:
+                      enSpecifications.length > 0
+                        ? enSpecifications
+                        : undefined,
+                  },
+                },
               })
             }
           >

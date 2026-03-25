@@ -15,5 +15,6 @@ export type {
   ProductSearchParams,
   ProductSortType,
   ProductSpecification,
+  ProductTranslation,
 } from "@/modules/products/products.d";
 export { default as SuggestedProductsSection } from "@/modules/products/suggested-products-section";

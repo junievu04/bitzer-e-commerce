@@ -27,6 +27,12 @@ export interface ProductCategory {
   name: string;
   slug: string;
 }
+export interface ProductTranslation {
+  name?: string;
+  brief?: string;
+  description?: string;
+  specifications?: ProductSpecification[];
+}
 export interface ProductItem {
   id: string;
   name: string;
@@ -34,6 +40,7 @@ export interface ProductItem {
   stock?: number;
   price?: number;
   images?: string[];
+  translations?: Record<string, ProductTranslation>;
 }
 export interface ProductDetail extends ProductItem {
   brief?: string;

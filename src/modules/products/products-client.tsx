@@ -7,6 +7,7 @@ import { Spinner } from "@/components/spinner";
 import Text from "@/components/text";
 import useInfiniteScroll from "@/hooks/use-infinite-scroll";
 import { ProductWrapper } from "@/modules/products";
+import { useIntl } from "@/utils/intl";
 import { Box, Center, Stack } from "@/vendors/styled-system/jsx";
 import { useQuery } from "@tanstack/react-query";
 import { isEmpty } from "lodash-es";
@@ -37,6 +38,7 @@ export default function ProductsClient({
   products: initialData,
   categories,
 }: Props) {
+  const { t } = useIntl();
   const router = useRouter();
   const urlSearchParams = useSearchParams();
   const elementRef = useRef<HTMLDivElement | null>(null);
@@ -166,14 +168,16 @@ export default function ProductsClient({
           <Stack gap="4" align="center">
             <MagnifyingGlass size="lg" tone="secondary" />
             <Text variant="paragraph-1" weight="bold" tone="primary">
-              Không tìm thấy sản phẩm
+              {t("Không tìm thấy sản phẩm")}
             </Text>
             <Text variant="paragraph-2" tone="secondary" textAlign="center">
-              Hiện chưa có sản phẩm nào. Hãy quay về trang chủ để khám phá thêm!
+              {t(
+                "Hiện chưa có sản phẩm nào. Hãy quay về trang chủ để khám phá thêm!",
+              )}
             </Text>
             <Link href="/">
               <Button variant="secondary" leftIcon={House}>
-                Về trang chủ
+                {t("Về trang chủ")}
               </Button>
             </Link>
           </Stack>

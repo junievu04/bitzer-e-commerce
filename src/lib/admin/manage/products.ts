@@ -1,12 +1,14 @@
 "use server";
 
 import { requireAdmin } from "@/lib/admin/admin-auth";
-import { deleteKeysFromLokalise } from "@/lib/lokalise/delete-keys-lokalise";
-import { pushKeysToLokalise } from "@/lib/lokalise/push-key-lokalise";
 import { connectDB } from "@/lib/mongodb";
 import { Category } from "@/models/Category";
 import { IProduct, Product } from "@/models/Product";
-import type { ProductDetail, ProductSpecification } from "@/modules/products";
+import type {
+  ProductDetail,
+  ProductSpecification,
+  ProductTranslation,
+} from "@/modules/products";
 import type {
   PopulatedCategory,
   ProductFormInput,
@@ -26,9 +28,31 @@ const PAGE_SIZE = 20;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
+function normalizeTranslations(
+  raw: unknown,
+): Record<string, ProductTranslation> | undefined {
+  if (!raw) return undefined;
+  // Map -> Object
+  if (raw instanceof Map) {
+    return Object.fromEntries(raw as Map<string, ProductTranslation>);
+  }
+  // Array -> Object
+  if (Array.isArray(raw)) {
+    return Object.fromEntries(raw as [string, ProductTranslation][]);
+  }
+  // Object -> giữ nguyên
+  if (typeof raw === "object") {
+    return raw as Record<string, ProductTranslation>;
+  }
+  return undefined;
+}
+
 function mapDoc(doc: IProduct): ProductDetail {
   const cat = doc.category as unknown as PopulatedCategory;
   const specifications = (doc.specifications ?? []) as ProductSpecification[];
+  const translationsRaw = (doc as unknown as { translations?: unknown })
+    .translations;
+  const translations = normalizeTranslations(translationsRaw);
   return {
     id: String(doc._id),
     name: doc.name,
@@ -49,6 +73,7 @@ function mapDoc(doc: IProduct): ProductDetail {
       description: cat?.description,
       isActive: cat?.isActive ?? false,
     },
+    translations,
   };
 }
 
@@ -138,24 +163,13 @@ export async function createProduct(
       description: data.description?.trim(),
       specifications: data.specifications,
       category: new Types.ObjectId(data.categoryId),
+      translations: data.translations ?? {},
     });
 
     // Populate category để mapDoc hoạt động đúng
     const populated = await Product.findById(created._id)
       .populate("category", "name slug description isActive")
       .lean();
-
-    await pushKeysToLokalise([
-      { value: data.name },
-      { value: data.brief },
-      { value: created.description },
-      {
-        value: created.specifications?.flatMap((s: ProductSpecification) => [
-          s.label,
-          s.value,
-        ]),
-      },
-    ]);
     revalidatePath("/admin/products");
     return { success: true, data: mapDoc(populated) };
   } catch (e: unknown) {
@@ -190,6 +204,11 @@ export async function updateProduct(
     if (typeof data.images === "string")
       update.images = data.images ? parseLines(data.images) : [];
     if (data.specifications) update.specifications = data.specifications;
+    if (data.translations) {
+      for (const [locale, translation] of Object.entries(data.translations)) {
+        update[`translations.${locale}`] = translation;
+      }
+    }
 
     const updated = await Product.findOneAndUpdate(
       { _id: new Types.ObjectId(id) },
@@ -200,18 +219,6 @@ export async function updateProduct(
       .lean();
 
     if (!updated) return { success: false, error: "Không tìm thấy sản phẩm" };
-
-    await pushKeysToLokalise([
-      { value: updated.name },
-      { value: updated.brief },
-      { value: updated.description },
-      {
-        value: updated.specifications?.flatMap((s: ProductSpecification) => [
-          s.label,
-          s.value,
-        ]),
-      },
-    ]);
     revalidatePath("/admin/products");
     return { success: true, data: mapDoc(updated) };
   } catch (e: unknown) {
@@ -234,15 +241,7 @@ export async function deleteProduct(
       _id: new Types.ObjectId(id),
     }).lean();
     if (!deleted) return { success: false, error: "Không tìm thấy sản phẩm" };
-    await deleteKeysFromLokalise([
-      deleted.name,
-      deleted.brief,
-      deleted.description,
-      deleted.specifications?.flatMap((s: ProductSpecification) => [
-        s.label,
-        s.value,
-      ]),
-    ]);
+
     revalidatePath("/admin/products");
     return { success: true };
   } catch (e: unknown) {

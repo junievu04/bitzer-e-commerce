@@ -16,6 +16,7 @@ export interface ProductFormInput {
   brief?: string;
   description?: string;
   specifications?: ProductSpecification[];
+  translations?: Record<string, ProductTranslation>;
 }
 
 export interface ProductUpdateInput {
@@ -24,6 +25,7 @@ export interface ProductUpdateInput {
   description?: string;
   images?: string;
   specifications?: ProductSpecification[];
+  translations?: Record<string, ProductTranslation>;
 }
 
 export type PopulatedCategory = {

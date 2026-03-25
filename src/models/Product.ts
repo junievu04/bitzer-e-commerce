@@ -1,3 +1,4 @@
+import { ProductTranslation } from "@/modules/products/products";
 import { Document, model, models, Schema, Types } from "mongoose";
 
 export interface IProduct extends Document {
@@ -10,6 +11,7 @@ export interface IProduct extends Document {
   description?: string;
   specifications?: { label: string; value: string }[];
   category: Types.ObjectId;
+  translations?: Record<string, ProductTranslation>;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -35,6 +37,7 @@ const ProductSchema = new Schema<IProduct>(
       },
     ],
     category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
+    translations: { type: Map, of: Object, default: {} },
   },
   { timestamps: true },
 );

@@ -32,7 +32,7 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
           <Fragment key={index}>
             {item.href && !isLast ? (
               <Link href={item.href} tone="primary" size="sm" hover="none">
-                {item.label}
+                {t(item.label)}
               </Link>
             ) : (
               <Text
@@ -40,7 +40,7 @@ export default function Breadcrumbs({ items }: BreadcrumbsProps) {
                 tone={isLast ? "link" : "secondary"}
                 weight={isLast ? "medium" : "normal"}
               >
-                {item.label}
+                {t(item.label)}
               </Text>
             )}
             {!isLast && <ArrowRight size="xs" tone="secondary" />}
