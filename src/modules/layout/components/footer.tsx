@@ -9,12 +9,8 @@ import {
 import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text/text";
-import {
-  INFO_COMPANY,
-  INFO_LINKS,
-  LOGO_IMAGE,
-  SOCIAL_LINKS,
-} from "@/constants";
+import { INFO_COMPANY, LOGO_IMAGE } from "@/constants";
+import { INFO_LINKS, SOCIAL_LINKS } from "@/constants/layout-links";
 import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
 import {

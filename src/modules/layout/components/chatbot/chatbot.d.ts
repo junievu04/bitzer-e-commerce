@@ -36,7 +36,7 @@ export type Message = {
 export interface ChatbotData {
   suggestionProducts: {
     topiKey: string;
-    products: ProductCard[];
+    products: ProductItem[];
   }[];
   suggestionServices: {
     topicKey: string;

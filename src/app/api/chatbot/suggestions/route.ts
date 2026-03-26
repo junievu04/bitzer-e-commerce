@@ -26,6 +26,7 @@ function mapProduct(doc: ProductDoc): ProductItem {
     price: typeof doc.price === "number" ? doc.price : undefined,
     stock: typeof doc.stock === "number" ? doc.stock : undefined,
     images: Array.isArray(doc.images) ? doc.images : [],
+    translations: doc.translations,
   };
 }
 
