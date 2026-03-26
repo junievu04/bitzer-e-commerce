@@ -59,7 +59,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       >
         <Image
           src={product.images?.[0] || DAITIN_IMAGE}
-          alt={translate("name")}
+          alt={product.name}
           aspectRatio="1/1"
           width="100%"
           objectFit="cover"

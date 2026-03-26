@@ -23,8 +23,8 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "BITZERshop — Phụ tùng máy nén Bitzer chính hãng",
-    template: "%s | BITZERshop",
+    default: "DAITIN — Phụ tùng máy nén Bitzer chính hãng",
+    template: "%s | DAITIN",
   },
   description:
     "Chuyên cung cấp phụ tùng máy nén Bitzer, linh kiện điện lạnh, gas lạnh chính hãng. Giao hàng toàn quốc. Tư vấn kỹ thuật 24/7.",
@@ -36,8 +36,8 @@ export const metadata: Metadata = {
     "Bitzer Việt Nam",
     "spare parts Bitzer",
   ],
-  authors: [{ name: "BITZERshop" }],
-  creator: "BITZERshop",
+  authors: [{ name: "DAITIN" }],
+  creator: "DAITIN",
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
   ),
@@ -45,25 +45,16 @@ export const metadata: Metadata = {
     type: "website",
     locale: "vi_VN",
     alternateLocale: "en_US",
-    siteName: "BITZERshop",
-    title: "BITZERshop — Phụ tùng máy nén Bitzer chính hãng",
+    siteName: "DAITIN",
+    title: "DAITIN — Phụ tùng máy nén Bitzer chính hãng",
     description:
       "Chuyên cung cấp phụ tùng máy nén Bitzer, linh kiện điện lạnh chính hãng.",
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "BITZERshop",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "BITZERshop — Phụ tùng máy nén Bitzer chính hãng",
+    title: "DAITIN — Phụ tùng máy nén Bitzer chính hãng",
     description:
       "Chuyên cung cấp phụ tùng máy nén Bitzer, linh kiện điện lạnh chính hãng.",
-    images: ["/og-image.jpg"],
   },
   robots: {
     index: true,
