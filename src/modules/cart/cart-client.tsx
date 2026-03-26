@@ -179,7 +179,7 @@ export const CartClient = () => {
                   {t("Tổng sản phẩm")}
                 </Text>
                 <Text variant="paragraph-2" weight="medium">
-                  {t("{totalItems} sản phẩm")}
+                  {t("{totalItems} sản phẩm", { totalItems })}
                 </Text>
               </Flex>
 
