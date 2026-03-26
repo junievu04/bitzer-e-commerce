@@ -1,11 +1,8 @@
 import { connectDB } from "@/lib/mongodb";
+import { mapProductToCard } from "@/lib/web/map-product-card";
 import { Category } from "@/models/Category";
 import { IProduct, Product } from "@/models/Product";
-import type {
-  ProductItem,
-  ProductsDTO,
-  ProductSearchParams,
-} from "@/modules/products";
+import type { ProductsDTO, ProductSearchParams } from "@/modules/products";
 import { normalizeText } from "@/utils/helpers/shared-helpers";
 import mongoose, { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
@@ -19,19 +16,6 @@ function parseLimit(searchParams: URLSearchParams): number {
   const n = Number(raw);
   if (Number.isNaN(n) || n <= 0) return DEFAULT_LIMIT;
   return Math.min(n, MAX_LIMIT);
-}
-
-function mapProductToCard(
-  doc: IProduct & { _id: Types.ObjectId },
-): ProductItem {
-  return {
-    id: String(doc._id),
-    name: doc.name,
-    slug: doc.slug,
-    price: typeof doc.price === "number" ? doc.price : undefined,
-    stock: typeof doc.stock === "number" ? doc.stock : undefined,
-    images: Array.isArray(doc.images) ? doc.images : [],
-  };
 }
 
 export async function GET(request: NextRequest) {

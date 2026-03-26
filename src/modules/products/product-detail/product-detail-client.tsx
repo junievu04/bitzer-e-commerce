@@ -7,20 +7,26 @@ import { Image } from "@/components/image";
 import Text from "@/components/text";
 import { DAITIN_IMAGE } from "@/constants";
 import { useCart } from "@/hooks";
+import { useTranslation } from "@/hooks/use-translation";
 import { formatPrice } from "@/utils/helpers/shared-helpers";
 import { useIntl } from "@/utils/intl";
 import { Box, Flex, Grid, Stack } from "@/vendors/styled-system/jsx";
 import { isEmpty } from "lodash";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { HeaderTitleWrapper } from "../../layout/components/header-title-wrapper";
-import type { ProductDetail, ProductItem } from "../products.d";
+import type {
+  ProductDetail,
+  ProductItem,
+  ProductSpecification,
+} from "../products.d";
 import SuggestedProductsSection from "../suggested-products-section";
+
 interface ProductDetailClientProps {
   product: ProductDetail;
   suggestions?: ProductItem[] | [];
 }
 
-const hadnleContactToBuy = (params: {
+const handleContactToBuy = (params: {
   slug: string;
   name: string;
   price?: number;
@@ -43,23 +49,34 @@ export default function ProductDetailClient({
   suggestions,
 }: ProductDetailClientProps) {
   const { t } = useIntl();
+  const { translate } = useTranslation(product);
   const { addToCart } = useCart();
+
   const {
-    name,
     slug,
     images,
     price,
     stock,
+    category,
+    name,
     brief,
     description,
     specifications,
-    category,
   } = product;
+
+  // Dùng translate() cho các field dynamic từ backend
+  const nameTranslated = translate("name") ?? name;
+  const briefTranslated = translate("brief") ?? brief;
+  const descriptionTranslated = translate("description") ?? description;
+  const specificationsTranslated: ProductSpecification[] | null =
+    translate<ProductSpecification>("specifications") ?? specifications;
+
   const isOutOfStock = useMemo(() => !stock || stock <= 0, [stock]);
   const imagesArray = useMemo(
     () => (images && !isEmpty(images) ? images : [DAITIN_IMAGE]),
     [images],
   );
+
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const [showExpandButton, setShowExpandButton] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
@@ -72,7 +89,7 @@ export default function ProductDetailClient({
       const maxHeight = lineHeight * 4;
       setShowExpandButton(el.scrollHeight >= maxHeight);
     }
-  }, [description]);
+  }, [descriptionTranslated]);
 
   const breadcrumbItems: { label: string; href?: string }[] = [
     { label: t("Sản phẩm"), href: "/products" },
@@ -86,6 +103,7 @@ export default function ProductDetailClient({
   }
 
   breadcrumbItems.push({ label: name });
+
   return (
     <>
       <HeaderTitleWrapper breadcrumbItems={breadcrumbItems}>
@@ -96,7 +114,7 @@ export default function ProductDetailClient({
               loop={imagesArray.length > 1}
               navigation={imagesArray.length > 1}
             >
-              {imagesArray.map((image, index) => (
+              {imagesArray.map((image: string, index: number) => (
                 <Image
                   key={index}
                   aspectRatio="1/1"
@@ -109,7 +127,7 @@ export default function ProductDetailClient({
                     onClick: () => setLightboxIndex(index),
                   }}
                   src={image || DAITIN_IMAGE}
-                  alt={product.name}
+                  alt={name}
                 />
               ))}
             </Carousel>
@@ -117,7 +135,7 @@ export default function ProductDetailClient({
 
           <Stack gap="4">
             <Text variant="page-heading-2" weight="bold" tone="primary">
-              {product.name}
+              {nameTranslated}
             </Text>
 
             <Text variant="caption-1" tone="secondary">
@@ -130,9 +148,9 @@ export default function ProductDetailClient({
               </Text>
             )}
 
-            {brief && (
+            {briefTranslated && (
               <Text variant="paragraph-2" tone="secondary">
-                {brief}
+                {briefTranslated}
               </Text>
             )}
 
@@ -168,11 +186,7 @@ export default function ProductDetailClient({
                 leftIcon={Phone}
                 disabled={isOutOfStock}
                 onClick={() =>
-                  hadnleContactToBuy({
-                    slug,
-                    name,
-                    price,
-                  })
+                  handleContactToBuy({ slug, name: nameTranslated, price })
                 }
               >
                 {t("Liên hệ tư vấn")}
@@ -191,7 +205,7 @@ export default function ProductDetailClient({
         </Grid>
 
         {/* Detailed Description */}
-        {description && (
+        {descriptionTranslated && (
           <Box
             mt="8"
             p="6"
@@ -218,7 +232,7 @@ export default function ProductDetailClient({
                   variant="paragraph-2"
                   tone="secondary"
                 >
-                  {description}
+                  {descriptionTranslated}
                 </Text>
                 {showExpandButton && (
                   <Button
@@ -241,7 +255,7 @@ export default function ProductDetailClient({
         )}
 
         {/* Specifications */}
-        {specifications && specifications.length > 0 && (
+        {specificationsTranslated && specificationsTranslated.length > 0 && (
           <Box
             mt="6"
             p="6"
@@ -262,9 +276,9 @@ export default function ProductDetailClient({
                 <Box w="12" h="3px" bg="brand.500" borderRadius="full" mt="2" />
               </Box>
               <Box>
-                {specifications.map((spec, index) => (
+                {specificationsTranslated.map((spec, index) => (
                   <Flex
-                    key={spec.label}
+                    key={spec?.label}
                     py="3"
                     borderBottom={
                       index < specifications!.length - 1
@@ -279,10 +293,10 @@ export default function ProductDetailClient({
                       w="40%"
                       flexShrink="0"
                     >
-                      {t(spec.label)}
+                      {spec?.label || ""}
                     </Text>
                     <Text variant="paragraph-2" tone="secondary">
-                      {spec.value}
+                      {spec?.value || ""}
                     </Text>
                   </Flex>
                 ))}
@@ -299,6 +313,7 @@ export default function ProductDetailClient({
           />
         )}
       </HeaderTitleWrapper>
+
       {lightboxIndex !== null && (
         <Box
           position="fixed"
@@ -322,14 +337,14 @@ export default function ProductDetailClient({
               navigation={imagesArray.length > 1}
               pagination={imagesArray.length > 1}
             >
-              {imagesArray.map((image, index) => (
+              {imagesArray.map((image: string, index: number) => (
                 <Image
                   key={index}
                   aspectRatio="1/1"
                   width="100%"
                   objectFit="contain"
                   src={image || DAITIN_IMAGE}
-                  alt={product.name}
+                  alt={name}
                 />
               ))}
             </Carousel>

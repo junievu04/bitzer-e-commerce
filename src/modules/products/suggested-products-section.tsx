@@ -23,7 +23,6 @@ export default function SuggestedProductsSection({
   const isShowNavigation = useMemo(() => {
     return products.length > 4;
   }, [products]);
-
   if (products.length === 0) return null;
 
   return (

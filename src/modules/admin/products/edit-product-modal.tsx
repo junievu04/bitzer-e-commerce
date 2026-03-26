@@ -15,6 +15,7 @@ import { useState } from "react";
 import ErrorBox from "../layout/error-box";
 import ModalBackdrop from "../layout/modal-backdrop";
 import SpecificationFields from "./specification-fields";
+import { cleanSpecs } from "./utils/clean-specifications";
 
 type Tab = "vi" | "en";
 
@@ -184,16 +185,13 @@ export default function EditProductModal({
                 stock: Number(stock),
                 description,
                 images,
-                specifications,
+                specifications: cleanSpecs(specifications ?? []),
                 translations: {
                   en: {
                     name: enName || undefined,
                     brief: enBrief || undefined,
                     description: enDescription || undefined,
-                    specifications:
-                      enSpecifications.length > 0
-                        ? enSpecifications
-                        : undefined,
+                    specifications: cleanSpecs(enSpecifications) || undefined,
                   },
                 },
               })

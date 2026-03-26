@@ -1,24 +1,12 @@
 import { connectDB } from "@/lib/mongodb";
+import { mapProductToCard } from "@/lib/web/map-product-card";
 import { IProduct, Product } from "@/models/Product";
-import type { ProductItem, ProductsDTO } from "@/modules/products";
+import type { ProductsDTO } from "@/modules/products";
 import { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 const MIN_SUGGESTIONS = 3;
 const MAX_SUGGESTIONS = 8;
-
-function mapProductToCard(
-  doc: IProduct & { _id: Types.ObjectId },
-): ProductItem {
-  return {
-    id: String(doc._id),
-    name: doc.name,
-    slug: doc.slug,
-    price: typeof doc.price === "number" ? doc.price : undefined,
-    stock: typeof doc.stock === "number" ? doc.stock : undefined,
-    images: Array.isArray(doc.images) ? doc.images : [],
-  };
-}
 
 async function getFallbackProducts(
   excludeIds: Types.ObjectId[],

@@ -7,12 +7,13 @@ import Link from "@/components/link";
 import Text from "@/components/text";
 import { DAITIN_IMAGE } from "@/constants";
 import { useCart } from "@/hooks";
+import { useTranslation } from "@/hooks/use-translation";
 import { formatPrice } from "@/utils/helpers/shared-helpers";
 import { useIntl } from "@/utils/intl";
 import { css } from "@/vendors/styled-system/css";
 import { Box, Center, Stack } from "@/vendors/styled-system/jsx";
 import { useMemo } from "react";
-import type { ProductItem } from "./products";
+import type { ProductItem } from "./products.d";
 
 interface ProductCardProps {
   product: ProductItem;
@@ -20,6 +21,7 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const { t } = useIntl();
+  const { translate } = useTranslation(product);
   const { addToCart } = useCart();
 
   const productUrl = `/products/${product.slug || product.id}`;
@@ -57,7 +59,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       >
         <Image
           src={product.images?.[0] || DAITIN_IMAGE}
-          alt={product.name}
+          alt={translate("name")}
           aspectRatio="1/1"
           width="100%"
           objectFit="cover"
@@ -73,7 +75,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             truncate={2}
             className={css({ minH: "40px" })}
           >
-            {product.name}
+            {translate("name")}
           </Text>
 
           {product.price && (

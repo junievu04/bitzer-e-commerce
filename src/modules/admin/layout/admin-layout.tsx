@@ -1,13 +1,7 @@
 "use client";
 
 import Button from "@/components/button";
-import {
-  Boxes,
-  ClipboardPaper,
-  Gear,
-  MagnifyingGlass,
-  ThumbsUp,
-} from "@/components/icons";
+import { MagnifyingGlass } from "@/components/icons";
 import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text";
@@ -18,20 +12,7 @@ import { Box, Flex, Stack } from "@/vendors/styled-system/jsx";
 import { signOut, useSession } from "next-auth/react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ReactNode, useState } from "react";
-
-// ─── Nav items ────────────────────────────────────────────────────────────────
-
-const NAV_ITEMS = [
-  { href: "/admin/dashboard", label: "Tổng quan", icon: ClipboardPaper },
-  { href: "/admin/products", label: "Sản phẩm", icon: Gear },
-  { href: "/admin/categories", label: "Danh mục", icon: Boxes },
-  { href: "/admin/services", label: "Dịch vụ", icon: ThumbsUp },
-];
-
-// Pages có search
-const SEARCHABLE = ["/admin/products", "/admin/categories", "/admin/services"];
-
-// ─── Layout ───────────────────────────────────────────────────────────────────
+import { NAV_ITEMS, SEARCHABLE } from "./constant";
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -103,7 +84,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         {/* Nav */}
         <Stack gap="1" p="3" flex="1">
           {NAV_ITEMS.map((item) => {
-            const isActive = pathname.startsWith(item.href);
+            const isActive = pathname === item.href;
             return (
               <Link key={item.href} href={item.href} display="block">
                 <Flex

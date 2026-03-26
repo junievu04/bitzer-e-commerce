@@ -9,7 +9,7 @@ export default auth((req) => {
 
   // Đã đăng nhập mà vào trang login → redirect vào dashboard
   if (isLoggedIn && isLoginPage) {
-    return NextResponse.redirect(new URL("/admin/dashboard", nextUrl));
+    return NextResponse.redirect(new URL("/admin", nextUrl));
   }
 
   // Chưa đăng nhập mà vào route admin → redirect về login

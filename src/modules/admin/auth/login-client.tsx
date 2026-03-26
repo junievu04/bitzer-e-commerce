@@ -13,7 +13,7 @@ import { FormEvent, useState } from "react";
 export default function AdminLoginClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/admin/dashboard";
+  const callbackUrl = searchParams.get("callbackUrl") || "/admin";
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

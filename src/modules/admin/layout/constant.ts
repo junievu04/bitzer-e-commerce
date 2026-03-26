@@ -1,22 +1,45 @@
-import { Boxes, Gear, ThumbsUp } from "@/components/icons";
+import { Boxes, ClipboardPaper, Gear, ThumbsUp } from "@/components/icons";
 
-export const QUICK_LINKS = [
+const ADMIN_ITEMS = [
   {
-    href: "/admin/products",
-    label: "Thêm sản phẩm",
-    icon: Gear,
-    action: "Quản lý",
+    href: "/admin",
+    label: "Tổng quan",
+    icon: ClipboardPaper,
   },
   {
-    href: "/admin/category",
-    label: "Thêm danh mục",
+    href: "/admin/products",
+    label: "Sản phẩm",
+    icon: Gear,
+    quickLink: { label: "Thêm sản phẩm", action: "Quản lý" },
+    searchable: true,
+  },
+  {
+    href: "/admin/categories",
+    label: "Danh mục",
     icon: Boxes,
-    action: "Quản lý",
+    quickLink: { label: "Thêm danh mục", action: "Quản lý" },
+    searchable: true,
   },
   {
     href: "/admin/services",
-    label: "Thêm dịch vụ",
+    label: "Dịch vụ",
     icon: ThumbsUp,
-    action: "Quản lý",
+    quickLink: { label: "Thêm dịch vụ", action: "Quản lý" },
+    searchable: true,
   },
 ];
+
+// Derive từ ADMIN_ITEMS
+export const NAV_ITEMS = ADMIN_ITEMS.map(({ href, label, icon }) => ({
+  href,
+  label,
+  icon,
+}));
+
+export const QUICK_LINKS = ADMIN_ITEMS.filter((item) => item.quickLink).map(
+  ({ href, icon, quickLink }) => ({ href, icon, ...quickLink }),
+);
+
+export const SEARCHABLE = ADMIN_ITEMS.filter((item) => item.searchable).map(
+  (item) => item.href,
+);

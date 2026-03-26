@@ -51,6 +51,7 @@ export async function GET(
       description: doc.description,
       specifications: doc.specifications,
       category,
+      translations: doc.translations,
     };
 
     return NextResponse.json(product, { status: 200 });

@@ -27,27 +27,28 @@ export interface ProductCategory {
   name: string;
   slug: string;
 }
-export interface ProductTranslation {
-  name?: string;
-  brief?: string;
-  description?: string;
-  specifications?: ProductSpecification[];
-}
-export interface ProductItem {
+interface ProductBase {
   id: string;
   name: string;
   slug: string;
   stock?: number;
   price?: number;
   images?: string[];
-  translations?: Record<string, ProductTranslation>;
-}
-export interface ProductDetail extends ProductItem {
   brief?: string;
   description?: string;
   specifications?: ProductSpecification[];
-  category: CategoryDTO;
 }
+
+export type ProductTranslation = Translation<ProductBase>;
+
+export type ProductItem = Translatable<ProductBase>;
+
+export type ProductDetail = Translatable<
+  ProductBase & {
+    specifications?: ProductSpecification[];
+    category: CategoryDTO;
+  }
+>;
 export interface ProductSearchParams {
   text?: string;
   categorySlug?: string;

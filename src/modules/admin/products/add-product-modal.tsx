@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import ErrorBox from "../layout/error-box";
 import ModalBackdrop from "../layout/modal-backdrop";
 import SpecificationFields from "./specification-fields";
+import { cleanSpecs } from "./utils/clean-specifications";
 
 interface Props {
   categories: CategoryDTO[];
@@ -255,17 +256,14 @@ export default function AddProductModal({
                 price: Number(form.price),
                 stock: Number(form.stock),
                 categoryId: form.categoryId,
-                specifications: form.specifications,
+                specifications: cleanSpecs(form.specifications ?? []),
                 images: form.images,
                 translations: {
                   en: {
                     name: enName || undefined,
                     brief: enBrief || undefined,
                     description: enDescription || undefined,
-                    specifications:
-                      enSpecifications.length > 0
-                        ? enSpecifications
-                        : undefined,
+                    specifications: cleanSpecs(enSpecifications) || undefined,
                   },
                 },
               })

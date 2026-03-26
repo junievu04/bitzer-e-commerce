@@ -2,23 +2,14 @@
 
 import Breadcrumbs from "@/components/breadcrumbs";
 import Button from "@/components/button";
-import { Dustbin, Minus, Phone, Plus } from "@/components/icons";
-import { Image } from "@/components/image";
+import { Dustbin, Phone } from "@/components/icons";
 import Link from "@/components/link";
 import Text from "@/components/text";
-import { DAITIN_IMAGE } from "@/constants";
 import { useCart } from "@/hooks";
 import { formatPrice } from "@/utils/helpers/shared-helpers";
 import { useIntl } from "@/utils/intl";
-import { css } from "@/vendors/styled-system/css";
-import {
-  Box,
-  Center,
-  Flex,
-  Grid,
-  HStack,
-  Stack,
-} from "@/vendors/styled-system/jsx";
+import { Box, Center, Flex, Grid, Stack } from "@/vendors/styled-system/jsx";
+import CartItemRow from "./cart-item-row";
 
 const handleContactToBuy = () => {
   if (typeof window === "undefined") return;
@@ -143,179 +134,12 @@ export const CartClient = () => {
                     : "none"
                 }
               >
-                <Flex
-                  direction={{ base: "column", md: "row" }}
-                  align={{ base: "stretch", md: "center" }}
-                  gap={{ base: "4", md: "0" }}
-                >
-                  {/* Product Info */}
-                  <Flex flex="1" gap="3" align="center">
-                    <Link
-                      href={`/products/${item.product.slug || item.product.id}`}
-                    >
-                      <Image
-                        src={item.product.images?.[0] || DAITIN_IMAGE}
-                        alt={item.product.name}
-                        aspectRatio="1/1"
-                        width="80px"
-                        objectFit="cover"
-                        borderRadius="md"
-                      />
-                    </Link>
-                    <Stack gap="1" flex="1">
-                      <Link
-                        href={`/products/${item.product.slug || item.product.id}`}
-                      >
-                        <Text
-                          variant="paragraph-2"
-                          weight="bold"
-                          tone="link"
-                          truncate={2}
-                        >
-                          {item.product.name}
-                        </Text>
-                      </Link>
-                      <Text variant="caption-2" tone="secondary">
-                        SKU: {item.product.id}
-                      </Text>
-                    </Stack>
-                  </Flex>
-
-                  {/* Price - Mobile */}
-                  <Flex
-                    display={{ base: "flex", md: "none" }}
-                    justify="space-between"
-                    align="center"
-                  >
-                    <Text tone="secondary">{t("Đơn giá")}:</Text>
-                    <Text variant="paragraph-2" weight="bold" tone="error">
-                      {formatPrice(item.product.price, t)}
-                    </Text>
-                  </Flex>
-
-                  {/* Price - Desktop */}
-                  <Box
-                    w="120px"
-                    textAlign="center"
-                    display={{ base: "none", md: "block" }}
-                  >
-                    <Text
-                      variant="paragraph-2"
-                      weight="bold"
-                      tone="error"
-                      textAlign="center"
-                    >
-                      {formatPrice(item.product.price, t)}
-                    </Text>
-                  </Box>
-
-                  {/* Quantity */}
-                  <Flex
-                    w={{ base: "full", md: "140px" }}
-                    justify={{ base: "space-between", md: "center" }}
-                    align="center"
-                  >
-                    <Text
-                      display={{ base: "block", md: "none" }}
-                      tone="secondary"
-                    >
-                      {t("Số lượng")}:
-                    </Text>
-                    <HStack
-                      gap="0"
-                      border="1px solid {colors.gray.300}"
-                      borderRadius="md"
-                    >
-                      <Button
-                        variant="plain"
-                        size="sm"
-                        p="2"
-                        onClick={() =>
-                          updateQuantity(item.product.id, item.quantity - 1)
-                        }
-                        disabled={item.quantity <= 1}
-                      >
-                        <Minus
-                          size="xs"
-                          tone={item.quantity <= 1 ? "disabled" : "primary"}
-                        />
-                      </Button>
-                      <Center
-                        w="10"
-                        h="8"
-                        borderX="1px solid {colors.gray.300}"
-                      >
-                        <Text variant="paragraph-2" weight="medium">
-                          {item.quantity}
-                        </Text>
-                      </Center>
-                      <Button
-                        variant="plain"
-                        size="sm"
-                        p="2"
-                        onClick={() =>
-                          updateQuantity(item.product.id, item.quantity + 1)
-                        }
-                      >
-                        <Plus size="xs" tone="primary" />
-                      </Button>
-                    </HStack>
-                  </Flex>
-
-                  {/* Subtotal - Mobile */}
-                  <Flex
-                    display={{ base: "flex", md: "none" }}
-                    justify="space-between"
-                    align="center"
-                  >
-                    <Text tone="secondary">{t("Thành tiền")}:</Text>
-                    <Text variant="paragraph-1" weight="bold" tone="success">
-                      {!!item.product.price
-                        ? formatPrice(item.product.price * item.quantity, t)
-                        : t("Liên hệ")}
-                    </Text>
-                  </Flex>
-
-                  {/* Subtotal - Desktop */}
-                  <Box w="120px" display={{ base: "none", md: "block" }}>
-                    <Text
-                      variant="paragraph-2"
-                      weight="bold"
-                      tone="success"
-                      textAlign="center"
-                    >
-                      {!!item.product.price
-                        ? formatPrice(item.product.price * item.quantity, t)
-                        : t("Liên hệ")}
-                    </Text>
-                  </Box>
-
-                  {/* Delete */}
-                  <Box
-                    w={{ base: "full", md: "50px" }}
-                    textAlign={{ base: "center", md: "right" }}
-                  >
-                    <Button
-                      variant="plain"
-                      p="2"
-                      onClick={() => removeFromCart(item.product.id)}
-                      className={css({
-                        _hover: { bg: "red.50" },
-                        borderRadius: "md",
-                      })}
-                    >
-                      <Text
-                        display={{ base: "inline", md: "none" }}
-                        tone="error"
-                        weight="medium"
-                        mr="1"
-                      >
-                        {t("Xóa")}
-                      </Text>
-                      <Dustbin size="sm" tone="error" />
-                    </Button>
-                  </Box>
-                </Flex>
+                <CartItemRow
+                  key={index}
+                  cartItemRow={item}
+                  updateQuantity={updateQuantity}
+                  removeFromCart={removeFromCart}
+                />
               </Box>
             ))}
           </Box>
@@ -355,7 +179,7 @@ export const CartClient = () => {
                   {t("Tổng sản phẩm")}
                 </Text>
                 <Text variant="paragraph-2" weight="medium">
-                  {totalItems} {t("sản phẩm")}
+                  {t("{totalItems} sản phẩm")}
                 </Text>
               </Flex>
 
