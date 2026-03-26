@@ -1,8 +1,16 @@
 "use server";
 
 import { FetchOptions } from "@/utils/fetchers/fetchers.utils";
-const getBaseUrl = () =>
-  process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+
+const getBaseUrl = () => {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? process.env.APP_URL;
+  if (appUrl) return appUrl;
+
+  // Vercel provides host without protocol.
+  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
+
+  return "http://localhost:3000";
+};
 
 export interface ServerFetchOptions<TRequestBody = unknown>
   extends FetchOptions<TRequestBody> {
