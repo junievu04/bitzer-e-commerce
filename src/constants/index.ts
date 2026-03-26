@@ -47,7 +47,7 @@ export const SOCIAL_LINKS = [
 export const INFO_COMPANY = {
   fullName: "CÔNG TY TNHH TM VÀ DV CÔNG NGHỆ ĐIỆN LẠNH ĐẠI TÍN",
   shortName: "ĐẠI TÍN",
-  bio: "Điện lạnh Đại Tín",
+  bio: "Điện Lạnh Đại Tín",
   address1:
     "Tầng 12 - Tháp A2, Tòa nhà Viettel, 285 Cách Mạng Tháng Tám, P. Hoà Hưng, TP. Hồ Chí Minh",
   address2: "8A Hẻm F11, Vĩnh Lộc A, Bình Chánh, TP. Hồ Chí Minh",

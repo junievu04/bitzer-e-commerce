@@ -1,4 +1,3 @@
-"use client";
 import Text from "@/components/text/text";
 import { css } from "@/vendors/styled-system/css";
 import { Box, HStack, Stack } from "@/vendors/styled-system/jsx";

@@ -44,7 +44,7 @@ export default function DynamicCardsAboutSection({ detail }: Props) {
 
   const renderHeader = useMemo(() => {
     if (label && title) {
-      return <AboutHeader label={label} title={title} center />;
+      return <AboutHeader label={t(label)} title={t(title)} center />;
     }
     return (
       <Stack gap="1">

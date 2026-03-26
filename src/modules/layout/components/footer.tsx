@@ -262,7 +262,7 @@ export default function Footer() {
                 </Box>
                 <Stack gap="0.5">
                   <Text variant="caption-1" weight="bold" tone="inverse">
-                    {INFO_COMPANY.admin}
+                    {t(INFO_COMPANY.admin)}
                   </Text>
                   <Link
                     href={`tel:${INFO_COMPANY.phone.replace(/\s/g, "")}`}

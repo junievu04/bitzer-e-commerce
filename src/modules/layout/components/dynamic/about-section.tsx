@@ -60,7 +60,7 @@ export default function AboutSection({ detail }: Props) {
 
   const renderAboutHeader = useMemo(() => {
     if (label && title) {
-      return <AboutHeader label={label} title={title} />;
+      return <AboutHeader label={t(label)} title={t(title)} />;
     }
     if (bulletPoints.length > 0) {
       return (
