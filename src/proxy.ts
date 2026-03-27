@@ -6,20 +6,38 @@ export async function proxy(req: NextRequest) {
   const isAdminRoute = nextUrl.pathname.startsWith("/admin");
   const isLoginPage = nextUrl.pathname === "/admin-login";
 
+  // Không xử lý login page — để NextAuth tự lo
+  if (isLoginPage) {
+    const token = await getToken({
+      req,
+      secret: process.env.NEXTAUTH_SECRET,
+    });
+    const isLoggedIn = !!token && token.role === "admin";
+
+    // Đã login rồi thì đẩy vào dashboard
+    if (isLoggedIn) {
+      return NextResponse.redirect(new URL("/admin", nextUrl));
+    }
+
+    // Chưa login → vào login page bình thường, KHÔNG set callbackUrl
+    return NextResponse.next();
+  }
+
+  if (!isAdminRoute) return NextResponse.next();
+
   const token = await getToken({
     req,
     secret: process.env.NEXTAUTH_SECRET,
   });
-
   const isLoggedIn = !!token && token.role === "admin";
 
-  if (isLoggedIn && isLoginPage) {
-    return NextResponse.redirect(new URL("/admin", nextUrl));
-  }
-
-  if (!isLoggedIn && isAdminRoute) {
+  if (!isLoggedIn) {
     const loginUrl = new URL("/admin-login", nextUrl);
-    loginUrl.searchParams.set("callbackUrl", nextUrl.pathname);
+    // ✅ Chỉ set callbackUrl nếu đích đến KHÔNG phải login page
+    const callback = nextUrl.pathname.startsWith("/admin")
+      ? nextUrl.pathname
+      : "/admin";
+    loginUrl.searchParams.set("callbackUrl", callback);
     return NextResponse.redirect(loginUrl);
   }
 
