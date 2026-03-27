@@ -6,7 +6,6 @@ import {
 } from "@/modules/layout/components";
 import { fetchChatbotData } from "@/modules/layout/utils/fetch-chatbot-data";
 import { styled } from "@/vendors/styled-system/jsx";
-import { ViewTransition } from "react";
 
 const Wrapper = styled("div", {
   base: {
@@ -26,9 +25,7 @@ export default async function layout({
   return (
     <Wrapper>
       <Header />
-      <ViewTransition>
-        <main style={{ flex: 1 }}>{children}</main>
-      </ViewTransition>
+      <main style={{ flex: 1 }}>{children}</main>
       <Footer />
       <ContactButtons />
       <Chatbot data={chatbotData} />
