@@ -4,25 +4,22 @@ import { normalizePublicAppUrl } from "@/utils/app-url";
 import { FetchOptions } from "@/utils/fetchers/fetchers.utils";
 
 const getBaseUrl = () => {
-  // Browser: dùng relative URL
   if (typeof window !== "undefined") return "";
 
-  // `next dev`: luôn gọi API của chính process này. NEXT_PUBLIC_APP_URL thường trỏ
-  // domain production (Vercel) — nếu dùng làm base thì fetch trúng server khác → 500.
   if (process.env.NODE_ENV === "development") {
     return `http://localhost:${process.env.PORT ?? 3000}`;
   }
 
-  // Vercel (production / preview)
+  // Production: ưu tiên custom domain stable
+  const raw = process.env.NEXT_PUBLIC_APP_URL?.trim();
+  if (raw) return normalizePublicAppUrl(raw);
+
+  // Fallback: preview URL (thay đổi mỗi lần deploy — chỉ dùng khi không có APP_URL)
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`;
   }
 
-  const raw = process.env.NEXT_PUBLIC_APP_URL?.trim();
-  if (!raw) {
-    return `http://localhost:${process.env.PORT ?? 3000}`;
-  }
-  return normalizePublicAppUrl(raw);
+  return `http://localhost:${process.env.PORT ?? 3000}`;
 };
 
 export interface ServerFetchOptions<TRequestBody = unknown>
