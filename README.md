@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DAITIN - Bitzer E-commerce
 
-## Getting Started
+Commercial website and internal admin system for DAITIN, focused on Bitzer compressor products and services.
 
-First, run the development server:
+## Live Website
+
+- Production: [https://bitzer-e-commerce.vercel.app/](https://bitzer-e-commerce.vercel.app/)
+
+## Project Overview
+
+- **Frontend:** Next.js App Router (`src/app`) + React 19
+- **UI system:** Panda CSS + module-based component architecture
+- **Database:** MongoDB + Mongoose
+- **Admin auth:** NextAuth Credentials (JWT session)
+- **Data fetching/client state:** TanStack Query
+- **Contact email:** Nodemailer (SMTP)
+- **Internationalization:** Lokalise integration + i18n hooks
+
+## Key Features
+
+- **Commercial website**
+  - Dynamic homepage based on `layoutKey`
+  - Product listing with filtering, sorting, search, and infinite scroll
+  - Product detail pages with cart support and quick consultation CTA
+  - Service listing/detail pages with registration CTA
+  - Cart flow and contact form for purchase inquiries
+  - About page, contact page, and product suggestion chatbot
+- **Admin dashboard**
+  - Credentials-based admin login
+  - Overview statistics (products, categories, services, out-of-stock)
+  - Product management (create/edit/delete, pagination, search)
+  - Category management (create/delete with product relationship checks)
+  - Service management (create/edit/delete)
+  - Automatic route revalidation after data updates
+
+## Directory Structure
+
+```text
+src/
+  app/
+    (web)/           # Public commercial pages
+    (manage)/        # Admin pages
+    api/             # API routes
+  modules/           # Feature modules (products, services, admin, layout, ...)
+  lib/               # Server actions, auth, db, integrations
+  models/            # Mongoose models
+docs/
+  LOKALISE-WORKFLOW.md
+```
+
+## Local Setup
+
+### 1) Install dependencies
+
+```bash
+npm install
+```
+
+### 2) Configure environment variables
+
+Create `.env.local` and define the required variables:
+
+```bash
+NEXT_PUBLIC_APP_URL=
+PORT=
+
+SMTP_HOST=
+SMTP_PORT=
+SMTP_USER=
+SMTP_PASSWORD=
+ADMIN_EMAIL=
+
+MONGODB_URI=
+
+CLOUDINARY_CLOUD_NAME=
+CLOUDINARY_API_KEY=
+CLOUDINARY_API_SECRET=
+CLOUDINARY_URL=
+
+AUTH_SECRET=
+ADMIN_USERNAME=
+ADMIN_PASSWORD=
+
+LOKALISE_PROJECT_ID=
+LOKALISE_API_TOKEN=
+```
+
+### 3) Run development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` - run local development server
+- `npm run build` - build production
+- `npm run start` - run production build
+- `npm run lint` - run ESLint
+- `npm run storybook` - run Storybook
+- `npm run build-storybook` - build Storybook
+- `npm run test:db` - test database connection
+- `npm run seed:db` - seed sample data
 
-## Learn More
+## Security
 
-To learn more about Next.js, take a look at the following resources:
+- Do not commit `.env.local` to git.
+- Protect all sensitive values: SMTP, MongoDB, Cloudinary, Auth, Lokalise.
+- Admin routes are protected by middleware + server-side auth checks.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Documentation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Admin guide (EN): `docs/admin-user-guide.md`
+- Commercial pages (EN): `docs/commercial-pages.md`
+- Customer-facing admin usage guide (VI): `docs/huong-dan-van-hanh-gui-khach-hang.vi.md`
+- Lokalise workflow: `docs/LOKALISE-WORKFLOW.md`
