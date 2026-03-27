@@ -31,7 +31,7 @@ jobs:
           base_lang: vi_VN
           flat_naming: true
           skip_include_tags: true
-          additional_params: '{"filter_langs": ["vi", "en"], "directory_prefix": "languages/", "language_mapping": [{"original_language_iso": "en", "custom_language_iso": "en"}, {"original_language_iso": "en_US", "custom_language_iso": "en"}, {"original_language_iso": "vi", "custom_language_iso": "vi"}]}'
+          additional_params: '{"filter_langs": ["vi", "en"], "directory_prefix": "languages/", "placeholder_format": "icu", "language_mapping": [{"original_language_iso": "en", "custom_language_iso": "en"}, {"original_language_iso": "en_US", "custom_language_iso": "en"}, {"original_language_iso": "vi", "custom_language_iso": "vi"}]}'
 
       - name: Debug - List files after Pull
         run: |
@@ -46,3 +46,17 @@ jobs:
           echo ""
           echo "=== Mẫu vi.json (10 dòng đầu) ==="
           head -10 languages/vi.json 2>/dev/null || echo "Không có vi.json"
+
+      - name: Check for changes
+        id: diff
+        run: |
+          git diff --quiet languages/ && echo "changed=false" >> $GITHUB_OUTPUT || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push
+        if: steps.diff.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add languages/
+          git commit -m "chore: sync translations from Lokalise [skip ci]"
+          git push

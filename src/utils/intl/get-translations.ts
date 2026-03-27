@@ -27,6 +27,39 @@ type FormatMessage = (
   },
 ) => string;
 
+function replacePrintfPlaceholders(
+  translatedMessage: string,
+  key: string,
+  values?: Record<string, string | number | ReactNode>,
+): string {
+  if (!/%\d*\$?s/.test(translatedMessage)) {
+    return translatedMessage;
+  }
+
+  const keyPlaceholderRegex = /{([^{}]+)}/g;
+  const keyPlaceholders: string[] = [];
+  for (const match of key.matchAll(keyPlaceholderRegex)) {
+    keyPlaceholders.push(match[1]);
+  }
+
+  let sequence = 0;
+  return translatedMessage.replace(/%(\d+)\$s|%s/g, (_, indexed) => {
+    const placeholderIndex = indexed ? Number(indexed) - 1 : sequence++;
+    const placeholderName = keyPlaceholders[placeholderIndex];
+
+    if (!placeholderName) {
+      return _;
+    }
+
+    const value = get(values, placeholderName);
+    if (isNil(value) || isValidElement(value)) {
+      return _;
+    }
+
+    return String(value);
+  });
+}
+
 const getTranslations = (message: Record<string, string>) => {
   const callback: FormatMessage = (key, values) => {
     let translatedMessage = message[key];
@@ -35,6 +68,11 @@ const getTranslations = (message: Record<string, string>) => {
       const defaultMessage = values?.defaultMessage?.toString();
       translatedMessage = defaultMessage ?? key;
     }
+    translatedMessage = replacePrintfPlaceholders(
+      translatedMessage,
+      key,
+      values,
+    );
 
     const regex = /({[^{}]*})|[^{}]+/g;
     const messages = translatedMessage.match(regex);
