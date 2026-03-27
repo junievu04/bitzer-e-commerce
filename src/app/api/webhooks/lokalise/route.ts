@@ -9,8 +9,25 @@ import { NextRequest, NextResponse } from "next/server";
 const GITHUB_DISPATCH_URL = (repo: string) =>
   `https://api.github.com/repos/${repo}/dispatches`;
 
+function isLokalisePing(body: unknown): boolean {
+  return Array.isArray(body) && body[0] === "ping";
+}
+
 export async function POST(request: NextRequest) {
   try {
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      body = undefined;
+    }
+
+    // Lokalise gửi POST body ["ping"] khi validate URL lúc tạo webhook —
+    // không yêu cầu so khớp X-Secret; bắt buộc trả 2xx.
+    if (isLokalisePing(body)) {
+      return NextResponse.json({ ok: true, ping: true });
+    }
+
     const secret = request.headers.get("x-secret");
     const event = request.headers.get("x-event");
     const expectedSecret = process.env.LOKALISE_WEBHOOK_SECRET;
@@ -30,8 +47,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Ping khi setup webhook hoặc event khác → trả 200 ngay
-    if (event !== "project.translation.updated") {
-      return NextResponse.json({ ok: true, skipped: event ?? "ping" });
+    const triggersPull =
+      event === "project.translation.updated" ||
+      event === "project.translations.updated";
+
+    if (!triggersPull) {
+      return NextResponse.json({ ok: true, skipped: event ?? "unknown" });
     }
 
     const res = await fetch(GITHUB_DISPATCH_URL(repo), {
