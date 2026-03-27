@@ -68,7 +68,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             </Box>
             <Stack gap="0">
               <Text variant="paragraph-2" weight="bold" tone="inverse">
-                BITZERshop
+                DAI TIN
               </Text>
               <Text
                 variant="caption-2"

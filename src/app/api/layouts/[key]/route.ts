@@ -53,9 +53,10 @@ export async function GET(
     }
 
     // ─── Resolve serviceId/productId → slug links ─────────────────────────────
-    const resolvedComponents = await resolveLayoutLinks(
-      doc.data.components ?? [],
-    );
+    const rawComponents = doc.data?.components;
+    const components = Array.isArray(rawComponents) ? rawComponents : [];
+
+    const resolvedComponents = await resolveLayoutLinks(components);
 
     return NextResponse.json(
       { ...doc, data: { ...doc.data, components: resolvedComponents } },

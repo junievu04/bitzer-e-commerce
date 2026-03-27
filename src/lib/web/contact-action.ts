@@ -1,4 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
+// actions/contact.ts
+"use server";
+
 import nodemailer from "nodemailer";
 
 interface ContactFormData {
@@ -9,18 +11,30 @@ interface ContactFormData {
   message: string;
 }
 
-export async function POST(request: NextRequest) {
+interface ActionResult {
+  success: boolean;
+  message: string;
+}
+
+export async function submitContact(
+  formData: ContactFormData,
+): Promise<ActionResult> {
+  const { name, email, phone, address, message } = formData;
+
+  if (!name || !email || !phone || !message) {
+    return {
+      success: false,
+      message: "Vui lòng điền đầy đủ thông tin bắt buộc",
+    };
+  }
+
+  const adminEmail = process.env.ADMIN_EMAIL;
+  if (!adminEmail) {
+    console.error("ADMIN_EMAIL is not configured");
+    return { success: false, message: "Cấu hình email chưa hoàn tất" };
+  }
+
   try {
-    const body: ContactFormData = await request.json();
-    const { name, email, phone, address, message } = body;
-
-    if (!name || !email || !phone || !message) {
-      return NextResponse.json(
-        { error: "Vui lòng điền đầy đủ thông tin bắt buộc" },
-        { status: 400 }
-      );
-    }
-
     const transporter = nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT) || 587,
@@ -31,20 +45,10 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    const adminEmail = process.env.ADMIN_EMAIL;
-
-    if (!adminEmail) {
-      console.error("ADMIN_EMAIL is not configured");
-      return NextResponse.json(
-        { error: "Cấu hình email chưa hoàn tất" },
-        { status: 500 }
-      );
-    }
-
     const htmlContent = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h2 style="color: #16a34a; border-bottom: 2px solid #16a34a; padding-bottom: 10px;">
-          Yêu cầu liên hệ mới từ BITZERshop
+          Yêu cầu liên hệ mới từ DAI TIN
         </h2>
         
         <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
@@ -96,28 +100,28 @@ ${message}
         </div>
         
         <p style="margin-top: 30px; color: #6b7280; font-size: 12px;">
-          Email này được gửi tự động từ form liên hệ trên website BITZERshop.
+          Email này được gửi tự động từ form liên hệ trên website DAI TIN.
         </p>
       </div>
     `;
 
     await transporter.sendMail({
-      from: `"BITZERshop Contact" <${process.env.SMTP_USER}>`,
+      from: `"DAI TIN Contact" <${process.env.SMTP_USER}>`,
       to: adminEmail,
       replyTo: email,
-      subject: `[BITZERshop] Yêu cầu liên hệ từ ${name}`,
+      subject: `[DAI TIN] Yêu cầu liên hệ từ ${name}`,
       html: htmlContent,
     });
 
-    return NextResponse.json(
-      { message: "Gửi liên hệ thành công! Chúng tôi sẽ phản hồi sớm nhất." },
-      { status: 200 }
-    );
+    return {
+      success: true,
+      message: "Gửi liên hệ thành công! Chúng tôi sẽ phản hồi sớm nhất.",
+    };
   } catch (error) {
     console.error("Error sending email:", error);
-    return NextResponse.json(
-      { error: "Có lỗi xảy ra khi gửi email. Vui lòng thử lại sau." },
-      { status: 500 }
-    );
+    return {
+      success: false,
+      message: "Có lỗi xảy ra khi gửi email. Vui lòng thử lại sau.",
+    };
   }
 }

@@ -5,6 +5,7 @@ import Text from "@/components/text";
 import TextArea from "@/components/text-area/text-area";
 import TextField from "@/components/text-field";
 import { useCart } from "@/hooks";
+import { submitContact } from "@/lib/web/contact-action";
 import { useIntl } from "@/utils/intl";
 import { Box, Stack } from "@/vendors/styled-system/jsx";
 import { useSearchParams } from "next/navigation";
@@ -76,6 +77,7 @@ export const ContactForm = () => {
             currency: "VND",
           }).format(totalPrice);
 
+      /// eslint-disable-next-line react-hooks/exhaustive-deps
       setFormData((prev) => ({
         ...prev,
         message: `Tôi muốn đặt mua các sản phẩm sau:\n\n${cartContent}\n\n---\nTổng cộng: ${totalText}\n\nVui lòng liên hệ lại với tôi để xác nhận đơn hàng.`,
@@ -141,35 +143,18 @@ Vui lòng liên hệ lại với tôi để tư vấn chi tiết và đăng ký 
     setIsSubmitting(true);
     setSubmitStatus(null);
 
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+    const result = await submitContact(formData);
 
-      const data = await response.json();
+    setSubmitStatus({
+      type: result.success ? "success" : "error",
+      message: result.message,
+    });
 
-      if (response.ok) {
-        setSubmitStatus({ type: "success", message: data.message });
-        setFormData({
-          name: "",
-          email: "",
-          phone: "",
-          address: "",
-          message: "",
-        });
-      } else {
-        setSubmitStatus({ type: "error", message: data.error });
-      }
-    } catch {
-      setSubmitStatus({
-        type: "error",
-        message: t("Có lỗi xảy ra. Vui lòng thử lại sau."),
-      });
-    } finally {
-      setIsSubmitting(false);
+    if (result.success) {
+      setFormData({ name: "", email: "", phone: "", address: "", message: "" });
     }
+
+    setIsSubmitting(false);
   };
 
   return (

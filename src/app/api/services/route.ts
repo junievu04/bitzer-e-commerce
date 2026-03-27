@@ -1,8 +1,9 @@
 // app/api/services/route.ts
 
 import { connectDB } from "@/lib/mongodb";
+import { mapServiceToListDTO } from "@/lib/web/map-services";
 import { IService, Service } from "@/models/Service";
-import type { Service as ServiceDTO, ServicesDTO } from "@/modules/services";
+import type { ServicesDTO } from "@/modules/services";
 import mongoose, { Types } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -17,16 +18,6 @@ function parseLimit(searchParams: URLSearchParams): number {
   const n = Number(raw);
   if (Number.isNaN(n) || n <= 0) return DEFAULT_LIMIT;
   return Math.min(n, MAX_LIMIT);
-}
-
-function mapToListDTO(doc: ServiceDoc): ServiceDTO {
-  return {
-    id: String(doc._id),
-    name: doc.name,
-    slug: doc.slug,
-    thumbnail: doc.thumbnail,
-    brief: doc.brief,
-  };
 }
 
 export async function GET(request: NextRequest) {
@@ -56,7 +47,7 @@ export async function GET(request: NextRequest) {
     const pageItems = hasNext ? docs.slice(0, -1) : docs;
 
     const result: ServicesDTO = {
-      data: pageItems.map(mapToListDTO),
+      data: pageItems.map(mapServiceToListDTO),
       next: hasNext ? String(pageItems.at(-1)?._id) : null,
       isActive: true,
     };

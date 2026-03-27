@@ -1,4 +1,5 @@
 import { CartProvider } from "@/hooks";
+import { getMetadataBaseUrl } from "@/utils/app-url";
 import { IntlProvider } from "@/utils/intl";
 import TanStackQueryProvider from "@/vendors/tanstack-query/provider";
 import type { Metadata, Viewport } from "next";
@@ -19,8 +20,6 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-// ─── Metadata ─────────────────────────────────────────────────────────────────
-
 export const metadata: Metadata = {
   title: {
     default: "DAITIN — Phụ tùng máy nén Bitzer chính hãng",
@@ -38,9 +37,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "DAITIN" }],
   creator: "DAITIN",
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
-  ),
+  metadataBase: getMetadataBaseUrl(process.env.NEXT_PUBLIC_APP_URL),
   openGraph: {
     type: "website",
     locale: "vi_VN",
@@ -80,8 +77,6 @@ export const viewport: Viewport = {
   initialScale: 1,
   themeColor: "#16a34a",
 };
-
-// ─── Layout ───────────────────────────────────────────────────────────────────
 
 export default function RootLayout({
   children,

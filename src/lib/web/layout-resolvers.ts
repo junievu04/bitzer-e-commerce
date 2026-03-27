@@ -1,6 +1,7 @@
 import { connectDB } from "@/lib/mongodb";
 import { Product } from "@/models/Product";
 import { Service } from "@/models/Service";
+import { Types } from "mongoose";
 import { LayoutComponent, LayoutComponentDetail } from "@/modules/layout";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -76,6 +77,10 @@ export async function resolveLayoutLinks(
 ): Promise<LayoutComponent[]> {
   await connectDB();
 
+  if (!Array.isArray(components)) {
+    return [];
+  }
+
   const serviceIds = new Set<string>();
   const productIds = new Set<string>();
 
@@ -89,20 +94,27 @@ export async function resolveLayoutLinks(
     collectIds(nested, serviceIds, productIds);
   }
 
+  const serviceIdList = [...serviceIds].filter((id) =>
+    Types.ObjectId.isValid(id),
+  );
+  const productIdList = [...productIds].filter((id) =>
+    Types.ObjectId.isValid(id),
+  );
+
   // Không có gì cần resolve — trả về nguyên bản
-  if (!serviceIds.size && !productIds.size) return components;
+  if (!serviceIdList.length && !productIdList.length) return components;
 
   // Fetch slugs 1 lần duy nhất
   const [services, products] = await Promise.all([
-    serviceIds.size
+    serviceIdList.length
       ? Service.find(
-          { _id: { $in: [...serviceIds] } },
+          { _id: { $in: serviceIdList } },
           { _id: 1, slug: 1 },
         ).lean()
       : [],
-    productIds.size
+    productIdList.length
       ? Product.find(
-          { _id: { $in: [...productIds] } },
+          { _id: { $in: productIdList } },
           { _id: 1, slug: 1 },
         ).lean()
       : [],
