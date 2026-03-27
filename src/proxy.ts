@@ -1,18 +1,22 @@
-import { auth } from "@/auth";
-import { NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
+import { NextRequest, NextResponse } from "next/server";
 
-export default auth((req) => {
-  const { nextUrl, auth: session } = req;
-  const isLoggedIn = !!session?.user && session.user.role === "admin";
+export async function middleware(req: NextRequest) {
+  const { nextUrl } = req;
   const isAdminRoute = nextUrl.pathname.startsWith("/admin");
   const isLoginPage = nextUrl.pathname === "/admin-login";
 
-  // Đã đăng nhập mà vào trang login → redirect vào dashboard
+  const token = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+
+  const isLoggedIn = !!token && token.role === "admin";
+
   if (isLoggedIn && isLoginPage) {
     return NextResponse.redirect(new URL("/admin", nextUrl));
   }
 
-  // Chưa đăng nhập mà vào route admin → redirect về login
   if (!isLoggedIn && isAdminRoute) {
     const loginUrl = new URL("/admin-login", nextUrl);
     loginUrl.searchParams.set("callbackUrl", nextUrl.pathname);
@@ -20,8 +24,8 @@ export default auth((req) => {
   }
 
   return NextResponse.next();
-});
+}
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/admin-login"],
 };
