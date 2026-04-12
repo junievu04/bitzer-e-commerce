@@ -22,7 +22,6 @@ import {
   Stack,
 } from "@/vendors/styled-system/jsx";
 
-// Nav links: trắng 70% → trắng 100% on hover
 const navLinkCss = css({
   display: "flex",
   alignItems: "center",
@@ -70,11 +69,9 @@ export default function Footer() {
           mb="10"
           alignItems="start"
         >
-          {/* ── Col 1: Về chúng tôi ──────────────────────────────────────── */}
           <Stack gap="0">
             <ColHeading>{t("Về chúng tôi")}</ColHeading>
             <Stack gap="4">
-              {/* Logo + wordmark */}
               <Link
                 href="/"
                 tone="inverse"
@@ -83,17 +80,6 @@ export default function Footer() {
                 alignItems="center"
                 gap="2.5"
               >
-                {/* <Center
-                  w="10"
-                  h="10"
-                  borderRadius="lg"
-                  bg="brand.700"
-                  flexShrink={0}
-                  border="1px solid"
-                  borderColor="brand.600"
-                >
-                  <span style={{ fontSize: "20px", lineHeight: 1 }}>🔩</span>
-                </Center> */}
                 <Image
                   src={LOGO_IMAGE}
                   alt={INFO_COMPANY.shortName}
@@ -123,7 +109,6 @@ export default function Footer() {
                 </Stack>
               </Link>
 
-              {/* Tên đầy đủ + MST */}
               <Stack gap="1.5">
                 <Text weight="bold" tone="inverse" lineHeight="1.55">
                   {t(INFO_COMPANY.fullName)}
@@ -133,7 +118,6 @@ export default function Footer() {
                 </Text>
               </Stack>
 
-              {/* Trust tags */}
               <Flex gap="2" flexWrap="wrap">
                 {[
                   { icon: StarTickFilled, label: t("Chính hãng") },
@@ -167,7 +151,6 @@ export default function Footer() {
           <Stack gap="0">
             <ColHeading>{t("Địa chỉ")}</ColHeading>
             <Stack gap="6">
-              {/* Văn phòng */}
               <Stack gap="2">
                 <Text
                   variant="caption-1"
@@ -193,7 +176,6 @@ export default function Footer() {
                 </HStack>
               </Stack>
 
-              {/* Kho nhận hàng */}
               <Stack gap="2">
                 <Text
                   variant="caption-1"
@@ -221,7 +203,6 @@ export default function Footer() {
             </Stack>
           </Stack>
 
-          {/* ── Col 3: Sản phẩm + Thông tin ─────────────────────────────── */}
           <Stack gap="0">
             <ColHeading>{t("Thông tin")}</ColHeading>
             <Stack gap="2.5">
@@ -251,7 +232,6 @@ export default function Footer() {
           <Stack gap="0">
             <ColHeading>{t("Liên hệ")}</ColHeading>
             <Stack gap="4" mb="7">
-              {/* Ms Vân */}
               <HStack gap="3" alignItems="flex-start">
                 <Box pt="1" flexShrink={0}>
                   <Phone size="sm" tone="trending" />
@@ -267,13 +247,28 @@ export default function Footer() {
                     className={contactLinkCss}
                   >
                     <Text variant="paragraph-2" inline tone="inverse">
+                      {t("Liên lạc trực tiếp: ")}
+                    </Text>
+                    <Text variant="paragraph-2" inline tone="inverse">
                       {INFO_COMPANY.phone}
+                    </Text>
+                  </Link>
+                  <Link
+                    href={`tel:${INFO_COMPANY.phone.replace(/\s/g, "")}`}
+                    tone="inverse"
+                    hover="none"
+                    className={contactLinkCss}
+                  >
+                    <Text variant="paragraph-2" inline tone="inverse">
+                      {t("Số điện thoại khác: ")}
+                    </Text>
+                    <Text variant="paragraph-2" inline tone="inverse">
+                      {INFO_COMPANY.phone2}
                     </Text>
                   </Link>
                 </Stack>
               </HStack>
 
-              {/* Email */}
               <HStack gap="3" alignItems="flex-start">
                 <Box pt="1" flexShrink={0}>
                   <Envelope size="sm" tone="trending" />
@@ -301,7 +296,6 @@ export default function Footer() {
               </HStack>
             </Stack>
 
-            {/* Social */}
             <Stack gap="3">
               <Text
                 variant="caption-1"
@@ -343,11 +337,9 @@ export default function Footer() {
           </Stack>
         </Grid>
 
-        {/* Divider — xám */}
         <Box borderTop="1px solid" borderColor="gray.700" />
       </Box>
 
-      {/* ── Copyright bar — brand.600 bg, chữ trắng ───────────────────────── */}
       <Box py="3.5" px={{ base: "4", md: "8" }} bg="brand.600">
         <Flex
           maxW="7xl"

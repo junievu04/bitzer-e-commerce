@@ -4,7 +4,7 @@ const getMongoUri = () => {
   const uri = process.env.MONGODB_URI;
   if (!uri) {
     throw new Error(
-      "Please define MONGODB_URI in your .env.local file.\n" +
+      "Please define MONGODB_URI in .env or .env.local.\n" +
         "Example: MONGODB_URI=mongodb+srv://<user>:<pass>@cluster.mongodb.net/bitzer",
     );
   }

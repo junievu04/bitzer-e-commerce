@@ -19,10 +19,15 @@ const TOPICS: TopicKey[] = ["compressor", "gas", "repair", "warranty"];
 async function getProductsByTopic(topic: TopicKey): Promise<ProductItem[]> {
   if (topic !== "compressor" && topic !== "gas") return [];
 
+  /** Khớp danh mục seed: may-nen-*, cum-may-nen*, dau-bitzer, binh-ngung-* */
   const categoryQuery =
     topic === "gas"
-      ? { slug: { $regex: /gas/i } }
-      : { slug: { $regex: /^may-nen/i } };
+      ? { slug: { $regex: /dau-bitzer|binh-ngung/i } }
+      : {
+          slug: {
+            $regex: /may-nen-piston|may-nen-truc-vit|cum-may-nen/i,
+          },
+        };
   const categories = await Category.find(categoryQuery)
     .select({ _id: 1 })
     .limit(10)

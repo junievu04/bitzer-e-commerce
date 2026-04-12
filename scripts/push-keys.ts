@@ -2,7 +2,7 @@
 
 import { pushKeysToLokalise } from "@/lib/lokalise/push-key-lokalise";
 import { Layout } from "@/models/Layout";
-import "dotenv/config";
+import "./load-env";
 
 // ─── Config ───────────────────────────────────────────────────────────────────
 

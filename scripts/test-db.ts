@@ -1,5 +1,5 @@
 // scripts/test-db.ts
-import "dotenv/config";
+import "./load-env";
 
 console.log("junie test", process.env.MONGODB_URI);
 

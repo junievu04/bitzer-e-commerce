@@ -1,4 +1,4 @@
-import { Facebook, Mail, Messenger, Zalo } from "@/components/icons";
+import { Facebook, Mail, Zalo } from "@/components/icons";
 
 export const NAV_LINKS: { pathname: string; label: string }[] = [
   { pathname: "/", label: "Trang chủ" },
@@ -18,22 +18,17 @@ export const INFO_LINKS = [
 export const SOCIAL_LINKS = [
   {
     icon: Zalo,
-    url: "https://",
+    url: "https://zalo.me/0975187429",
     title: "Zalo",
   },
   {
-    icon: Messenger,
-    url: "https://",
-    title: "Messenger",
-  },
-  {
     icon: Facebook,
-    url: "https://facebook.com/YOUR_PAGE",
+    url: "https://www.facebook.com/anhvan.truong.77",
     title: "Facebook",
   },
   {
     icon: Mail,
-    url: "https://",
+    url: "mailto:bitzerecommerce@gmail.com",
     title: "Mail",
   },
 ];

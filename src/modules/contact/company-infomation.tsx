@@ -25,10 +25,10 @@ export const CompanyInfomation = () => {
           </Box>
           <Box>
             <Text variant="caption-1" weight="bold" tone="secondary">
-              {t("Địa chỉ")}:
+              {t("Địa chỉ nhận hàng")}:
             </Text>
             <Text variant="paragraph-2" tone="primary">
-              {t(INFO_COMPANY.address1)}
+              {t(INFO_COMPANY.address2)}
             </Text>
           </Box>
         </Flex>

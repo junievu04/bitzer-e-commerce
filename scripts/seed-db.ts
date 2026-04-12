@@ -1,6 +1,7 @@
 // scripts/seed-db.ts
+import "./load-env";
+import { Layout } from "@/models/Layout";
 import { Service } from "@/models/Service";
-import "dotenv/config";
 
 async function main() {
   const { connectDB } = await import("@/lib/mongodb");
@@ -25,9 +26,9 @@ async function main() {
       brief:
         "Dịch vụ bảo trì máy nén BITZER chuyên nghiệp, đảm bảo thiết bị luôn hoạt động ổn định.",
       description: [
-        "Green Point Vietnam là trung tâm dịch vụ ủy quyền chính thức duy nhất tại Việt Nam được BITZER trao quyền thực hiện bảo trì toàn diện các dòng máy nén. Với hơn 15 năm kinh nghiệm trong ngành, chúng tôi đã thực hiện hàng trăm hợp đồng bảo trì định kỳ cho các doanh nghiệp lớn trong lĩnh vực lạnh công nghiệp, thực phẩm và điều hòa không khí trên toàn quốc.",
-        "Quy trình bảo trì của chúng tôi tuân thủ nghiêm ngặt tiêu chuẩn kỹ thuật do nhà máy BITZER ban hành, bao gồm kiểm tra áp suất, nhiệt độ vận hành, độ rung, tình trạng dầu bôi trơn và các thông số điện. Mỗi lần bảo trì đều được lập biên bản chi tiết và lưu trữ hồ sơ thiết bị, giúp khách hàng theo dõi lịch sử vận hành và dự đoán sớm các nguy cơ hỏng hóc trước khi xảy ra sự cố.",
-        "Đội ngũ kỹ sư của chúng tôi được đào tạo trực tiếp tại nhà máy BITZER ở Đức và thường xuyên cập nhật kỹ thuật mới nhất. Chúng tôi cam kết đáp ứng lịch bảo trì đúng hẹn, hạn chế tối đa thời gian dừng máy và đảm bảo thiết bị luôn vận hành ở hiệu suất tối ưu sau mỗi lần bảo dưỡng.",
+        "Công ty TNHH TM & DV Công Nghệ Điện Lạnh Đại Tín cung cấp dịch vụ bảo trì máy nén Bitzer và hệ thống lạnh công nghiệp theo quy trình rõ ràng, phù hợp quy mô vận hành thực tế của từng khách hàng.",
+        "Quy trình bảo trì tuân thủ các bước kiểm tra áp suất, nhiệt độ vận hành, độ rung, dầu bôi trơn và thông số điện; lập biên bản gọn để khách hàng theo dõi lịch sử thiết bị.",
+        "Chúng tôi ưu tiên an toàn vận hành, đúng hẹn lịch bảo dưỡng và hạn chế thời gian dừng máy, đồng thời tư vấn vật tư chính hãng khi cần thay thế.",
       ],
       features: [
         "Kiểm tra toàn bộ hệ thống máy nén theo chu kỳ",
@@ -48,9 +49,9 @@ async function main() {
       brief:
         "Sửa chữa máy nén BITZER đúng quy trình kỹ thuật với phụ tùng chính hãng, bảo hành đầy đủ.",
       description: [
-        "Green Point Vietnam sở hữu xưởng sửa chữa máy nén hiện đại được trang bị đầy đủ thiết bị chuyên dụng theo tiêu chuẩn BITZER, bao gồm hệ thống kiểm tra chân không, nạp gas, cân bằng động rotor và đo lường điện tử chính xác cao. Chúng tôi có khả năng tiếp nhận và xử lý đồng thời nhiều máy nén từ các dòng piston, trục vít đến scroll với năng lực công suất đa dạng.",
-        "Quy trình sửa chữa được thực hiện theo đúng tài liệu kỹ thuật của BITZER, bắt đầu từ giai đoạn chẩn đoán lỗi chuyên sâu bằng thiết bị đo lường hiện đại, tiếp theo là tháo máy hoàn toàn, làm sạch từng chi tiết, kiểm tra kích thước dung sai, thay thế các bộ phận hao mòn và lắp ráp lại theo đúng moment xiết quy định. Mỗi máy nén sau sửa chữa đều được chạy thử tải và nghiệm thu trước khi bàn giao.",
-        "Toàn bộ linh kiện thay thế sử dụng trong quá trình sửa chữa là phụ tùng chính hãng BITZER được nhập khẩu trực tiếp, có đầy đủ tem nhãn và chứng từ xuất xứ. Khách hàng được cấp phiếu bảo hành sau sửa chữa và được hỗ trợ kỹ thuật miễn phí trong suốt thời gian bảo hành. Chúng tôi cam kết thời gian hoàn trả máy nhanh chóng, giảm thiểu tối đa thiệt hại do dừng dây chuyền sản xuất.",
+        "Đại Tín tiếp nhận sửa chữa máy nén Bitzer với quy trình chẩn đoán – tháo lắp – thử tải rõ ràng; ưu tiên phụ tùng chính hãng và hồ sơ kỹ thuật minh bạch.",
+        "Các bước thực hiện bám sát tài liệu kỹ thuật nhà sản xuất: kiểm tra nguyên nhân, đánh giá chi tiết hao mòn, thay thế linh kiện phù hợp và nghiệm thu trước khi bàn giao.",
+        "Khách hàng được thông báo phương án xử lý và chi phí dự kiến; hỗ trợ tư vấn sau sửa chữa trong thời gian bảo hành theo thỏa thuận.",
       ],
       features: [
         "Chẩn đoán chính xác nguyên nhân hỏng hóc",

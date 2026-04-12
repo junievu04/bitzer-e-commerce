@@ -5,7 +5,7 @@ import { Image } from "@/components/image";
 import Link from "@/components/link";
 import Text from "@/components/text";
 import TextField from "@/components/text-field/text-field";
-import { INFO_COMPANY, LOGO_IMAGE } from "@/constants";
+import { INFO_COMPANY, LOGO_FULLNAME_IMAGE } from "@/constants";
 import { NAV_LINKS } from "@/constants/layout-links";
 import { useCart } from "@/hooks";
 import { useIntl } from "@/utils/intl";
@@ -52,7 +52,6 @@ export default function Header() {
       shadow={scrolled ? "md" : "none"}
       transition="all 0.3s ease"
     >
-      {/* ── Main row ──────────────────────────────────────────────────────── */}
       <Flex
         w="100%"
         mx="auto"
@@ -63,7 +62,6 @@ export default function Header() {
         gap="5"
         justifyContent="space-between"
       >
-        {/* Logo */}
         <Link
           href="/"
           display="flex"
@@ -72,16 +70,14 @@ export default function Header() {
           gap="1"
         >
           <Image
-            src={LOGO_IMAGE}
+            src={LOGO_FULLNAME_IMAGE}
             alt={INFO_COMPANY.shortName}
-            width="10"
-            height="10"
+            width={150}
+            height="12"
             borderRadius="lg"
           />
-          <Text variant="metric-2">{INFO_COMPANY.shortName}</Text>
         </Link>
 
-        {/* Desktop nav */}
         <HStack gap="5" display={{ base: "none", lg: "flex" }} flexShrink={0}>
           {links.map((l) => (
             <Link key={l.pathname} href={l.pathname} transition="color 0.2s">
@@ -97,7 +93,6 @@ export default function Header() {
           ))}
         </HStack>
 
-        {/* ── Search bar ─────────────────────────────────────────────────── */}
         <Box
           as="form"
           flex="1"
@@ -117,7 +112,6 @@ export default function Header() {
           />
         </Box>
 
-        {/* Right actions */}
         <HStack gap="3" flexShrink={0}>
           <LanguageSwitcher />
           <Link href="/cart" position="relative">
@@ -152,7 +146,6 @@ export default function Header() {
         </HStack>
       </Flex>
 
-      {/* ── Mobile search — below the header row ──────────────────────────── */}
       <Box
         as="form"
         display={{ base: "block", md: "none" }}
@@ -173,7 +166,6 @@ export default function Header() {
         />
       </Box>
 
-      {/* ── Mobile nav menu ───────────────────────────────────────────────── */}
       {menuOpen && (
         <Stack
           px="4"

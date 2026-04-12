@@ -30,9 +30,6 @@ export type Message = {
   };
 };
 
-/**
- * Chatbot
- */
 export interface ChatbotData {
   suggestionProducts: {
     topiKey: string;
