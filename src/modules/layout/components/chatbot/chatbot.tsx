@@ -43,7 +43,7 @@ function getChatbotResponse(message: string): ChatRule {
   }
   return {
     keywords: [],
-    response: `"Vui lòng liên hệ hotline ${INFO_COMPANY.phone} hoặc chat trực tiếp qua Zalo/Messenger.`,
+    response: `Vui lòng liên hệ hotline ${INFO_COMPANY.phone} hoặc chat trực tiếp qua Zalo/Messenger.`,
   };
 }
 
