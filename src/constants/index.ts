@@ -18,6 +18,6 @@ export const INFO_COMPANY = {
   phone: "0975 187 429",
   phone2: "0962 884 529",
   email: "bitzerecommerce@gmail.com",
-  website: "www.congnghedaitin.com",
+  website: "https://www.daitindienlanh.com",
   admin: "Ms. Vân (Kinh doanh)",
 };
