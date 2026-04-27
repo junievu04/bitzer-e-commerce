@@ -22,36 +22,41 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "DAITIN — Phụ tùng máy nén Bitzer chính hãng",
-    template: "%s | DAITIN",
+    default: "Điện Lạnh Đại Tín — Máy nén Bitzer & Dịch vụ lạnh công nghiệp",
+    template: "%s | Điện Lạnh Đại Tín",
   },
   description:
-    "Chuyên cung cấp phụ tùng máy nén Bitzer, linh kiện điện lạnh, gas lạnh chính hãng. Giao hàng toàn quốc. Tư vấn kỹ thuật 24/7.",
+    "Công ty TNHH TM và DV Công Nghệ Điện Lạnh Đại Tín tại Việt Nam. Cung cấp máy nén Bitzer, cụm máy nén, phụ kiện, dầu bôi trơn và dịch vụ bảo trì sửa chữa máy nén chuyên nghiệp. Tư vấn kỹ thuật 24/7.",
   keywords: [
-    "phụ tùng máy nén Bitzer",
-    "linh kiện điện lạnh",
-    "gas lạnh",
-    "máy nén lạnh",
+    "máy nén Bitzer",
+    "máy nén piston Bitzer",
+    "máy nén trục vít Bitzer",
+    "cụm máy nén Bitzer",
+    "phụ kiện máy nén Bitzer",
+    "dầu Bitzer BSE170 BSE32",
+    "bảo trì sửa chữa máy nén",
+    "điện lạnh công nghiệp",
     "Bitzer Việt Nam",
-    "spare parts Bitzer",
+    "Đại Tín điện lạnh",
+    "spare parts Bitzer Vietnam",
   ],
-  authors: [{ name: "DAITIN" }],
-  creator: "DAITIN",
+  authors: [{ name: "Công ty TNHH TM và DV Công Nghệ Điện Lạnh Đại Tín" }],
+  creator: "Điện Lạnh Đại Tín",
   metadataBase: getMetadataBaseUrl(process.env.NEXT_PUBLIC_APP_URL),
   openGraph: {
     type: "website",
     locale: "vi_VN",
     alternateLocale: "en_US",
-    siteName: "DAITIN",
-    title: "DAITIN — Phụ tùng máy nén Bitzer chính hãng",
+    siteName: "Điện Lạnh Đại Tín",
+    title: "Điện Lạnh Đại Tín — Máy nén Bitzer & Dịch vụ lạnh công nghiệp",
     description:
-      "Chuyên cung cấp phụ tùng máy nén Bitzer, linh kiện điện lạnh chính hãng.",
+      "Cung cấp máy nén, phụ kiện, dầu bôi trơn và dịch vụ bảo trì sửa chữa máy nén Bitzer chuyên nghiệp.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "DAITIN — Phụ tùng máy nén Bitzer chính hãng",
+    title: "Điện Lạnh Đại Tín — Máy nén Bitzer & Dịch vụ lạnh công nghiệp",
     description:
-      "Chuyên cung cấp phụ tùng máy nén Bitzer, linh kiện điện lạnh chính hãng.",
+      "Máy nén, phụ kiện, dầu bôi trơn và dịch vụ bảo trì chuyên nghiệp.",
   },
   robots: {
     index: true,
@@ -65,9 +70,9 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
+    icon: [{ url: "/logo.png", sizes: "512x512", type: "image/png" }],
+    shortcut: "/logo.png",
+    apple: [{ url: "/logo.png", sizes: "180x180", type: "image/png" }],
   },
   manifest: "/site.webmanifest",
 };

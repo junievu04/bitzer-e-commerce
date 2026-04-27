@@ -1,9 +1,22 @@
 {
-  "name": "DAI TIN",
-  "short_name": "DAI TIN",
+  "name": "Dien Lanh Dai Tin",
+  "short_name": "Dai Tin",
+  "description": "May nen Bitzer, phu kien, dau boi tron va dich vu bao tri chuyen nghiep tai Viet Nam.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#16a34a",
-  "icons": []
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }
