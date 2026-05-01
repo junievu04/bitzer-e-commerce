@@ -17,7 +17,7 @@ export const INFO_COMPANY = {
   taxCode: "0318617669",
   phone: "0975 187 429",
   phone2: "0962 884 529",
-  email: "bitzerecommerce@gmail.com",
-  website: "daitindienlanh.com",
+  email: "info.congnghedaitin@gmail.com",
+  website: "congnghedienlanhdaitin.com",
   admin: "Ms. Vân (Kinh doanh)",
 };
