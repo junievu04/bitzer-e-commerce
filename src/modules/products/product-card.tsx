@@ -78,11 +78,9 @@ export default function ProductCard({ product }: ProductCardProps) {
             {translate("name")}
           </Text>
 
-          {product.price && (
-            <Text variant="paragraph-1" weight="bold" tone="error">
-              {formatPrice(product.price, t)}
-            </Text>
-          )}
+          <Text variant="paragraph-1" weight="bold" tone="error">
+            {formatPrice(product.price, t)}
+          </Text>
 
           {product.stock && (
             <Text

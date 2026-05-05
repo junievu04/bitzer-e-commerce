@@ -26,8 +26,6 @@ export const CartClient = () => {
     return sum + item.product.price * item.quantity;
   }, 0);
 
-  const hasContactPrice = items.some((item) => item.product.price === null);
-
   const breadcrumbItems = [{ label: t("Giỏ hàng") }];
 
   if (items.length === 0) {
@@ -188,7 +186,7 @@ export const CartClient = () => {
                   {t("Tổng tạm tính")}
                 </Text>
                 <Text variant="paragraph-2" weight="medium">
-                  {hasContactPrice ? t("Liên hệ") : formatPrice(totalPrice, t)}
+                  {formatPrice(totalPrice, t)}
                 </Text>
               </Flex>
 
@@ -199,15 +197,9 @@ export const CartClient = () => {
                   {t("Thành tiền")}
                 </Text>
                 <Text variant="section-heading-2" weight="bold" tone="error">
-                  {hasContactPrice ? t("Liên hệ") : formatPrice(totalPrice, t)}
+                  {formatPrice(totalPrice, t)}
                 </Text>
               </Flex>
-
-              {hasContactPrice && (
-                <Text variant="caption-2" tone="secondary" fontStyle="italic">
-                  * {t("Một số sản phẩm cần liên hệ để biết giá")}
-                </Text>
-              )}
             </Stack>
 
             <Stack gap="3">

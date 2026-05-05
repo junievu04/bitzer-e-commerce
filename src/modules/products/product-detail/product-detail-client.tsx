@@ -142,11 +142,9 @@ export default function ProductDetailClient({
               {t("Loại sản phẩm")}: {t(category?.name || "Không có danh mục")}
             </Text>
 
-            {price && (
-              <Text variant="section-heading-1" weight="bold" tone="error">
-                {formatPrice(price, t)}
-              </Text>
-            )}
+            <Text variant="section-heading-1" weight="bold" tone="error">
+              {formatPrice(price, t)}
+            </Text>
 
             {briefTranslated && (
               <Text variant="paragraph-2" tone="secondary">

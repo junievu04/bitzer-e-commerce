@@ -28,7 +28,7 @@ export function buildBaseSlug(name: string): string {
 }
 
 export const formatPrice = (price?: number | null, t?: FormatMessage) => {
-  if (!price) return t ? t("Liên hệ") : "Liên hệ";
+  if (!price || price <= 0) return t ? t("Liên hệ") : "Liên hệ";
   return new Intl.NumberFormat("vi-VN", {
     style: "currency",
     currency: "VND",
