@@ -4,7 +4,8 @@ Commercial website and internal admin system for DAITIN, focused on Bitzer compr
 
 ## Live Website
 
-- Production: [https://bitzer-e-commerce.vercel.app/](https://bitzer-e-commerce.vercel.app/)
+- Production: [https://www.congnghedienlanhdaitin.com/](https://www.congnghedienlanhdaitin.com/)
+              
 
 ## Project Overview
 
