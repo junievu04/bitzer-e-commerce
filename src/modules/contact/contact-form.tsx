@@ -226,10 +226,10 @@ Vui lòng liên hệ lại với tôi để tư vấn chi tiết và đăng ký 
           <Box
             p="3"
             borderRadius="md"
-            bg={submitStatus.type === "success" ? "green.50" : "red.50"}
+            bg={submitStatus.type === "success" ? "brand.50" : "red.50"}
             border="1px solid"
             borderColor={
-              submitStatus.type === "success" ? "green.200" : "red.200"
+              submitStatus.type === "success" ? "brand.200" : "red.200"
             }
           >
             <Text

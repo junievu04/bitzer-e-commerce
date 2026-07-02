@@ -17,7 +17,7 @@ export default function NotFound() {
         alignItems: "center",
         justifyContent: "center",
         background:
-          "linear-gradient(135deg, #f0fdf4 0%, #f9fafb 50%, #dcfce7 100%)",
+          "linear-gradient(135deg, #dbeafe 0%, #f9fafb 50%, #bfdbfe 100%)",
         padding: "2rem",
         fontFamily: "var(--font-heading, 'Be Vietnam Pro', sans-serif)",
         textAlign: "center",
@@ -35,12 +35,12 @@ export default function NotFound() {
             width: "180px",
             height: "180px",
             borderRadius: "50%",
-            border: "2px solid #bbf7d0",
+            border: "2px solid #93c5fd",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             background: "white",
-            boxShadow: "0 20px 60px rgba(34,197,94,0.15)",
+            boxShadow: "0 20px 60px rgba(37,130,235,0.15)",
             position: "relative",
           }}
         >
@@ -50,7 +50,7 @@ export default function NotFound() {
               position: "absolute",
               inset: "-16px",
               borderRadius: "50%",
-              border: "1px dashed #86efac",
+              border: "1px dashed #60a5fa",
               animation: "spin 12s linear infinite",
             }}
           />
@@ -75,7 +75,7 @@ export default function NotFound() {
           lineHeight: "1",
           letterSpacing: "-0.04em",
           background:
-            "linear-gradient(135deg, #15803d 0%, #22c55e 50%, #4ade80 100%)",
+            "linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%)",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
           backgroundClip: "text",
@@ -131,14 +131,14 @@ export default function NotFound() {
             display: "inline-flex",
             alignItems: "center",
             gap: "0.5rem",
-            background: "#16a34a",
+            background: "#1d4ed8",
             color: "white",
             padding: "0.75rem 1.5rem",
             borderRadius: "0.625rem",
             fontWeight: "700",
             fontSize: "0.9375rem",
             transition: "all 0.2s ease",
-            boxShadow: "0 4px 14px rgba(34,197,94,0.35)",
+            boxShadow: "0 4px 14px rgba(37,130,235,0.35)",
             textDecoration: "none",
           }}
         >
@@ -153,8 +153,8 @@ export default function NotFound() {
             alignItems: "center",
             gap: "0.5rem",
             background: "white",
-            color: "#16a34a",
-            border: "1.5px solid #22c55e",
+            color: "#1d4ed8",
+            border: "1.5px solid #2563eb",
             padding: "0.75rem 1.5rem",
             borderRadius: "0.625rem",
             fontWeight: "700",
@@ -180,7 +180,7 @@ export default function NotFound() {
         <Link
           href="/contact"
           style={{
-            color: "#16a34a",
+            color: "#1d4ed8",
             fontWeight: "600",
             textDecoration: "underline",
             textUnderlineOffset: "3px",
@@ -195,11 +195,11 @@ export default function NotFound() {
       <style>{`
         .nf-btn { will-change: transform; }
         .nf-btn--primary:hover {
-          background: #15803d !important;
+          background: #1e40af !important;
           transform: translateY(-1px);
         }
         .nf-btn--secondary:hover {
-          background: #f0fdf4 !important;
+          background: #dbeafe !important;
         }
         @keyframes spin {
           to { transform: rotate(360deg); }

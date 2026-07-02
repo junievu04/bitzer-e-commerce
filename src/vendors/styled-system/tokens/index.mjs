@@ -1352,43 +1352,43 @@ const tokens = {
     "variable": "var(--colors-slate-950)"
   },
   "colors.brand.50": {
-    "value": "#f0fdf4",
+    "value": "#dbeafe",
     "variable": "var(--colors-brand-50)"
   },
   "colors.brand.100": {
-    "value": "#dcfce7",
+    "value": "#bfdbfe",
     "variable": "var(--colors-brand-100)"
   },
   "colors.brand.200": {
-    "value": "#bbf7d0",
+    "value": "#93c5fd",
     "variable": "var(--colors-brand-200)"
   },
   "colors.brand.300": {
-    "value": "#86efac",
+    "value": "#60a5fa",
     "variable": "var(--colors-brand-300)"
   },
   "colors.brand.400": {
-    "value": "#4ade80",
+    "value": "#3b82f6",
     "variable": "var(--colors-brand-400)"
   },
   "colors.brand.500": {
-    "value": "#22c55e",
+    "value": "#2563eb",
     "variable": "var(--colors-brand-500)"
   },
   "colors.brand.600": {
-    "value": "#16a34a",
+    "value": "#1d4ed8",
     "variable": "var(--colors-brand-600)"
   },
   "colors.brand.700": {
-    "value": "#15803d",
+    "value": "#1e40af",
     "variable": "var(--colors-brand-700)"
   },
   "colors.brand.800": {
-    "value": "#166534",
+    "value": "#1e3a8a",
     "variable": "var(--colors-brand-800)"
   },
   "colors.brand.900": {
-    "value": "#14532d",
+    "value": "#172554",
     "variable": "var(--colors-brand-900)"
   },
   "colors.gray.50": {

@@ -25,8 +25,8 @@ const ChatbotProductSuggestions = ({ product }: { product: ProductItem }) => {
       bg="white"
       transition="all 0.2s ease"
       _hover={{
-        borderColor: "warning.base",
-        boxShadow: "0 4px 16px {colors.warning.base/0.15}",
+        borderColor: "brand.500",
+        boxShadow: "0 4px 16px {colors.brand.500/0.15}",
         transform: "translateY(-1px)",
       }}
     >
@@ -53,7 +53,7 @@ const ChatbotProductSuggestions = ({ product }: { product: ProductItem }) => {
             {t("Nhấn để xem chi tiết sản phẩm")}
           </Text>
         </Stack>
-        <ArrowRight pr="3" flexShrink={0} tone="warning" size="sm" />
+        <ArrowRight pr="3" flexShrink={0} tone="link" size="sm" />
       </Flex>
     </Link>
   );

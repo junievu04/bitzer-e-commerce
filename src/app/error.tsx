@@ -191,7 +191,7 @@ export default function GlobalError({ error, reset }: Props) {
         <a
           href="tel:0909123456"
           style={{
-            color: "#16a34a",
+            color: "#1d4ed8",
             fontWeight: "600",
             textDecoration: "underline",
             textUnderlineOffset: "3px",

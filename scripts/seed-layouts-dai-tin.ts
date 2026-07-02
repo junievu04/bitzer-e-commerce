@@ -1,14 +1,10 @@
 import { Layout } from "@/models/Layout";
 
 const IMG = {
-  hero1:
-    "https://res.cloudinary.com/dsw4o0hjl/image/upload/hero-banner-1.jpg",
-  hero2:
-    "https://res.cloudinary.com/dsw4o0hjl/image/upload/hero-banner-2.jpg",
-  hero3:
-    "https://res.cloudinary.com/dsw4o0hjl/image/upload/hero-banner-3.jpg",
-  about1:
-    "https://res.cloudinary.com/dsw4o0hjl/image/upload/dai-tin-image.jpg",
+  hero1: "https://res.cloudinary.com/dsw4o0hjl/image/upload/hero-banner-1.jpg",
+  hero2: "https://res.cloudinary.com/dsw4o0hjl/image/upload/hero-banner-2.jpg",
+  hero3: "https://res.cloudinary.com/dsw4o0hjl/image/upload/hero-banner-3.jpg",
+  about1: "https://res.cloudinary.com/dsw4o0hjl/image/upload/dai-tin-image.jpg",
   about2:
     "https://res.cloudinary.com/dsw4o0hjl/image/upload/dai-tin-image-2.jpg",
   yellowIcon:
@@ -21,10 +17,8 @@ const IMG = {
     "https://res.cloudinary.com/dsw4o0hjl/image/upload/orange-stars-hand-icon.svg",
   paper:
     "https://res.cloudinary.com/dsw4o0hjl/image/upload/green-paper-icon.svg",
-  medal:
-    "https://res.cloudinary.com/dsw4o0hjl/image/upload/medal-icon.svg",
-  tick:
-    "https://res.cloudinary.com/dsw4o0hjl/image/upload/green-tick-icon.svg",
+  medal: "https://res.cloudinary.com/dsw4o0hjl/image/upload/medal-icon.svg",
+  tick: "https://res.cloudinary.com/dsw4o0hjl/image/upload/green-tick-icon.svg",
   p1: "https://res.cloudinary.com/dsw4o0hjl/image/upload/product-1.jpg",
   p2: "https://res.cloudinary.com/dsw4o0hjl/image/upload/product-2.jpg",
   p3: "https://res.cloudinary.com/dsw4o0hjl/image/upload/product-3.jpg",
@@ -54,7 +48,7 @@ const STATS_STRIP_MODEST = {
     {
       id: "stats-strip-3",
       type: "increase",
-      number: "2+",
+      number: "2",
       label: "Năm đồng hành thị trường",
     },
   ],
@@ -154,10 +148,8 @@ export async function seedLayoutsDaiTin() {
               description: "",
               image: IMG.about1,
               cta: { link: "/about", text: "Tìm hiểu thêm" },
-              theme: "brand.700",
-              components: [
-                { contents: ABOUT_PARAGRAPHS_HOME },
-              ],
+              theme: "#1a399c",
+              components: [{ contents: ABOUT_PARAGRAPHS_HOME }],
             },
           },
           {
@@ -200,7 +192,8 @@ export async function seedLayoutsDaiTin() {
               subTitle: "",
               description: "",
               image: "",
-              theme: "gray.800",
+              theme:
+                "linear-gradient(135deg, #0f172a 0%, #2563eb 55%, #60a5fa 100%)",
               cta: {
                 link: "/contact",
                 text: "Liên hệ ngay",
@@ -296,7 +289,7 @@ export async function seedLayoutsDaiTin() {
             tag: "about-section",
             detail: {
               title: "Lĩnh vực hoạt động",
-              label: "Hoạt động",
+              label: "HOẠT ĐỘNG",
               subTitle: "",
               description:
                 "Đại Tín phục vụ các nhu cầu cốt lõi trong chuỗi cung ứng lạnh và cơ điện — phù hợp doanh nghiệp vừa và nhỏ, công trình đang triển khai giai đoạn đầu.",
@@ -335,7 +328,7 @@ export async function seedLayoutsDaiTin() {
             detail: {
               title: "GIÁ TRỊ CỐT LÕI",
               subTitle: "",
-              label: "Cam kết",
+              label: "CAM KẾT HỢP TÁC",
               description: "",
               image: "",
               theme: "",
@@ -388,7 +381,7 @@ export async function seedLayoutsDaiTin() {
             detail: {
               title: "PHÁP LÝ & HỒ SƠ",
               subTitle: "",
-              label: "Pháp lý",
+              label: "PHÁP LÝ",
               description: "",
               image: "",
               theme: "",
@@ -426,7 +419,7 @@ export async function seedLayoutsDaiTin() {
             detail: {
               title: "MỘT SỐ DÒNG MÁY NÉN",
               subTitle: "",
-              label: "Sản phẩm",
+              label: "SẢN PHẨM",
               description: "",
               image: "",
               theme: "",
@@ -475,7 +468,7 @@ export async function seedLayoutsDaiTin() {
             detail: {
               title: "PHÂN KHÚC PHỤC VỤ",
               subTitle: "",
-              label: "Đối tác",
+              label: "ĐỐI TÁC",
               description: "",
               image: "",
               theme: "",
@@ -515,7 +508,8 @@ export async function seedLayoutsDaiTin() {
               subTitle: "(+84) 975 187 429",
               description: "",
               image: "",
-              theme: "linear-gradient(90deg, #15803d, #22c55e)",
+              theme:
+                "linear-gradient(135deg, #172554 0%, #1d4ed8 55%, #3b82f6 100%)",
               cta: {
                 link: "/contact",
                 text: "Gửi yêu cầu tư vấn",
@@ -530,3 +524,21 @@ export async function seedLayoutsDaiTin() {
     },
   ]);
 }
+
+async function main() {
+  await import("./load-env");
+  const { connectDB } = await import("@/lib/mongodb");
+  await connectDB();
+
+  await seedLayoutsDaiTin();
+  console.log("✅ Layouts: cleared & re-seeded (home-1, about-1)");
+}
+
+main()
+  .catch((err) => {
+    console.error("❌ Seed error:", err);
+    process.exit(1);
+  })
+  .finally(() => {
+    process.exit(0);
+  });

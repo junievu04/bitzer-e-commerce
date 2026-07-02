@@ -340,7 +340,7 @@ export default function Footer() {
         <Box borderTop="1px solid" borderColor="gray.700" />
       </Box>
 
-      <Box py="3.5" px={{ base: "4", md: "8" }} bg="brand.600">
+      <Box py="3.5" px={{ base: "4", md: "8" }} bg="brand.900">
         <Flex
           maxW="7xl"
           mx="auto"

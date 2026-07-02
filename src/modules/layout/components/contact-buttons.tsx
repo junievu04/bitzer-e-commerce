@@ -95,21 +95,49 @@ export default function ContactButtons() {
           {/* Ripple rings — only shown when closed */}
           {!open && (
             <>
-              <Box className="ripple-ring" />
-              <Box className="ripple-ring ripple-ring-2" />
+              <Box
+                className={css({
+                  position: "absolute",
+                  inset: "0",
+                  borderRadius: "full",
+                  border: "2px solid",
+                  borderColor: "warning.base",
+                  animation: "ripple-ring 2s ease-out infinite",
+                  pointerEvents: "none",
+                })}
+              />
+              <Box
+                className={css({
+                  position: "absolute",
+                  inset: "0",
+                  borderRadius: "full",
+                  border: "2px solid",
+                  borderColor: "warning.base",
+                  animation: "ripple-ring 2s ease-out infinite",
+                  animationDelay: "0.75s",
+                  pointerEvents: "none",
+                })}
+              />
             </>
           )}
 
           <Button
+            variant="none"
             onClick={() => setOpen((v) => !v)}
             transition="all 0.25s ease"
             boxShadow="0 8px 24px {colors.gray.900/0.3}"
-            _hover={{ transform: "scale(1.08)" }}
             minH="0"
             aria-label="Liên hệ trực tiếp"
             className={css({
-              backgroundColor: open ? "gray.800" : "brand.500",
+              bgColor: open ? "gray.800" : "warning.base",
               p: open ? "2" : "4",
+              _hover: {
+                bgColor: open ? "gray.700" : "amber.600",
+                transform: "scale(1.08)",
+              },
+              _active: {
+                bgColor: open ? "gray.900" : "amber.700",
+              },
             })}
           >
             <Headset

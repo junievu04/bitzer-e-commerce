@@ -8,7 +8,7 @@ interface Props {
   detail: LayoutComponentDetail;
 }
 
-const theme = "linear-gradient(135deg, #052e16 0%, #14532d 50%, #166534 100%)";
+const theme = "linear-gradient(135deg, #0f172a 0%, #172554 50%, #1e3a8a 100%)";
 
 export default function ThemedBannerGridOverlay({ detail }: Props) {
   const { t } = useIntl();

@@ -240,16 +240,16 @@ export default function Chatbot({ data }: ChatbotProps) {
           minH="0"
           p="4"
           onClick={handleOpen}
-          bg="warning.base"
+          bg="brand.500"
           borderRadius="full"
           cursor="pointer"
           className={css({
-            shadow: "0 8px 24px token(colors.warning.light/0.4)",
+            shadow: "0 8px 24px token(colors.brand.500/0.35)",
             transition: "all 0.2s ease",
             _hover: {
               opacity: "0.88",
               transform: "scale(1.08)",
-              boxShadow: "0 12px 32px token(colors.warning.light/0.5)",
+              boxShadow: "0 12px 32px token(colors.brand.500/0.45)",
             },
           })}
         >
@@ -269,7 +269,7 @@ export default function Chatbot({ data }: ChatbotProps) {
           })}
         >
           <Flex
-            bg="warning.base"
+            bg="brand.500"
             alignItems="center"
             justifyContent="space-between"
             px="4"
@@ -293,7 +293,7 @@ export default function Chatbot({ data }: ChatbotProps) {
                   {t("Hỗ trợ tư vấn")}
                 </Text>
                 <Flex alignItems="center" gap="1">
-                  <Box w="1.5" h="1.5" borderRadius="full" bg="brand.300" />
+                  <Box w="1.5" h="1.5" borderRadius="full" bg="green.500" />
                   <Text
                     variant="caption-2"
                     tone="inverse"
@@ -310,7 +310,7 @@ export default function Chatbot({ data }: ChatbotProps) {
               onClick={handleClose}
               p="1.5"
               minH="0"
-              _hover={{ bg: "warning.base" }}
+              _hover={{ bg: "brand.600" }}
             >
               <CrossDiagonal tone="inverse" size="sm" />
             </Button>
@@ -338,7 +338,7 @@ export default function Chatbot({ data }: ChatbotProps) {
                   py="2"
                   borderRadius="xl"
                   maxW="60"
-                  bg={msg.type === "user" ? "warning.base" : "gray.100"}
+                  bg={msg.type === "user" ? "brand.500" : "gray.100"}
                   className={css({
                     borderBottomRightRadius: msg.type === "user" ? "sm" : "xl",
                     borderBottomLeftRadius: msg.type === "bot" ? "sm" : "xl",
@@ -377,9 +377,9 @@ export default function Chatbot({ data }: ChatbotProps) {
                             bg: "white",
                             transition: "all 0.2s ease",
                             _hover: {
-                              borderColor: "warning.base",
+                              borderColor: "brand.500",
                               boxShadow:
-                                "0 4px 16px token(colors.warning.base/0.15)",
+                                "0 4px 16px token(colors.brand.500/0.15)",
                               transform: "translateY(-1px)",
                             },
                           })}
@@ -432,7 +432,7 @@ export default function Chatbot({ data }: ChatbotProps) {
                             <ArrowRight
                               pr="3"
                               flexShrink={0}
-                              tone="warning"
+                              tone="link"
                               size="sm"
                             />
                           </Flex>
@@ -449,13 +449,13 @@ export default function Chatbot({ data }: ChatbotProps) {
                     px="3"
                     py="2"
                     borderRadius="lg"
-                    border="1px solid token(colors.warning.base)"
-                    _hover={{ bg: "warning.light" }}
+                    border="1px solid token(colors.brand.500)"
+                    _hover={{ bg: "brand.50" }}
                   >
-                    <Text variant="caption-1" tone="warning" inline>
+                    <Text variant="caption-1" tone="link" inline>
                       {msg.fallbackLink.label}
                     </Text>
-                    <ArrowRight tone="warning" size="sm" />
+                    <ArrowRight tone="link" size="sm" />
                   </Link>
                 )}
               </Flex>
@@ -496,7 +496,7 @@ export default function Chatbot({ data }: ChatbotProps) {
                 {SUGGESTION_TOPICS.map((topic) => (
                   <Button
                     variant="none"
-                    border="1px solid {colors.warning.base}"
+                    border="1px solid {colors.brand.500}"
                     key={topic.key}
                     onClick={() => handleSelectTopic(topic.label, topic.key)}
                     size="sm"
@@ -532,9 +532,9 @@ export default function Chatbot({ data }: ChatbotProps) {
                     minH="0"
                     h="full"
                     className={css({
-                      bgColor: "warning.base",
+                      bgColor: "brand.500",
                       borderRadius: "full",
-                      _hover: { bg: "warning.base" },
+                      _hover: { bg: "brand.600" },
                     })}
                   >
                     <TravelNavigation tone="inverse" size="sm" />
@@ -550,7 +550,7 @@ export default function Chatbot({ data }: ChatbotProps) {
                 size="sm"
                 className={css({
                   fontWeight: "normal",
-                  color: "warning.base",
+                  color: "brand.500",
                   textDecoration: "underline",
                   fontSize: "xs",
                 })}
